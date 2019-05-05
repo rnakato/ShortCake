@@ -8,9 +8,10 @@ It's on docker-hub and github
 - 2.3.1 (2.3.1/Dockerfile)
 
 ## how to build
-git clone https://github.com/rnakato/docker_singlecell.git
-cd docker_singlecell
-docker build --rm -t rnakato/singlecell .
+
+    git clone https://github.com/rnakato/docker_singlecell.git
+    cd docker_singlecell
+    docker build --rm -t rnakato/singlecell .
 
 ## running
-docker run --rm  -it rnakato/singlecel
+    docker run --rm  -it rnakato/singlecel
