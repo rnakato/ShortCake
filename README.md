@@ -7,11 +7,16 @@ It's on docker-hub and github
 - latest (master/Dockerfile)
 - 2.3.1 (2.3.1/Dockerfile)
 
-## how to build
+## Run
+    docker pull rnakato/singlecell
+    docker run --rm -it rnakato/singlecell
+
+## Build image from dockerfile
 
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
     docker build --rm -t rnakato/singlecell .
 
-## running
-    docker run --rm  -it rnakato/singlecel
+## Contact 
+
+Ryuichiro Nakato: rnakato@iam.u-tokyo.ac.jp
