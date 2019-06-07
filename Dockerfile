@@ -1,5 +1,5 @@
 ### Single-cell analysis pipeline
-# Installed tools: Seurat, scater, scImpute, velocyto, scanpy, sleepwalk, singleCellHaystack
+# Installed tools: Seurat, scater, scImpute, velocyto, scanpy, sleepwalk, liger, singleCellHaystack
 # splatter is an R script and cannot be installed by command
 
 FROM rnakato/anaconda3:2019.03
@@ -30,11 +30,11 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /e
     && R CMD INSTALL --no-configure . \
     && cd .. && rm -rf hdf5r \
     && R -e "BiocManager::install(c('Seurat','scater','tsne','Rtsne','pcaMethods'))" \
-    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'alexisvdb/singleCellHaystack'))" 
+    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'alexisvdb/singleCellHaystack', 'MacoskoLab/liger'))"
 # Python
 RUN conda install ${PACKAGES_CONDA} \
     && conda install ${PACKAGES_CONDA} \
     && conda install -c bioconda samtools \
-    && pip install -U ${PACKAGES_PY} 
+    && pip install -U ${PACKAGES_PY}
 
 CMD ["/bin/bash"]
