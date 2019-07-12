@@ -1,5 +1,6 @@
 ### Single-cell analysis pipeline
-# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, RCA, scBio, (py)SCENIC, singleCellHaystack, scmap, scran
+# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, (py)SCENIC, singleCellHaystack, scmap, scran
+
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
 
@@ -31,7 +32,7 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /e
     && R CMD INSTALL --no-configure . \
     && cd .. && rm -rf hdf5r \
     && R -e "BiocManager::install(c('Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran'))" \
-    && R -e "devtools::install_github(c('cole-trapnell-lab/monocle3', 'Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
+    && R -e "devtools::install_github(c('cole-trapnell-lab/monocle3', 'Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
 # Python
 RUN conda install ${PACKAGES_CONDA} \
     && conda install ${PACKAGES_CONDA} \
