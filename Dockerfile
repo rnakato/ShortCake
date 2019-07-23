@@ -51,6 +51,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.100 /usr/lib/x86_64-linux-gnu/libhdf5.so.100 \
     && ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial_hl.so.100 /usr/lib/x86_64-linux-gnu/libhdf5_hl.so.100
+# FFTW, FIt-SNE
+RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
+    && tar zxvf fftw-3.3.8.tar.gz \
+    && cd fftw-3.3.8 \
+    && ./configure \
+    && make \
+    && make install \
+    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+    && cd FIt-SNE/ \
+    && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
+    && cp bin/fast_tsne /usr/local/bin/
 # R
 # hdf5r failed due to the conda path
 # configure from source
