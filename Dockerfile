@@ -1,5 +1,5 @@
 ### Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, (py)SCENIC, singleCellHaystack, scmap, scran
+# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, (py)SCENIC, singleCellHaystack, scmap, scran, slingshot, scBio (CPM)
 
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
@@ -33,12 +33,15 @@ RUN apt-get update \
     libblas-dev \
     libboost-all-dev \
     libcurl4-openssl-dev \
+    libfreetype6-dev \
     libgdal-dev \
+    libglu1-mesa-dev \
     libhdf5-dev \
     liblapack3 \
     liblapack-dev \
     libssl-dev \
     libudunits2-dev \
+    libx11-dev \
     make \
     openjdk-8-jdk-headless \
     openjdk-8-jre \
@@ -46,6 +49,7 @@ RUN apt-get update \
     sra-toolkit \
     unzip \
     vim \
+    xorg \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -72,13 +76,13 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /e
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && R CMD javareconf \
-    && R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','scBio','zoo'))" \
+    && R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','scBio','zoo', 'scBio'))" \
     && git clone https://github.com/hhoeflin/hdf5r \
     && cd hdf5r \
     && ./configure --with-hdf5=/usr/bin/h5cc \
     && R CMD INSTALL --no-configure . \
     && cd .. && rm -rf hdf5r \
-    && R -e "BiocManager::install(c('Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran'))" \
+    && R -e "BiocManager::install(c('Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'kstreet13/slingshot'))" \
     && R -e "devtools::install_github(c('cole-trapnell-lab/monocle3', 'Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
 # Python
 RUN conda install ${PACKAGES_CONDA} \
