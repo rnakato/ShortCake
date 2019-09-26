@@ -4,11 +4,13 @@
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
 
-FROM rnakato/anaconda3:2019.03
+FROM jupyter/datascience-notebook
 LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
+USER root
+
 ENV PACKAGES_CONDA numpy scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click
-ENV PACKAGES_PY scanpy python-igraph louvain velocyto pyscenic
+ENV PACKAGES_PY scanpy python-igraph louvain velocyto pyscenic umap-learn louvain
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -32,6 +34,7 @@ RUN apt-get update \
     imagemagick \
     libblas-dev \
     libboost-all-dev \
+    libbz2-dev \
     libcurl4-openssl-dev \
     libfreetype6-dev \
     libgdal-dev \
@@ -66,28 +69,39 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && cd FIt-SNE/ \
     && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
     && cp bin/fast_tsne /usr/local/bin/
-# R
-# hdf5r failed due to the conda path
-# configure from source
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /etc/apt/sources.list \
-    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 51716619E084DAB9 \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends r-base \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && R CMD javareconf \
-    && R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','scBio','zoo', 'scBio'))" \
-    && git clone https://github.com/hhoeflin/hdf5r \
-    && cd hdf5r \
-    && ./configure --with-hdf5=/usr/bin/h5cc \
-    && R CMD INSTALL --no-configure . \
-    && cd .. && rm -rf hdf5r \
-    && R -e "BiocManager::install(c('Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'kstreet13/slingshot'))" \
-    && R -e "devtools::install_github(c('cole-trapnell-lab/monocle3', 'Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
+
 # Python
 RUN conda install ${PACKAGES_CONDA} \
     && conda install ${PACKAGES_CONDA} \
     && conda install -c bioconda samtools \
     && pip install -U ${PACKAGES_PY}
+
+# R
+# hdf5r failed due to the conda path
+# configure from source
+#RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /etc/apt/sources.list \
+#    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 51716619E084DAB9 \
+#    && apt-get update \
+#    && apt-get install -y --no-install-recommends r-base \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* \
+#    && R CMD javareconf \
+RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','zoo'), repos='https://cran.ism.ac.jp/')" \
+    && git clone https://github.com/hhoeflin/hdf5r \
+    && cd hdf5r \
+    && ./configure \
+#--with-hdf5=/usr/bin/h5cc \
+    && R CMD INSTALL --no-configure . \
+    && cd .. && rm -rf hdf5r \
+    && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'monocle', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'kstreet13/slingshot'))" \
+    && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
+    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
+# 'velocyto-team/velocyto.R',
+# monocle3 (pending)
+#RUN R -e "devtools::install_github('cole-trapnell-lab/DDRTree', ref='simple-ppt-like')" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/L1-graph')" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/monocle-release', ref='monocle3_alpha')"
+
+USER jovyan
 
 CMD ["/bin/bash"]
