@@ -1,12 +1,6 @@
 #docker run -u root -it rnakato/singlecell_jupyter /bin/bash
-docker run  \
-       -e GRANT_SUDO=yes \
-       -e NB_UID=$UID \
-       -e NB_GID=$GID \
-       -e TZ=Asia/Tokyo \
-       -p 8888:8888 \
-       --name notebook \
-       -v $(pwd):/home/jovyan/work \
+docker run --name notebook -p 8888:8888 \
+       -v $(pwd):/home/jovyan \
        rnakato/singlecell_jupyter \
        start-notebook.sh #\
-#       --NotebookApp.password='sha1:YOUR_PASSWORD_HASH_VALUE'
+#       --NotebookApp.password='sha1:ddb766b28c2b:6b0ff3cf909a320a103b9df0587f7a1908887240'
