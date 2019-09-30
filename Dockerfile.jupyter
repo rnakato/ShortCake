@@ -9,7 +9,7 @@ LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
 USER root
 
-ENV PACKAGES_CONDA numpy scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click
+ENV PACKAGES_CONDA numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click
 ENV PACKAGES_PY scanpy python-igraph louvain velocyto pyscenic umap-learn louvain
 
 RUN apt-get update \
@@ -95,8 +95,9 @@ RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk
     && cd .. && rm -rf hdf5r \
     && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'monocle', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'kstreet13/slingshot'))" \
     && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
-    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
-# 'velocyto-team/velocyto.R',
+    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR', 'velocyto-team/velocyto.R'))"
+# 'velocyto-team/velocyto.R'
+
 # monocle3 (pending)
 #RUN R -e "devtools::install_github('cole-trapnell-lab/DDRTree', ref='simple-ppt-like')" \
 #    && R -e "devtools::install_github('cole-trapnell-lab/L1-graph')" \

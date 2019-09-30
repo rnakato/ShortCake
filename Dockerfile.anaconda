@@ -7,8 +7,9 @@
 FROM rnakato/anaconda3:2019.03
 LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
-ENV PACKAGES_CONDA numpy scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click
-ENV PACKAGES_PY scanpy python-igraph louvain velocyto pyscenic pysam
+ENV PACKAGES_CONDA numpy scipy pandas==0.23.4 cython numba matplotlib pathlib scikit-learn h5py click pysam python-igraph louvain velocyto pyscenic
+#ENV PACKAGES_PY
+# scanpy
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -87,9 +88,8 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /e
     && R -e "devtools::install_github(c('Vivianstats/scImpute', 'velocyto-team/velocyto.R', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
 # 'cole-trapnell-lab/monocle3',
 # Python
-RUN conda install ${PACKAGES_CONDA} \
-    && conda install ${PACKAGES_CONDA} \
-    && conda install -c bioconda samtools \
-    && pip install -U ${PACKAGES_PY}
+RUN conda install ${PACKAGES_CONDA} #\
+#    && pip install -U ${PACKAGES_PY}
+#    && conda install -c bioconda samtools \
 
 CMD ["/bin/bash"]
