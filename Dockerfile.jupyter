@@ -9,8 +9,9 @@ LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
 USER root
 
-ENV PACKAGES_CONDA numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click
-ENV PACKAGES_PY scanpy python-igraph louvain velocyto pyscenic umap-learn louvain
+ENV PACKAGES_CONDA numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click python-igraph louvain umap-learn
+ENV PACKAGES_PY velocyto
+#pyscenic
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -58,6 +59,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.100 /usr/lib/x86_64-linux-gnu/libhdf5.so.100 \
     && ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial_hl.so.100 /usr/lib/x86_64-linux-gnu/libhdf5_hl.so.100
+
 # FFTW, FIt-SNE
 RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && tar zxvf fftw-3.3.8.tar.gz \
@@ -70,38 +72,31 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
     && cp bin/fast_tsne /usr/local/bin/
 
-# Python
-RUN conda install ${PACKAGES_CONDA} \
-    && conda install ${PACKAGES_CONDA} \
-    && conda install -c bioconda samtools \
-    && pip install -U ${PACKAGES_PY}
-
 # R
-# hdf5r failed due to the conda path
-# configure from source
-#RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/" >> /etc/apt/sources.list \
-#    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 51716619E084DAB9 \
-#    && apt-get update \
-#    && apt-get install -y --no-install-recommends r-base \
-#    && apt-get clean \
-#    && rm -rf /var/lib/apt/lists/* \
-#    && R CMD javareconf \
-RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','zoo'), repos='https://cran.ism.ac.jp/')" \
-    && git clone https://github.com/hhoeflin/hdf5r \
-    && cd hdf5r \
-    && ./configure \
-#--with-hdf5=/usr/bin/h5cc \
-    && R CMD INSTALL --no-configure . \
-    && cd .. && rm -rf hdf5r \
-    && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'monocle', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'kstreet13/slingshot'))" \
-    && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
-    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR', 'velocyto-team/velocyto.R'))"
-# 'velocyto-team/velocyto.R'
+RUN R -e "install.packages(c('Rcpp','stringi','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"
 
-# monocle3 (pending)
-#RUN R -e "devtools::install_github('cole-trapnell-lab/DDRTree', ref='simple-ppt-like')" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/L1-graph')" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/monocle-release', ref='monocle3_alpha')"
+RUN ln -s /bin/tar /bin/gtar \
+    && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran'))" \
+    && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
+    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR', 'kstreet13/slingshot'))"
+
+# velocyto
+RUN conda install -c statiskit libboost \
+    && R -e "devtools::install_github('velocyto-team/velocyto.R')"
+
+# monocle3
+RUN conda install -c bioconda r-monocle3
+
+#RUN conda install r-units r-curl r-sf \
+#    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
+
+# Python
+RUN conda config --add channels conda-forge \
+    && conda install ${PACKAGES_CONDA} \
+    && conda install -c bioconda samtools scanpy \
+    && pip install -U ${PACKAGES_PY}
 
 USER jovyan
 
