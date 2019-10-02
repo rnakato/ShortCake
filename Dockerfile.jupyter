@@ -98,6 +98,7 @@ RUN conda config --add channels conda-forge \
     && conda install -c bioconda samtools scanpy \
     && pip install -U ${PACKAGES_PY}
 
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-hce969dd_0/lib/R/lib/
 USER jovyan
 
 CMD ["/bin/bash"]
