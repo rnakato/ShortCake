@@ -85,7 +85,8 @@ RUN conda install -c statiskit libboost \
     && R -e "devtools::install_github('velocyto-team/velocyto.R')"
 
 # monocle3
-RUN conda install -c bioconda r-monocle3
+RUN conda install -c bioconda r-monocle3 \
+    && R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')" \
 
 #RUN conda install r-units r-curl r-sf \
 #    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
