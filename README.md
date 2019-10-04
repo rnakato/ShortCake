@@ -1,21 +1,24 @@
-# docker_singlecell
+# docker_singlecell_jupyter
 A docker image for singlecell analysis
 
 It's on docker-hub and github
 
 ## tags and links
-- latest (master/Dockerfile)
-- 2.3.1 (2.3.1/Dockerfile)
+- 1.0.0/latest 
 
 ## Run
-    docker pull rnakato/singlecell
-    docker run --rm -it rnakato/singlecell
+    docker pull rnakato/singlecell_jupyter
+    
+    # container login
+    docker run --rm -it rnakato/singlecell_jupyter /bin/bash
+    # jupyter notebook
+    docker run --name notebook -p 8888:8888 -v (your directory):/home/jovyan/work rnakato/singlecell_jupyter start-notebook.sh
 
 ## Build image from dockerfile
 
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
-    docker build --rm -t rnakato/singlecell .
+    docker build -f Dockerfile -t rnakato/singlecell_jupyter
 
 ## Contact 
 
