@@ -1,10 +1,25 @@
 # docker_singlecell_jupyter
-A docker image for singlecell analysis
-
-It's on docker-hub and github
+A docker image for singlecell analysis. It's on docker-hub and github
 
 ## tags and links
 - 1.0.0/latest 
+
+## Included tools
+- Seurat
+- Monocle3
+- scater
+- scmap
+- scran
+- slingshot
+- scImpute
+- velocyto (R and Python)
+- scanpy
+- sleepwalk
+- liger
+- RCA
+- scBio
+- SCENIC
+- singleCellHaystack
 
 ## Run
     docker pull rnakato/singlecell_jupyter
