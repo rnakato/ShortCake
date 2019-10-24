@@ -76,9 +76,9 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
 RUN R -e "install.packages(c('Rcpp','stringi','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"
 
 RUN ln -s /bin/tar /bin/gtar \
-    && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran'))" \
+    && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot'))" \
     && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
-    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR', 'kstreet13/slingshot'))"
+    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
 
 # velocyto
 RUN conda install -c statiskit libboost \
@@ -98,6 +98,9 @@ RUN conda config --add channels conda-forge \
     && conda install ${PACKAGES_CONDA} \
     && conda install -c bioconda samtools scanpy \
     && pip install -U ${PACKAGES_PY}
+
+# permission of work/
+RUN chmod -R 775 /home/jovyan/work
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-hce969dd_0/lib/R/lib/
 USER jovyan

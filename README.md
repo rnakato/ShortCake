@@ -2,7 +2,7 @@
 A docker image for singlecell analysis. It's on docker-hub and github
 
 ## tags and links
-- 1.0.0/latest 
+- 1.0.1/latest
 
 ## Included tools
 - Seurat
@@ -23,7 +23,7 @@ A docker image for singlecell analysis. It's on docker-hub and github
 
 ## Run
     docker pull rnakato/singlecell_jupyter
-    
+
     # container login
     docker run --rm -it rnakato/singlecell_jupyter /bin/bash
     # jupyter notebook
@@ -35,6 +35,6 @@ A docker image for singlecell analysis. It's on docker-hub and github
     cd docker_singlecell
     docker build -f Dockerfile -t rnakato/singlecell_jupyter
 
-## Contact 
+## Contact
 
 Ryuichiro Nakato: rnakato@iam.u-tokyo.ac.jp
