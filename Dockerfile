@@ -86,7 +86,7 @@ RUN conda install -c statiskit libboost \
 
 # monocle3
 RUN conda install -c bioconda r-monocle3 \
-    && R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')" \
+    && R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')"
 
 #RUN conda install r-units r-curl r-sf \
 #    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
@@ -102,7 +102,6 @@ RUN conda config --add channels conda-forge \
 # permission of work/
 RUN chmod -R 775 /home/jovyan/work
 
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-hce969dd_0/lib/R/lib/
+RUN ln -s /opt/conda/pkgs/r-base-3*/lib/R/lib/libRlapack.so /opt/conda/lib
+#ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-h9bb98a2_1/lib/R/lib/
 USER jovyan
-
-CMD ["/bin/bash"]
