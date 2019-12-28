@@ -2,7 +2,7 @@
 A docker image for singlecell analysis. It's on docker-hub and github
 
 ## tags and links
-- 1.0.1/latest
+- 1.0.2/latest
 
 ## Included tools
 - Seurat
