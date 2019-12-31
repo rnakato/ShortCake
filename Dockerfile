@@ -94,7 +94,8 @@ RUN conda install -c bioconda r-monocle3 \
 #    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
 
 # Python
-RUN conda config --add channels conda-forge \
+RUN conda update conda \
+    && conda config --add channels conda-forge \
     && conda install ${PACKAGES_CONDA} \
     && conda install -c bioconda samtools scanpy \
     && pip install -U ${PACKAGES_PY}
