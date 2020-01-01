@@ -4,7 +4,7 @@
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
 
-FROM jupyter/datascience-notebook
+FROM jupyter/datascience-notebook:1386e2046833
 LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
 USER root
@@ -72,8 +72,14 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
     && cp bin/fast_tsne /usr/local/bin/
 
+# Python
+RUN conda config --add channels conda-forge \
+    && conda install ${PACKAGES_CONDA} \
+    && conda install -c bioconda samtools scanpy \
+    && pip install -U ${PACKAGES_PY}
+
 # R
-RUN R -e "install.packages(c('Rcpp','stringi','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"
+RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"
 
 RUN ln -s /bin/tar /bin/gtar \
     && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot'))" \
@@ -88,21 +94,14 @@ RUN conda install -c statiskit libboost \
 RUN conda install -c bioconda r-monocle3 \
     && R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')"
 
-#RUN conda install r-units r-curl r-sf \
-#    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
-
-# Python
-RUN conda update conda \
-    && conda config --add channels conda-forge \
-    && conda install ${PACKAGES_CONDA} \
-    && conda install -c bioconda samtools scanpy \
-    && pip install -U ${PACKAGES_PY}
-
 # permission of work/
 RUN chmod -R 775 /home/jovyan/work
 
 RUN ln -s /opt/conda/pkgs/r-base-3*/lib/R/lib/libRlapack.so /opt/conda/lib
 #ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-h9bb98a2_1/lib/R/lib/
 USER jovyan
+
+#RUN conda install r-units r-curl r-sf \
+#    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')" \
+#    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
