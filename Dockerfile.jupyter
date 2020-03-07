@@ -100,8 +100,3 @@ RUN chmod -R 775 /home/jovyan/work
 RUN ln -s /opt/conda/pkgs/r-base-3*/lib/R/lib/libRlapack.so /opt/conda/lib
 #ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-h9bb98a2_1/lib/R/lib/
 USER jovyan
-
-#RUN conda install r-units r-curl r-sf \
-#    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')" \
-#    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
