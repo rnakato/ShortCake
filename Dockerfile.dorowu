@@ -5,7 +5,8 @@
 # https://github.com/MarioniLab/MNN2017/
 #pyscenic
 
-FROM rnakato/ubuntu:dorowu-bionic
+#FROM rnakato/ubuntu:dorowu-bionic
+FROM dorowu/ubuntu-desktop-lxde-vnc
 LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
 USER root
@@ -54,6 +55,14 @@ RUN apt-get update \
     vim \
     xorg \
     zlib1g-dev \
+       emacs \
+       git \
+       language-pack-ja-base \
+       language-pack-ja \
+       locales \
+       make \
+       vim \
+       wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

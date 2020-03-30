@@ -1,17 +1,17 @@
 ### Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot
+# Installed tools: Seurat, Monocle3, Garnett, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot
 
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
 
 FROM jupyter/datascience-notebook:1386e2046833
+
 LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
 
 USER root
-
-ENV PACKAGES_CONDA numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click python-igraph louvain umap-learn
-ENV PACKAGES_PY velocyto
-#pyscenic
+ENV PKG_CONFIG_PATH /opt/conda/lib/pkgconfig/:/usr/lib/x86_64-linux-gnu/pkgconfig/
+ENV LD_LIBRARY_PATH /opt/conda/pkgs/r-base-3.6.1-h9bb98a2_1/lib/R/lib/
+ENV PROJ_LIB /opt/conda/share/proj/
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -50,6 +50,8 @@ RUN apt-get update \
     openjdk-8-jdk-headless \
     openjdk-8-jre \
     pigz \
+    samtools \
+    software-properties-common \
     sra-toolkit \
     unzip \
     vim \
@@ -57,12 +59,18 @@ RUN apt-get update \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+
 RUN ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.100 /usr/lib/x86_64-linux-gnu/libhdf5.so.100 \
     && ln -s /usr/lib/x86_64-linux-gnu/libhdf5_serial_hl.so.100 /usr/lib/x86_64-linux-gnu/libhdf5_hl.so.100
 
 # FFTW, FIt-SNE
 RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && tar zxvf fftw-3.3.8.tar.gz \
+    && rm fftw-3.3.8.tar.gz \
     && cd fftw-3.3.8 \
     && ./configure \
     && make \
@@ -73,30 +81,46 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
     && cp bin/fast_tsne /usr/local/bin/
 
 # Python
-RUN conda config --add channels conda-forge \
-    && conda install ${PACKAGES_CONDA} \
-    && conda install -c bioconda samtools scanpy \
-    && pip install -U ${PACKAGES_PY}
+RUN conda install numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click python-igraph louvain umap-learn \
+    && conda install -c bioconda scanpy \
+    && pip install -U velocyto
 
 # R
 RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"
 
+# Monocle3
+RUN R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats', 'limma', 'S4Vectors', 'SingleCellExperiment', 'SummarizedExperiment', 'batchelor'))" \
+    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')"
+
+RUN conda install r-units r-sf gdal
+RUN R -e "install.packages('curl', configure.vars='INCLUDE_DIR=/opt/conda/lib/pkgconfig/ LIB_DIR=/opt/conda/lib/pkgconfig/', repos='https://cran.ism.ac.jp/')" \
+    && R -e "install.packages('units', configure.args='--with-udunits2-lib=/usr/lib/x86_64-linux-gnu/', repos='https://cran.ism.ac.jp/')" \
+    && R -e "install.packages('sf', repos='https://cran.ism.ac.jp/')" \
+    && R -e "devtools::install_github('cole-trapnell-lab/monocle3', ref='develop')" \
+    && R -e "BiocManager::install(c('org.Mm.eg.db', 'org.Hs.eg.db', 'org.Dm.eg.db', 'org.Ce.eg.db'))" \
+    && R -e "devtools::install_github('cole-trapnell-lab/garnett', ref='monocle3')"
+
+
 RUN ln -s /bin/tar /bin/gtar \
     && R -e "BiocManager::install(c('limma', 'Seurat','scater','tsne','Rtsne','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot'))" \
-    && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')" \
-    && R -e "devtools::install_github(c('Vivianstats/scImpute', 'MacoskoLab/liger', 'alexisvdb/singleCellHaystack', 'aertslab/SCopeLoomR'))"
+    && R -e "install.packages(c('scBio'), repos='https://cran.ism.ac.jp/')"
+RUN R -e "devtools::install_github('aertslab/SCopeLoomR')"
+RUN R -e "devtools::install_github('Vivianstats/scImpute')"
+RUN R -e "devtools::install_github('alexisvdb/singleCellHaystack')"
+RUN R -e "devtools::install_github('MacoskoLab/liger')"
 
 # velocyto
 RUN conda install -c statiskit libboost \
     && R -e "devtools::install_github('velocyto-team/velocyto.R')"
 
-# monocle3
-RUN conda install -c bioconda r-monocle3 \
-    && R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')"
+RUN R -e "install.packages(c('stringi'), repos='https://cran.ism.ac.jp/')"
 
 # permission of work/
 RUN chmod -R 775 /home/jovyan/work
 
-RUN ln -s /opt/conda/pkgs/r-base-3*/lib/R/lib/libRlapack.so /opt/conda/lib
-#ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/pkgs/r-base-3.6.1-h9bb98a2_1/lib/R/lib/
+ENV CONF /home/jovyan/.jupyter/jupyter_notebook_config.py
+ADD conf conf
+RUN cat ./conf >> /home/jovyan/.jupyter/jupyter_notebook_config.py \
+    && rm ./conf
+
 USER jovyan
