@@ -1,5 +1,5 @@
 ### Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-# Installed tools: Seurat, Monocle3, Garnett, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot
+# Installed tools: Seurat, Monocle3, Garnett, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot, CellPhoneDB
 
 # splatter is an R script and cannot be installed by command
 # https://github.com/MarioniLab/MNN2017/
@@ -83,7 +83,7 @@ RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
 # Python
 RUN conda install numpy numpy_groupies scipy pandas==0.23.4 cython numba matplotlib scikit-learn h5py click python-igraph louvain umap-learn \
     && conda install -c bioconda scanpy \
-    && pip install -U velocyto
+    && pip install -U velocyto cellphonedb
 
 # R
 RUN R -e "install.packages(c('Rcpp','devtools','BiocManager','igraph','sleepwalk','bit64','zoo','hdf5r'), repos='https://cran.ism.ac.jp/')"

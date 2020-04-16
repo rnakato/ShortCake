@@ -2,7 +2,7 @@
 A docker image for singlecell analysis. It's on docker-hub and github
 
 ## tags and links
-- 1.0.2/latest
+- 1.0.3/latest
 
 ## Included tools
 - Seurat
@@ -20,6 +20,7 @@ A docker image for singlecell analysis. It's on docker-hub and github
 - scBio
 - SCENIC
 - singleCellHaystack
+- CellPhoneDB
 
 ## Run
     docker pull rnakato/singlecell_jupyter
