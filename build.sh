@@ -1,7 +1,7 @@
-for tag in 1.0.3 latest
+for tag in 1.0.3 #latest
 do
     docker build -f Dockerfile.jupyter -t rnakato/singlecell_jupyter:$tag .
-    docker push rnakato/singlecell_jupyter:$tag
+#    docker push rnakato/singlecell_jupyter:$tag
 done
 
 for tag in #latest 18.04
