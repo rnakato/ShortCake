@@ -1,15 +1,18 @@
-for tag in 1.0.3 #latest
+for tag in #1.0.4 latest
 do
     docker build -f Dockerfile.jupyter -t rnakato/singlecell_jupyter:$tag .
-#    docker push rnakato/singlecell_jupyter:$tag
+    docker push rnakato/singlecell_jupyter:$tag
 done
 
-for tag in #latest 18.04
+for tag in r40u18 latest 
 do
-    docker build -f Dockerfile.ubuntu -t rnakato/singlecell_ubuntu:$tag .
-    docker push rnakato/singlecell_ubuntu:$tag
+docker build -f Dockerfile.ubuntu.R40.u18 -t rnakato/singlecell_ubuntu:$tag . #--no-cache
+docker push rnakato/singlecell_ubuntu:$tag
 done
 
+tag=r35u18
+#docker build -f Dockerfile.ubuntu.R35.u18 -t rnakato/singlecell_ubuntu:$tag .
+#docker push rnakato/singlecell_ubuntu:$tag
 
 for tag in #dorowu-bionic
 do
