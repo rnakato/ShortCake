@@ -81,3 +81,7 @@ RUN R -e "devtools::install_github('cole-trapnell-lab/cicero-release', ref = 'mo
 # chromVAR
 RUN R -e "BiocManager::install(c('chromVAR','JASPAR2016'))" \
     && R -e "devtools::install_github(c('GreenleafLab/chromVARmotifs','GreenleafLab/motifmatchr'))"
+
+### Added after v1.1.0
+RUN R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))"
+RUN pip install pybind11 hnswlib
