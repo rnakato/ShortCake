@@ -7,7 +7,7 @@ See https://hub.docker.com/r/rnakato/singlecell_jupyter for README.
 
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
-    docker build -f Dockerfile.ubuntu.R40.u18 -t rnakato/singlecell_jupyter
+    docker build -t rnakato/singlecell_jupyter
     
 ## Contact
 
