@@ -47,7 +47,6 @@ RUN R -e "devtools::install_github('chris-mcginnis-ucsf/DoubletFinder')"
 # scater-cellassign
 RUN R -e "install.packages(c('here'))"
 RUN R -e "devtools::install_github('Irrationone/cellassign')"
-#    && R -e "tensorflow::install_tensorflow(gpu = TRUE)"
 
 # scVI
 RUN conda install scvi -c bioconda -c conda-forge \
@@ -63,11 +62,14 @@ RUN pip install sccaf
 RUN R -e "BiocManager::install('metacell',  site_repository = 'tanaylab.github.io/repo', update = FALSE)"
 
 # LIGER
-RUN R -e "devtools::install_github(c('MacoskoLab/liger'))"
+RUN R -e "devtools::install_github(c('MacoskoLab/liger', 'satijalab/seurat-data', 'satijalab/seurat-wrappers'))"
+RUN R -e "SeuratData::InstallData(c('pbmcsca','ifnb','panc8'))"
 ADD bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 
 # Harmony
-RUN R -e "BiocManager::install('sva')" \
-    && R -e "devtools::install_github(c('immunogenomics/harmony','JEFworks/MUDAN'))"
+RUN R -e "install.packages('gganimate')" \
+    && R -e "BiocManager::install(c('sva','DESeq2'))" \
+    && R -e "devtools::install_github(c('immunogenomics/harmony','immunogenomics/presto','JEFworks/MUDAN'))"
+RUN pip install harmonypy
 
 ENV PATH ${PATH}:/opt/bedops_linux_x86_64-v2.4.39
