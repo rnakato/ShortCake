@@ -6,22 +6,17 @@ A docker image for singlecell analysis. It's on docker-hub and github
 - v1.1.0: change base image `jupyter/datascience-notebook` to `Ubuntu18.04`
 
 ## Included tools (latest)
-- Seurat
-- Monocle3
-- scater
-- scmap
-- scran
-- slingshot
-- scImpute
-- velocyto (R and Python)
-- scanpy
-- sleepwalk
-- liger
-- RCA
-- scBio
-- SCENIC
-- singleCellHaystack
-- CellPhoneDB
+
+- Pipeline: Seurat, scater, scran, scanpy, liger, scVI, kallisto(bustools)
+- Doublet finding: Scrublet, DoubletFinder
+- Batch correction and data integration: Harmony, scmap, scBio, SingleCellNet
+- Clustering and annotation: RCA, CellPhoneDB, CellAssign, garnett, scTensor, SCCAF, metacell
+- Trajectory analysis: Monocle2/3, slingshot, velocyto, scVelo, Palantir
+- Gene network: WGCNA, SCENIC
+- Data imputation: scImpute, MAGIC, SAVER, SCRABBLE
+- Simulation: Splatter
+- Others: scGen, sleepwalk, singleCellHaystack
+- scATAC-seq: cicero, chromVAR, ArchR
 
 ## Run
 
