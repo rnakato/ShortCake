@@ -1,5 +1,5 @@
 ### Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot, scVelo
+# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot, scVelo
 # ArchR
 
 FROM rnakato/r_python:r40u18

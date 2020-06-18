@@ -1,4 +1,4 @@
-for tag in 1.2.0 #pytorch-1.5-cuda10.1-cudnn7-devel #1.1.0
+for tag in #1.2.0 #pytorch-1.5-cuda10.1-cudnn7-devel #1.1.0
 do
     docker build -f Dockerfile.v$tag -t rnakato/singlecell_jupyter:$tag .
     docker push rnakato/singlecell_jupyter:$tag

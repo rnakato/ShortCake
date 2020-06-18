@@ -51,7 +51,23 @@ RUN R -e "devtools::install_github('Irrationone/cellassign')"
 
 # scVI
 RUN conda install scvi -c bioconda -c conda-forge \
-    && pip install scikit-misc
+    && pip install scikit-misc plotnine
 
 # scGen
 RUN pip install scgen
+
+# SCCAF
+RUN pip install sccaf
+
+# metacells
+RUN R -e "BiocManager::install('metacell',  site_repository = 'tanaylab.github.io/repo', update = FALSE)"
+
+# LIGER
+RUN R -e "devtools::install_github(c('MacoskoLab/liger'))"
+ADD bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
+
+# Harmony
+RUN R -e "BiocManager::install('sva')" \
+    && R -e "devtools::install_github(c('immunogenomics/harmony','JEFworks/MUDAN'))"
+
+ENV PATH ${PATH}:/opt/bedops_linux_x86_64-v2.4.39
