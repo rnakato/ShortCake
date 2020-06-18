@@ -1,11 +1,11 @@
 # docker_singlecell_jupyter
 A docker image for singlecell analysis. It's on docker-hub and github
 
-# Changelog
+## Changelog
 - v1.2.0: change base image from `Ubuntu18.04` to `pytorch-1.5-cuda10.1-cudnn7-devel` to allow GPU computing
 - v1.1.0: change base image `jupyter/datascience-notebook` to `Ubuntu18.04`
 
-# Included tools (latest)
+## Included tools (latest)
 - Seurat
 - Monocle3
 - scater
@@ -23,7 +23,7 @@ A docker image for singlecell analysis. It's on docker-hub and github
 - singleCellHaystack
 - CellPhoneDB
 
-# Run
+## Run
 
 For Docker:
 
@@ -44,7 +44,7 @@ For Singularity:
     # execute R directory
     singularity exec --nv rnakato_singlecell_jupyter.img R
     
-# Build image from dockerfile
+## Build image from dockerfile
 
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
