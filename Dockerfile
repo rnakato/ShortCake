@@ -20,7 +20,8 @@ RUN pip install PhenoGraph palantir rpy2 magic-impute \
 RUN pip install scrublet
 
 # SingleCellNet
-RUN R -e "devtools::install_github('pcahan1/singleCellNet')"
+RUN R -e "devtools::install_github(c('pcahan1/singleCellNet'))"
+RUN R -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
 
 # FlyATACAtlus
 RUN R -e "install.packages(c('irlba','DDRTree','densityClust'))"
