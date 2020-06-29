@@ -11,15 +11,17 @@ WORKDIR /opt
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libgsl-dev \
+    samtools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Python
-RUN conda install -y -c bioconda samtools scanpy kallisto \
+RUN conda install -y -c bioconda scanpy kallisto \
     && conda install -y louvain leidenalg \
     && conda install -y -c statiskit libboost \
-    && pip install -U Cython \
-    && pip install -U velocyto scvelo numba pybind11 hnswlib
+    && pip install -U Cython 
+RUN pip install llvmlite --ignore-installed
+RUN pip install -U velocyto scvelo numba pybind11 #hnswlib
 
 RUN R -e "install.packages(c('sleepwalk','bit64','zoo','scBio','Seurat','metap'), repos='https://cran.ism.ac.jp/')"
 
