@@ -2,6 +2,7 @@
 A docker image for singlecell analysis. It's on docker-hub and github
 
 ## Changelog
+- v1.3.0 (2020-07-14): add programs
 - v1.2.0: change base image from `Ubuntu18.04` to `pytorch-1.5-cuda10.1-cudnn7-devel` to allow GPU computing
 - v1.1.0: change base image `jupyter/datascience-notebook` to `Ubuntu18.04`
 
@@ -10,13 +11,15 @@ A docker image for singlecell analysis. It's on docker-hub and github
 - Pipeline: Seurat, scater, scran, scanpy, liger, scVI, kallisto(bustools)
 - Doublet finding: Scrublet, DoubletFinder
 - Batch correction and data integration: Harmony, scmap, scBio, SingleCellNet
-- Clustering and annotation: RCA, CellPhoneDB, CellAssign, garnett, scTensor, SCCAF, metacell
+- Clustering and annotation: RCA, CellPhoneDB, CellAssign, garnett, scCatch, SCCAF, metacell
 - Trajectory analysis: Monocle2/3, slingshot, velocyto, scVelo, Palantir
 - Gene network: WGCNA, SCENIC
+- Cell-to-cell interaction: SingleCellSingnalR, scTensor
 - Data imputation: scImpute, MAGIC, SAVER, SCRABBLE
 - Simulation: Splatter
+- Multi-modal: LIGER, scAI
 - Others: scGen, sleepwalk, singleCellHaystack
-- scATAC-seq: cicero, chromVAR, ArchR
+- scATAC-seq: cicero, chromVAR, ArchR, Signac
 
 ## Run
 
@@ -38,7 +41,7 @@ For Singularity:
     singularity exec --nv rnakato_singlecell_jupyter.img jupyternotebook.sh
     # execute R directory
     singularity exec --nv rnakato_singlecell_jupyter.img R
-    
+
 ## Build image from dockerfile
 
     git clone https://github.com/rnakato/docker_singlecell.git
@@ -47,4 +50,4 @@ For Singularity:
 
 ## Contact
 
-Ryuichiro Nakato: rnakato AT iam.u-tokyo.ac.jp
+Ryuichiro Nakato: rnakato AT iqb.u-tokyo.ac.jp
