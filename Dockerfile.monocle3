@@ -6,7 +6,7 @@
 #pyscenic
 
 FROM rnakato/rstudio:bionic
-LABEL maintainer "Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>"
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 
