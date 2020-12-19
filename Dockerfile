@@ -70,8 +70,7 @@ RUN R -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ'
     && R -e "IRkernel::installspec()"
 
 RUN R -e "BiocManager::install(c('limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'scTensor','S4Vectors'))"
-RUN R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))"
-
+RUN R -e "options(timeout=6000); BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))"
 
 # Seurat wrappers
 RUN R -e "BiocManager::install(c('CoGAPS'))"
@@ -196,9 +195,3 @@ ENV PATH $PATH:/opt/scgen-venv/bin/
 # metacells
 #RUN R -e "BiocManager::install('metacell',  site_repository = 'tanaylab.github.io/repo', update = FALSE)"
 RUN R -e "BiocManager::install('tanaylab/metacell')"
-
-# SnapATAC
-#RUN python -m venv snapatac-venv \
-#    && . snapatac-venv/bin/activate \
-#    && pip install scgen
-#ENV PATH $PATH:/opt/snapatac-venv/bin/
