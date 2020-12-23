@@ -1,0 +1,7 @@
+version: "3"
+services:
+  singlecell_jupyter:
+    build:
+      context: "."
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
