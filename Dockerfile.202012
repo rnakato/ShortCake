@@ -94,7 +94,7 @@ RUN rm ifnb.SeuratData_3.1.0.tar.gz panc8.SeuratData_3.0.2.tar.gz pbmcsca.Seurat
 # Signac
 RUN R -e "BiocManager::install('ggbio')"
 RUN R -e "install.packages('Signac')" \
-    && R -e "BiocManager::install(c('EnsDb.Hsapiens.v75','EnsDb.Hsapiens.v79', 'EnsDb.Hsapiens.v86', 'EnsDb.Mmusculus.v79', 'EnsDb.Mmusculus.v79'))"
+    && R -e "BiocManager::install(c('EnsDb.Hsapiens.v75','EnsDb.Hsapiens.v79', 'EnsDb.Hsapiens.v86', 'EnsDb.Mmusculus.v79'))"
 
 # SingleR
 RUN R -e "BiocManager::install(c('SingleR','scRNAseq'))"
