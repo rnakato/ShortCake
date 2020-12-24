@@ -6,6 +6,11 @@ LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 USER root
 WORKDIR /opt
 
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev \
@@ -62,6 +67,7 @@ RUN pip install gprofiler-official anndata2ri bbknn \
 
 # Seurat
 RUN R -e "install.packages(c('sleepwalk','bit64','zoo','scBio','Seurat','metap'), repos='https://cran.ism.ac.jp/')"
+
 # R for jupyterbook
 RUN R -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest'))" \
     && R -e "devtools::install_github('IRkernel/IRkernel')" \
@@ -201,3 +207,4 @@ RUN R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020'))"
 RUN R -e "devtools::install_github('aertslab/cisTopic')"
 
 RUN chmod 777 jupyternotebook.sh rserver.sh
+RUN rm ~/.Renviron
