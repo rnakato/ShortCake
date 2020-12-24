@@ -5,3 +5,4 @@ services:
       context: "."
       args:
         - GITHUB_PAT=${GITHUB_PAT}
+    image: rnakato/singlecell_jupyter

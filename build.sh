@@ -1,3 +1,8 @@
+docker-compose build
+docker tag rnakato/singlecell_jupyter:latest 2020.12
+
+exit
+
 for tag in latest #2020.12
 do
     docker build -f Dockerfile -t rnakato/singlecell_jupyter:$tag .
