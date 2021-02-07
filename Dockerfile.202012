@@ -35,7 +35,7 @@ RUN pip install -U velocyto scvelo numba pybind11 macs2
 # cellphoneDB
 RUN python -m venv cpdb-venv \
     && . cpdb-venv/bin/activate \
-    && pip install cellphonedb
+    && pip install cellphonedb scikit-learn==0.20.4
 ENV PATH $PATH:/opt/cpdb-venv/bin/
 
 # SCCAF
@@ -54,7 +54,7 @@ ENV PATH $PATH:/opt/pyscenic-venv/bin/
 RUN pip install scrublet
 
 # scVI
-RUN conda install scvi -c bioconda -c conda-forge \
+RUN conda install scvi-tools -c bioconda -c conda-forge \
     && pip install scikit-misc plotnine
 
 # Palantir, MAGIC
@@ -84,8 +84,10 @@ RUN R -e "install.packages('glmpca')"
 RUN R -e "devtools::install_github('kharchenkolab/conos')"
 RUN R -e "devtools::install_github('satijalab/seurat', ref = 'mixscape')"
 RUN R -e "devtools::install_github('satijalab/seurat-wrappers')"
-RUN R -e "devtools::install_github('satijalab/seurat-data', ref = 'develop')"
-#RUN R -e "SeuratData::InstallData(c('pbmcsca','ifnb','panc8','pbmc3k'))"
+
+# SeuratData
+RUN R -e "devtools::install_github('satijalab/seurat-data')"
+#RUN R -e "options(timeout=6000); SeuratData::InstallData(c('pbmcsca','ifnb','panc8','pbmc3k'))"
 
 COPY SeuratData/ifnb.SeuratData_3.1.0.tar.gz ifnb.SeuratData_3.1.0.tar.gz
 COPY SeuratData/panc8.SeuratData_3.0.2.tar.gz panc8.SeuratData_3.0.2.tar.gz
@@ -103,7 +105,7 @@ RUN R -e "install.packages('Signac')" \
     && R -e "BiocManager::install(c('EnsDb.Hsapiens.v75','EnsDb.Hsapiens.v79', 'EnsDb.Hsapiens.v86', 'EnsDb.Mmusculus.v79'))"
 
 # SingleR
-RUN R -e "BiocManager::install(c('SingleR','scRNAseq'))"
+RUN R -e "BiocManager::install(c('SingleR','scRNAseq','celldex'))"
 
 # scImpute
 RUN R -e "devtools::install_github(c('Vivianstats/scImpute'))"
@@ -161,20 +163,20 @@ RUN git clone https://github.com/BUStools/bustools.git \
 RUN R -e "devtools::install_github('chris-mcginnis-ucsf/DoubletFinder')"
 
 # LIGER (FFTW, FIt-SNE)
-RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
-    && tar zxvf fftw-3.3.8.tar.gz \
-    && rm fftw-3.3.8.tar.gz \
-    && cd fftw-3.3.8 \
-    && ./configure \
-    && make \
-    && make install \
-    && git clone https://github.com/KlugerLab/FIt-SNE.git \
-    && cd FIt-SNE/ \
-    && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
-    && cp bin/fast_tsne /usr/local/bin/
-RUN R -e "devtools::install_github(c('MacoskoLab/liger'))"
-ADD bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
-ENV PATH ${PATH}:/opt/bedops_linux_x86_64-v2.4.39
+#RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
+#    && tar zxvf fftw-3.3.8.tar.gz \
+#    && rm fftw-3.3.8.tar.gz \
+#    && cd fftw-3.3.8 \
+#    && ./configure \
+#    && make \
+#    && make install \
+#    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+#    && cd FIt-SNE/ \
+#    && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
+#    && cp bin/fast_tsne /usr/local/bin/
+#RUN R -e "devtools::install_github(c('MacoskoLab/liger'))"
+#ADD bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
+#ENV PATH ${PATH}:/opt/bedops_linux_x86_64-v2.4.39
 
 # Harmony
 RUN R -e "install.packages('gganimate')" \
@@ -200,11 +202,42 @@ ENV PATH $PATH:/opt/scgen-venv/bin/
 # metacells
 RUN R -e "BiocManager::install('tanaylab/metacell')"
 
-
+# motif database
 RUN R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020'))"
 
 # cisTopic
 RUN R -e "devtools::install_github('aertslab/cisTopic')"
 
+# SeuratDisk
+RUN R -e "devtools::install_github('mojaveazure/seurat-disk')"
+
+# LIGER (FFTW, FIt-SNE)
+RUN wget http://www.fftw.org/fftw-3.3.8.tar.gz \
+    && tar zxvf fftw-3.3.8.tar.gz \
+    && rm fftw-3.3.8.tar.gz \
+    && cd fftw-3.3.8 \
+    && ./configure \
+    && make \
+    && make install \
+    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+    && cd FIt-SNE/ \
+    && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
+    && cp bin/fast_tsne /usr/local/bin/
+RUN R -e "devtools::install_github(c('MacoskoLab/liger'))"
+ADD bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
+ENV PATH ${PATH}:/opt/bedops_linux_x86_64-v2.4.39
+
 RUN chmod 777 jupyternotebook.sh rserver.sh
 RUN rm ~/.Renviron
+
+# DoubletDetection
+RUN pip install doubletdetection
+
+RUN apt-get update \
+     && apt-get install -y --no-install-recommends \
+     libgraphviz-dev \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/lists/*
+
+# Constclust
+RUN pip install constclust
