@@ -1,9 +1,8 @@
 docker-compose build
 
-docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:2021.02
-#docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:2020.12
+docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:2021.03
 
-for tag in latest 2021.02 # 2020.12
+for tag in latest 2021.03
 do
     docker push rnakato/singlecell_jupyter:$tag
 done

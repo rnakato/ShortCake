@@ -120,14 +120,14 @@ RUN R -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ'
 # DelayedMatrixStats
     && R -e "devtools::install_github('PeteHaitch/DelayedMatrixStats@RELEASE_3_12')" \
 # others
-    && R -e "BiocManager::install(c('limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'MeSH.Hsa.eg.db', 'scTensor'))" \
+    && R -e "options(timeout=6000); BiocManager::install(c('limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'MeSH.Hsa.eg.db', 'scTensor'))" \
     && R -e "options(timeout=6000); BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))" \
     && R -e "remotes::install_github(c('jokergoo/ComplexHeatmap'))" \
 # Seurat wrappers
     && R -e "BiocManager::install(c('CoGAPS'))" \
     && R -e "BiocManager::install(c('scry'))" \
     && R -e "install.packages('glmpca')" \
-    && R -e "remotes::install_github('kharchenkolab/conos')" \
+    && R -e "options(timeout=6000); remotes::install_github('kharchenkolab/conos')" \
 #    && R -e "remotes::install_github('satijalab/seurat', ref = 'mixscape')" \
     && R -e "remotes::install_github('satijalab/seurat-wrappers')" \
 # SeuratData
@@ -213,7 +213,7 @@ RUN R -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ'
     && R -e "install.packages('SDMTools',,'http://rforge.net/',type='source')" \
     && R -e "install.packages(c('igraph','robustbase','shiny','tcltk','rhandsontable'))" \
     && R -e "BiocManager::install('flowCore')" \
-    && R -e "remotes::install_github(c('nolanlab/scaffold','nolanlab/Rclusterpp','nolanlab/spade','zunderlab/FLOWMAP'))" \
+    && R -e "options(timeout=6000); remotes::install_github(c('nolanlab/scaffold','nolanlab/Rclusterpp','nolanlab/spade','ParkerICI/vite','zunderlab/FLOWMAP'))" \
 # bigSCale2
     && R -e "install.packages(c('fmsb','ClassDiscovery','ggalt','ggdendro','ggpubr'))" \
     && R -e "BiocManager::install(c('org.Mm.eg.db', 'org.Hs.eg.db', 'BioQC', 'SingleCellExperiment'))" \
