@@ -2,6 +2,12 @@
 A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Changelog
+
+- 2021.03 (2021-05-01):
+
+    - Add datasets in SeuratData 
+    - Add Pagoda2
+
 - 2021.02 (2021-02-07):
 
     - Add programs
