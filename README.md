@@ -7,7 +7,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
     - Add programs
     - Use pip venv for several tools to avoid package conflicts (e.g., tensorflow)
 
-- 2020.12 (2020-12-24): 
+- 2020.12 (2020-12-24):
 
     - Add `docker-compose.yml` to allow GitHub Token
     - Omit the password to login Jupyter notebook
@@ -20,7 +20,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Included tools (latest)
 
-- Pipeline: Seurat (and wrappers), scater, scran, scanpy, scVI, monet, kallisto (bustools)
+- Pipeline: Seurat (and wrappers), scater, scran, scanpy, scVI, monet, Pagoda2, kallisto (bustools)
 - Doublet finding: Scrublet, DoubletFinder
 - Batch correction and data integration: Harmony, scmap, scBio, SingleCellNet
 - Clustering: SC3, metacell, SCCAF, Constclust, bigSCale2
@@ -36,9 +36,9 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 - scATAC-seq: cicero, chromVAR, ArchR, Signac, cisTopic, episcanpy
 
 - Database (genome): BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
-- Database (gene): EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v79 
+- Database (gene): EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v79
 - Database (motif): JASPAR2016, JASPAR2018, JASPAR2020
-- SeuratData: pbmcsca, ifnb, panc8, pbmc3k
+- SeuratData: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.0, ssHippo_3.1.4
 
 ## Run
 
@@ -62,7 +62,7 @@ For Singularity:
     singularity exec [--nv] rnakato_singlecell_jupyter.img R
 
 ## Build image from Dockerfile
-First clone and move to the repository 
+First clone and move to the repository
 
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
