@@ -231,14 +231,8 @@ RUN conda create -n cellassign -y python=3.7.8 jupyter numpy scipy matplotlib pa
     && R -e "remotes::install_github('Irrationone/cellassign')" \
     && conda deactivate
 
-#RUN python -m venv cellassign-venv \
-#    && . cellassign-venv/bin/activate \
-#    && pip install tensorflow==2.1.0 tensorflow_gpu==2.1.0 \
-#    && R -e "tensorflow::install_tensorflow(extra_packages='tensorflow-probability', version = '2.1.0')" \
-#    && R -e "tensorflow::tf_config()" \
-#    && R -e "remotes::install_github('Irrationone/cellassign')" \
-
-RUN pip install networkx==2.5
+RUN pip install networkx==2.5 fa2
+RUN R -e "install.packages('p2data', repos='https://kharchenkolab.github.io/drat/', type='source')"
 
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 COPY cell2cell_jupyter.sh cell2cell_jupyter.sh
