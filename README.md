@@ -50,7 +50,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 - Database (genome): BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
 - Database (gene): EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v79
 - Database (motif): JASPAR2016, JASPAR2018, JASPAR2020
-- SeuratData: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.0, ssHippo_3.1.4
+- SeuratData: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.2, ssHippo_3.1.4
 
 ## Run
 
@@ -67,11 +67,11 @@ For Docker:
 For Singularity:
 
     # build image
-    singularity build -F rnakato_singlecell_jupyter.img docker://rnakato/singlecell_jupyter
+    singularity build -F rnakato_singlecell_jupyter.sif docker://rnakato/singlecell_jupyter
     # jupyter notebook
-    singularity exec [--nv] rnakato_singlecell_jupyter.img jupyternotebook.sh
+    singularity exec [--nv] rnakato_singlecell_jupyter.sif jupyternotebook.sh
     # execute R directory
-    singularity exec [--nv] rnakato_singlecell_jupyter.img R
+    singularity exec [--nv] rnakato_singlecell_jupyter.sif R
 
 ## Build image from Dockerfile
 First clone and move to the repository
@@ -79,9 +79,10 @@ First clone and move to the repository
     git clone https://github.com/rnakato/docker_singlecell.git
     cd docker_singlecell
 
-Because the Dockerfile installs many packages from GitHub, please add [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `docker-compose.yml`. Then type:
+Because the Dockerfile installs many packages from GitHub, please add [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `docker-compose.R.yml` and `docker-compose.yml`. Then type:
 
-    docker-compose build
+    docker-compose -f docker-compose.R.yml build
+    docker-compose -f docker-compose.yml build
 
 ## Contact
 
