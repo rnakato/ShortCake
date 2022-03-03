@@ -1,8 +1,10 @@
-docker-compose build
+#docker-compose build
+docker-compose -f docker-compose.R.yml build --no-cache
+docker-compose -f docker-compose.yml build --no-cache
 
-docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:2021.03
+docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:2022.03
 
-for tag in latest 2021.03
+for tag in #2022.02 latest
 do
     docker push rnakato/singlecell_jupyter:$tag
 done

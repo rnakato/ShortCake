@@ -1,0 +1,139 @@
+# Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
+
+FROM docker_singlecell_singlecell_jupyter_r
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /work
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+CMD ["/bin/bash"]
+
+# Python
+RUN conda uninstall TBB
+
+## MACS2
+RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.6.tar.gz \
+    && tar zxvf v2.2.6.tar.gz && cd MACS-2.2.6/ \
+    && python setup.py install \
+    && rm -rf /work/v2.2.6.tar.gz /work/MACS-2.2.6/
+
+## conda install
+RUN conda install -y llvmlite numba \
+    && conda install -y -c bioconda scanpy kallisto \
+    && conda install -y louvain leidenalg
+RUN conda install -y -c statiskit libboost
+RUN conda install -y cython python-igraph
+# CellRank
+RUN conda install -y -c bioconda cellrank #cellrank-krylov
+
+## virtual environment
+# scVI
+RUN python -m venv scvi-venv \
+    && . scvi-venv/bin/activate \
+    && pip install scikit-misc plotnine scvi-tools \
+    && deactivate
+# cellphoneDB
+RUN conda create -n cpdb python=3.7 \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate cpdb \
+    && pip install cellphonedb \
+    && conda deactivate \
+# SCCAF
+    && python -m venv sccaf-venv \
+    && . sccaf-venv/bin/activate \
+    && pip install sccaf \
+    && deactivate
+# pySCENIC
+RUN conda create -y -n pyscenic python=3.7 \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate pyscenic \
+    && conda install -y numpy \
+    && conda install -y -c anaconda cytoolz \
+    && pip install pyscenic \
+    && conda deactivate
+# scGen
+RUN python -m venv scgen-venv \
+    && . scgen-venv/bin/activate \
+    && pip install scgen \
+    && deactivate \
+# cell2cell
+    && conda create -n cell2cell -y python=3.7.8 jupyter numpy scipy matplotlib pandas seaborn \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate cell2cell \
+    && pip install 'cell2cell==0.2.2' \
+    && pip install git+https://github.com/BubaVV/Pyevolve \
+    && pip install obonet umap-learn \
+    && conda deactivate \
+# SAVER-X
+    && python -m venv saverx-venv \
+    && . saverx-venv/bin/activate \
+    && pip install sctransfer \
+    && R -e "remotes::install_github('jingshuw/SAVERX')" \
+    && pip install obonet umap-learn \
+    && deactivate \
+# LIGER (FFTW, FIt-SNE)
+    && wget http://www.fftw.org/fftw-3.3.8.tar.gz \
+    && tar zxvf fftw-3.3.8.tar.gz \
+    && rm fftw-3.3.8.tar.gz \
+    && cd fftw-3.3.8 \
+    && ./configure \
+    && make \
+    && make install \
+    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+    && cd FIt-SNE/ \
+    && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm \
+    && cp bin/fast_tsne /usr/local/bin/ \
+    && cd \
+    && rm -rf ~/fftw-3.3.8 \
+    && R -e "install.packages('rliger')"
+ #   && R -e "remotes::install_github(c('MacoskoLab/liger'))" \
+ #   && conda clean -i -t -y
+# CellAssign
+RUN conda create -n cellassign -y python=3.7.8 jupyter numpy scipy matplotlib pandas seaborn \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate cellassign \
+    && pip install tensorflow==2.1.0 tensorflow_gpu==2.1.0 \
+    && R -e "install.packages('tensorflow')" \
+    && R -e "tensorflow::install_tensorflow(extra_packages='tensorflow-probability', version = '2.1.0')" \
+    && R -e "tensorflow::tf_config()" \
+    && R -e "remotes::install_github('Irrationone/cellassign')" \
+    && conda deactivate
+RUN conda create -n doubletdetection -y python=3.7.8 \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate doubletdetection \
+    && pip install doubletdetection \
+    && conda deactivate
+
+# pip install
+#RUN conda install -y cython
+RUN pip install -U velocyto scvelo pybind11 dash \
+    && pip install harmonypy daal==2021.2.3 scrublet constclust monet episcanpy \
+# Theis_Tutorial
+    && pip install gprofiler-official anndata2ri bbknn
+# Palantir, MAGIC
+RUN pip install PhenoGraph palantir rpy2 magic-impute \
+    && R -e "install.packages('gam')"
+
+# DEBUG
+RUN R -e "install.packages('igraph')" \
+    && pip install -U jupyterlab jinja2 \
+    && rm /opt/conda/lib/libtinfo.so*
+
+COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
+COPY cell2cell_jupyter.sh cell2cell_jupyter.sh
+ENV PATH $PATH:/work/bedops_linux_x86_64-v2.4.39 $PATH:/work/sccaf-venv/bin/ $PATH:/work/cpdb-venv/bin/ $PATH:/work/pyscenic-venv/bin/ $PATH:/work/scgen-venv/bin/
+
+RUN chmod 777 jupyternotebook.sh rserver.sh cell2cell_jupyter.sh
+RUN rm ~/.Renviron
