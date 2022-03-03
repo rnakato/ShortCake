@@ -3,9 +3,15 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Changelog
 
+- 2022.03 (2022-03-03)
+
+    - Separate Dockerfile to Dockerfile.R and Dockerfile.Python
+    - change base image from `pytorch-1.5-cuda10.1-cudnn7-devel` to `nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04` to upgrade Python to 3.9
+    - Add CellChat
+
 - 2021.03 (2021-05-01):
 
-    - Add datasets in SeuratData 
+    - Add datasets in SeuratData
     - Add Pagoda2
 
 - 2021.02 (2021-02-07):
