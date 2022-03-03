@@ -39,7 +39,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 - Cluster annotation: RCA, CellAssign, garnett, scCatch, SingleR
 - Trajectory analysis: Monocle2/3, slingshot, velocyto, scVelo, Palantir, CellRank, FROWMAP
 - Gene network: WGCNA, SCENIC (pySCENIC)
-- Cell-to-cell interaction: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell
+- Cell-to-cell interaction: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
 - Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE
 - Multi-modal: LIGER, scAI, MOFA2
 - Bulk deconvolution: SCDC, MuSiC
