@@ -7,7 +7,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
     - Separate Dockerfile to Dockerfile.R and Dockerfile.Python
     - change base image from `pytorch-1.5-cuda10.1-cudnn7-devel` to `nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04` to upgrade Python to 3.9
-    - Add CellChat
+    - Add CellChat, dyngen
 
 - 2021.03 (2021-05-01):
 
@@ -43,7 +43,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 - Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE
 - Multi-modal: LIGER, scAI, MOFA2
 - Bulk deconvolution: SCDC, MuSiC
-- Simulation: Splatter
+- Simulation: Splatter, dyngen
 - Others: scGen, sleepwalk, singleCellHaystack, ComplexHeatmap
 - scATAC-seq: cicero, chromVAR, ArchR, Signac, cisTopic, episcanpy
 
