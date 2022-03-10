@@ -133,6 +133,8 @@ RUN R -e "install.packages('igraph')" \
 
 RUN R -e "install.packages('dyngen')"
 
+RUN pip install -U scanpy
+
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 COPY cell2cell_jupyter.sh cell2cell_jupyter.sh
 ENV PATH $PATH:/work/bedops_linux_x86_64-v2.4.39 $PATH:/work/sccaf-venv/bin/ $PATH:/work/cpdb-venv/bin/ $PATH:/work/pyscenic-venv/bin/ $PATH:/work/scgen-venv/bin/
