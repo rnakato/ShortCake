@@ -7,7 +7,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
     - Separate Dockerfile to Dockerfile.R and Dockerfile.Python
     - change base image from `pytorch-1.5-cuda10.1-cudnn7-devel` to `nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04` to upgrade Python to 3.9
-    - Add CellChat, dyngen
+    - Add CellChat, dyngen, Dynamo
 
 - 2021.03 (2021-05-01):
 
@@ -37,7 +37,8 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 - Batch correction and data integration: Harmony, scmap, scBio, SingleCellNet
 - Clustering: SC3, metacell, SCCAF, Constclust, bigSCale2
 - Cluster annotation: RCA, CellAssign, garnett, scCatch, SingleR
-- Trajectory analysis: Monocle2/3, slingshot, velocyto, scVelo, Palantir, CellRank, FROWMAP
+- Trajectory analysis: Monocle2/3, slingshot, Palantir, FROWMAP
+- RNA velocity: velocyto, scVelo, CellRank, Dynamo
 - Gene network: WGCNA, SCENIC (pySCENIC)
 - Cell-to-cell interaction: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
 - Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE
