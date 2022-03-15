@@ -137,7 +137,13 @@ RUN pip install -U scanpy \
     && conda install -c conda-forge fa2
 
 RUN conda install -y -c bioconda samtools
-RUN pip install dynamo-release
+
+RUN conda create -n dynamo -y jupyter \
+    && conda init bash \
+    && . ~/.bashrc \
+    && conda activate dynamo \
+    && pip install dynamo-release pycairo \
+    && deactivate
 
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 COPY cell2cell_jupyter.sh cell2cell_jupyter.sh
