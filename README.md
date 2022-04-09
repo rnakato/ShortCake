@@ -62,8 +62,8 @@ For Docker:
 
     # container login
     docker run [--gpus all] --rm -it rnakato/singlecell_jupyter /bin/bash
-    # jupyter notebook
-    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/opt/work rnakato/singlecell_jupyter jupyternotebook.sh
+    # jupyter notebook (see mnt/ directory in the notebook )
+    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/singlecell_jupyter jupyternotebook.sh
 
 For Singularity:
 
