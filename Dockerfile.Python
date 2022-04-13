@@ -138,7 +138,7 @@ RUN pip install -U scanpy \
 
 RUN conda install -y -c bioconda samtools
 
-RUN conda create -n dynamo -y jupyter \
+RUN conda create -n dynamo -y python=3.7 jupyter pandas==1.1.1 sinfo \
     && conda init bash \
     && . ~/.bashrc \
     && conda activate dynamo \
@@ -147,7 +147,8 @@ RUN conda create -n dynamo -y jupyter \
 
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 COPY cell2cell_jupyter.sh cell2cell_jupyter.sh
-ENV PATH $PATH:/work/bedops_linux_x86_64-v2.4.39 $PATH:/work/sccaf-venv/bin/ $PATH:/work/cpdb-venv/bin/ $PATH:/work/pyscenic-venv/bin/ $PATH:/work/scgen-venv/bin/
+ENV PATH $PATH:/work:/opt/bin:/work/bedops_linux_x86_64-v2.4.39:/work/sccaf-venv/bin/:/work/cpdb-venv/bin/:/work/pyscenic-venv/bin/:/work/scgen-venv/bin/
 
 RUN chmod 777 jupyternotebook.sh rserver.sh cell2cell_jupyter.sh
+RUN mkdir /opt/bin && cp jupyternotebook.sh rserver.sh cell2cell_jupyter.sh /opt/bin
 RUN rm ~/.Renviron
