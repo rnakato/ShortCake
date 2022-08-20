@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  singlecell_jupyter_r:
+    build:
+      context: "."
+      dockerfile: Dockerfile.R
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}

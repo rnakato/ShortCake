@@ -1,0 +1,93 @@
+#!/bin/bash
+# author : sjn + apr
+# date : July.2017
+
+BINDIR=$(dirname `which bedops`)
+[ -n "${2}" ] && BINDIR=${2}
+
+CMD="switch-BEDOPS-binary-type"
+
+help()
+{
+    echo "Switch the BEDOPS binary build to typical, megarow, or float128"
+    echo "Usage: ${CMD} [ --help ] [ --typical | --megarow | --float128 ] [ <binary-directory> (optional) ]" >&2
+    exit $1
+}
+
+TYPICAL=false
+MEGAROW=false
+FLOAT128=false
+
+cntr=0
+
+OPTSPEC=":tmfh-:"
+while getopts "$OPTSPEC" OPTCHAR; do
+    case "${OPTCHAR}" in
+        -)
+            case "${OPTARG}" in
+                typical)
+                    ((cntr+=1))
+                    TYPICAL=true
+                    ;;
+                megarow)
+                    ((cntr+=1))
+                    MEGAROW=true
+                    ;;
+                float128)
+                    ((cntr+=1))
+                    FLOAT128=true
+                    ;;
+                help)
+                    help 0
+                    ;;
+                *)
+                    help 1
+                    ;;
+            esac;;
+        t)
+            ((cntr+=1))
+            TYPICAL=true
+            ;;
+        m)
+            ((cntr+=1))
+            MEGAROW=true
+            ;;
+        f)
+            ((cntr+=1))
+            FLOAT128=true
+            ;;
+        h)
+            help 0
+            ;;
+        *)
+            help 1
+            ;;
+    esac
+done
+
+if [[ "$cntr" -ne "1" ]]
+then
+    help 1
+fi
+
+if ${MEGAROW}
+then
+    TYPE=megarow
+fi
+if ${TYPICAL}
+then 
+    TYPE=typical
+fi
+if ${FLOAT128}
+then
+    TYPE=float128
+fi
+
+echo $BINDIR
+for SRCNAME in `find ${BINDIR} -maxdepth 1 -mindepth 1 -type f -name "*${TYPE}" -print0 | xargs -L1 -0 -I{} sh -c 'basename {}'`
+do
+    DESTNAME=`echo ${SRCNAME} | perl -Tpe 's/-'${TYPE}'//'`
+    ln -sf ${BINDIR}/${SRCNAME} ${BINDIR}/${DESTNAME}
+done
+
+exit 0

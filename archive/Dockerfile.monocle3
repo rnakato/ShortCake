@@ -1,0 +1,31 @@
+### Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
+# Installed tools: Seurat, Monocle3, scater, scImpute, velocyto, scanpy, sleepwalk, liger, RCA, scBio, SCENIC, singleCellHaystack, scmap, scran, slingshot
+
+# splatter is an R script and cannot be installed by command
+# https://github.com/MarioniLab/MNN2017/
+#pyscenic
+
+FROM rnakato/rstudio:bionic
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+
+ENV PATH /opt/conda/bin:${PATH}
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libgdal-dev \
+    libudunits2-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN R -e "install.packages(c('devtools','BiocManager'), repos='https://cran.ism.ac.jp/')" \
+    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats','S4Vectors', 'SingleCellExperiment','SummarizedExperiment', 'batchelor'))" \
+    && R -e "devtools::install_github('cole-trapnell-lab/leidenbase')" \
+    && R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
+
+RUN R -e "BiocManager::install(c('multtest'))" \
+    && R -e "install.packages(c('Seurat'))"
+
+RUN  R -e "BiocManager::install(c('limma'))" \
+    &&R -e "devtools::install_github('cole-trapnell-lab/monocle3')"

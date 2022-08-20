@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  singlecell_jupyter:
+    build:
+      context: "."
+      dockerfile: Dockerfile.Python
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+    image: rnakato/singlecell_jupyter

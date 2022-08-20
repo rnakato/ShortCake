@@ -1,0 +1,182 @@
+# Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
+
+FROM docker_r_singlecell_jupyter_r
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+### conda install
+RUN conda update conda && conda update --all \
+    && conda install -y llvmlite numba cython python-igraph \
+    && conda install -y -c bioconda kallisto \
+    && conda install -y -c conda-forge fa2 louvain leidenalg \
+    && conda install -y -c statiskit libboost
+#    && conda install -y cython python-igraph
+#    && conda install -c conda-forge fa2
+
+# MACS2
+RUN wget --progress=dot:giga https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.6.tar.gz \
+    && tar zxvf v2.2.6.tar.gz && cd MACS-2.2.6/ \
+    && python setup.py install \
+    && rm -rf /opt/v2.2.6.tar.gz /opt/MACS-2.2.6/
+# LIGER (FFTW, FIt-SNE)
+RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.8.tar.gz \
+    && tar zxvf fftw-3.3.8.tar.gz \
+    && rm fftw-3.3.8.tar.gz \
+    && cd fftw-3.3.8 \
+    && ./configure \
+    && make \
+    && make install \
+    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+    && cd FIt-SNE/ \
+    && g++ -std=c++11 -O3 src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp -o bin/fast_tsne -pthread -lfftw3 -lm \
+    && cp bin/fast_tsne /usr/local/bin/ \
+    && cd \
+    && rm -rf /opt/fftw-3.3.8 \
+    && R -e "install.packages('rliger')"
+ #   && R -e "remotes::install_github(c('MacoskoLab/liger'))" \
+ #   && conda clean -i -t -y
+
+### Virtual environment
+RUN conda init bash \
+    && . ~/.bashrc \
+    && . activate \
+    && conda create -n CellRank jupyter notebook ipykernel seaborn \
+    && source activate CellRank \
+    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
+#cellrank==1.5.1-0
+    && pip install --no-cache-dir session-info \
+    && python -m ipykernel install --name=CellRank \
+    && jupyter kernelspec list \
+    && conda deactivate
+# scVI
+RUN . activate \
+    && conda create -n scVI jupyter notebook ipykernel seaborn \
+    && source activate scVI \
+    && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
+    && python -m ipykernel install --name=scVI \
+    && jupyter kernelspec list \
+    && conda deactivate
+# cellphoneDB
+RUN . activate \
+    && conda create -n cellphoneDB python=3.7 jupyter notebook ipykernel seaborn nbconvert==5.6.1 \
+    && source activate cellphoneDB \
+    && pip uninstall -y jupyterlab-server \
+    && pip install --no-cache-dir cellphonedb session-info \
+    && cellphonedb database download \
+    && python -m ipykernel install --name=cellphoneDB \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# SCCAF
+    && conda create -n SCCAF jupyter notebook ipykernel seaborn \
+    && source activate SCCAF \
+    && pip install --no-cache-dir sccaf session-info \
+    && python -m ipykernel install --name=SCCAF \
+    && jupyter kernelspec list \
+    && conda deactivate
+# pySCENIC
+RUN conda create -y -n pySCENIC python=3.7 jupyter notebook ipykernel seaborn \
+    && source activate pySCENIC \
+    && conda install -y -c anaconda cytoolz \
+    && pip install --no-cache-dir pyscenic session-info \
+    && python -m ipykernel install --name=pySCENIC \
+    && jupyter kernelspec list \
+    && conda deactivate
+# scGen
+RUN conda create -y -n scGen jupyter notebook ipykernel seaborn \
+    && source activate scGen \
+    && pip install --no-cache-dir scgen[tutorials] session-info \
+    && python -m ipykernel install --name=scGen \
+    && jupyter kernelspec list \
+    && conda deactivate
+# cell2cell
+RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
+    && source activate cell2cell \
+    && pip install --no-cache-dir 'cell2cell==0.2.2' session-info \
+    && pip install --no-cache-dir git+https://github.com/BubaVV/Pyevolve \
+    && pip install --no-cache-dir obonet umap-learn \
+    && python -m ipykernel install --name=cell2cell \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# SAVER-X
+    && conda create -y -n SAVER-X jupyter notebook ipykernel seaborn \
+    && source activate SAVER-X \
+    && pip install --no-cache-dir sctransfer session-info \
+    && R -e "remotes::install_github('jingshuw/SAVERX')" \
+    && pip install --no-cache-dir obonet umap-learn \
+    && python -m ipykernel install --name=SAVER-X \
+    && jupyter kernelspec list \
+    && conda deactivate
+# CellAssign (purged)
+#RUN . activate \
+#    && conda create -n CellAssign -y python=3.7 jupyter notebook ipykernel seaborn pyzmq \
+#    && conda activate CellAssign \
+#    && conda install -c conda-forge -c bioconda r-cellassign \
+#    && pip install --no-cache-dir tensorflow==2.1.0 tensorflow_gpu==2.1.0 \
+#    && R -e "install.packages('tensorflow')" \
+#    && R -e "tensorflow::install_tensorflow(extra_packages='tensorflow-probability', version = '2.1.0')" \
+#    && R -e "tensorflow::tf_config()" \
+ #   && R -e "remotes::install_github('Irrationone/cellassign')" \
+#    && python -m ipykernel install --name=CellAssign \
+#    && jupyter kernelspec list \
+#    && conda deactivate
+# doubletdetection
+RUN conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel seaborn \
+    && source activate doubletdetection \
+    && pip install --no-cache-dir doubletdetection session-info \
+    && python -m ipykernel install --name=doubletdetection \
+    && jupyter kernelspec list \
+    && conda deactivate
+# dynamo
+RUN conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 \
+    && source activate dynamo \
+    && pip install --no-cache-dir dynamo-release pycairo session-info \
+    && python -m ipykernel install --name=dynamo \
+    && jupyter kernelspec list \
+    && conda deactivate
+# episcanpy
+RUN conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel seaborn \
+    && source activate episcanpy \
+    && pip install --no-cache-dir episcanpy \
+    && python -m ipykernel install --name=episcanpy \
+    && jupyter kernelspec list \
+    && conda deactivate
+# novosparc
+RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel seaborn \
+    && source activate novosparc \
+    && pip install --no-cache-dir novosparc \
+    && python -m ipykernel install --name=novosparc \
+    && jupyter kernelspec list \
+    && conda deactivate
+# harmonypy
+RUN conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel seaborn \
+    && source activate harmonypy \
+    && pip install --no-cache-dir harmonypy \
+    && python -m ipykernel install --name=harmonypy \
+    && jupyter kernelspec list \
+    && conda deactivate
+
+RUN conda uninstall TBB \
+ && pip install --no-cache-dir -U velocyto scvelo pybind11 dash black==19.10b0 \
+    && pip install --no-cache-dir daal==2021.2.3 scrublet constclust monet xlrd
+# Theis_Tutorial
+RUN pip install --no-cache-dir gprofiler-official anndata2ri bbknn \
+# Palantir, MAGIC
+    && pip install --no-cache-dir PhenoGraph palantir rpy2 magic-impute
+
+COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
+ENV PATH $PATH:/opt:/opt/bin:/opt/bedops_linux_x86_64-v2.4.39:
+
+RUN chmod 777 /opt/jupyternotebook.sh /opt/rserver.sh
+RUN rm ~/.Renviron
+
+CMD ["jupyternotebook.sh"]
