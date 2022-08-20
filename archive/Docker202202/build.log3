@@ -1,140 +1,0 @@
-nohup: 入力を無視します
-Building singlecell_jupyter
-Step 1/31 : FROM rnakato/r_python_gpu:2022.02
- ---> e099f92fc9e4
-Step 2/31 : LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
- ---> Using cache
- ---> 766ef8fe9049
-Step 3/31 : USER root
- ---> Using cache
- ---> 44f40811de49
-Step 4/31 : WORKDIR /work
- ---> Using cache
- ---> 36667cc9f7d4
-Step 5/31 : ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
- ---> Using cache
- ---> bb673d0d2198
-Step 6/31 : ARG GITHUB_PAT
- ---> Using cache
- ---> 5090ae2274bb
-Step 7/31 : RUN set -x &&     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron     && cat ~/.Renviron     && apt-get update     && apt-get install -y --no-install-recommends     libcurl4-openssl-dev     libgfortran5     libgmp3-dev     libgraphviz-dev     libgtk-3-dev     libgtkmm-3.0-dev     libssl-dev     libunwind-dev     libxt-dev     && apt-get clean     && rm -rf /var/lib/apt/lists/*
- ---> Using cache
- ---> 53dd6bd9f71a
-Step 8/31 : CMD ["/bin/bash"]
- ---> Using cache
- ---> afa78dd372d9
-Step 9/31 : RUN pip install -U pip
- ---> Using cache
- ---> 5392ef7a40d3
-Step 10/31 : RUN pip install -U velocyto scvelo pybind11 macs2 dash
- ---> Using cache
- ---> c8620013c78a
-Step 11/31 : RUN conda install -y llvmlite numba     && conda install -y -c bioconda scanpy kallisto     && conda install -y louvain leidenalg     && conda install -y -c statiskit libboost     && conda install -y cython python-igraph
- ---> Using cache
- ---> 6a6e6174f72e
-Step 12/31 : RUN conda uninstall TBB
- ---> Using cache
- ---> 5f7a66ed2136
-Step 13/31 : RUN pip install -U velocyto scvelo pybind11 macs2 dash     && pip install harmonypy daal==2021.2.3 scrublet constclust #monet #episcanpy
- ---> Using cache
- ---> 57a3082330a8
-Step 14/31 : RUN python -m venv scvi-venv     && . scvi-venv/bin/activate     && pip install scikit-misc plotnine scvi-tools     && deactivate     && pip install PhenoGraph palantir rpy2 magic-impute     && R -e "install.packages('gam')"     && pip install gprofiler-official anndata2ri bbknn     && R -e "BiocManager::install(c('MAST','clusterExperiment'))"     && conda install -y -c conda-forge -c bioconda cellrank-krylov
- ---> Using cache
- ---> f528884508a5
-Step 15/31 : RUN conda create -n cpdb python=3.7     && conda activate cpdb     && pip install cellphonedb     && conda deactivate     && python -m venv sccaf-venv     && . sccaf-venv/bin/activate     && pip install sccaf     && deactivate     && python -m venv pyscenic-venv     && . pyscenic-venv/bin/activate     && pip install pyscenic     && deactivate     && python -m venv scgen-venv     && . scgen-venv/bin/activate     && pip install scgen     && deactivate     && conda create -n cell2cell -y python=3.7.8 jupyter numpy scipy matplotlib pandas seaborn     && conda init bash     && . ~/.bashrc     && conda activate cell2cell     && pip install 'cell2cell==0.2.2'     && pip install git+https://github.com/BubaVV/Pyevolve     && pip install obonet umap-learn     && conda deactivate     && python -m venv saverx-venv     && . saverx-venv/bin/activate     && pip install sctransfer     && R -e "remotes::install_github('jingshuw/SAVERX')"     && pip install obonet umap-learn     && deactivate     && wget http://www.fftw.org/fftw-3.3.8.tar.gz     && tar zxvf fftw-3.3.8.tar.gz     && rm fftw-3.3.8.tar.gz     && cd fftw-3.3.8     && ./configure     && make     && make install     && git clone https://github.com/KlugerLab/FIt-SNE.git     && cd FIt-SNE/     && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm     && cp bin/fast_tsne /usr/local/bin/     && cd     && rm -rf ~/fftw-3.3.8     && R -e "remotes::install_github(c('MacoskoLab/liger'))"     && conda clean -i -t -y
- ---> Running in 963afc9832d8
-Collecting package metadata (current_repodata.json): ...working... done
-Solving environment: ...working... done
-
-## Package Plan ##
-
-  environment location: /opt/conda/envs/cpdb
-
-  added / updated specs:
-    - python=3.7
-
-
-The following packages will be downloaded:
-
-    package                    |            build
-    ---------------------------|-----------------
-    _openmp_mutex-4.5          |            1_gnu          22 KB  conda-forge
-    libffi-3.4.2               |       h7f98852_5          57 KB  conda-forge
-    libgomp-11.2.0             |      h1d223b6_12         426 KB  conda-forge
-    libnsl-2.0.0               |       h7f98852_0          31 KB  conda-forge
-    openssl-3.0.0              |       h7f98852_2         2.9 MB  conda-forge
-    python-3.7.12              |hf930737_100_cpython        57.3 MB  conda-forge
-    python_abi-3.7             |          2_cp37m           4 KB  conda-forge
-    setuptools-60.8.1          |   py37h89c1867_0         1.2 MB  conda-forge
-    ------------------------------------------------------------
-                                           Total:        61.9 MB
-
-The following NEW packages will be INSTALLED:
-
-  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge
-  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-1_gnu
-  ca-certificates    conda-forge/linux-64::ca-certificates-2021.10.8-ha878542_0
-  ld_impl_linux-64   conda-forge/linux-64::ld_impl_linux-64-2.36.1-hea4e1c9_2
-  libffi             conda-forge/linux-64::libffi-3.4.2-h7f98852_5
-  libgcc-ng          conda-forge/linux-64::libgcc-ng-11.2.0-h1d223b6_12
-  libgomp            conda-forge/linux-64::libgomp-11.2.0-h1d223b6_12
-  libnsl             conda-forge/linux-64::libnsl-2.0.0-h7f98852_0
-  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-11.2.0-he4da1e4_12
-  libzlib            conda-forge/linux-64::libzlib-1.2.11-h36c2ea0_1013
-  ncurses            conda-forge/linux-64::ncurses-6.3-h9c3ff4c_0
-  openssl            conda-forge/linux-64::openssl-3.0.0-h7f98852_2
-  pip                conda-forge/noarch::pip-22.0.3-pyhd8ed1ab_0
-  python             conda-forge/linux-64::python-3.7.12-hf930737_100_cpython
-  python_abi         conda-forge/linux-64::python_abi-3.7-2_cp37m
-  readline           conda-forge/linux-64::readline-8.1-h46c0cb4_0
-  setuptools         conda-forge/linux-64::setuptools-60.8.1-py37h89c1867_0
-  sqlite             conda-forge/linux-64::sqlite-3.37.0-h9cd32fc_0
-  tk                 conda-forge/linux-64::tk-8.6.11-h27826a3_1
-  wheel              conda-forge/noarch::wheel-0.37.1-pyhd8ed1ab_0
-  xz                 conda-forge/linux-64::xz-5.2.5-h516909a_1
-  zlib               conda-forge/linux-64::zlib-1.2.11-h36c2ea0_1013
-
-
-Proceed ([y]/n)? 
-
-Downloading and Extracting Packages
-libffi-3.4.2         | 57 KB     |            |   0% libffi-3.4.2         | 57 KB     | ########## | 100% libffi-3.4.2         | 57 KB     | ########## | 100% 
-openssl-3.0.0        | 2.9 MB    |            |   0% openssl-3.0.0        | 2.9 MB    | ##3        |  23% openssl-3.0.0        | 2.9 MB    | #####8     |  58% openssl-3.0.0        | 2.9 MB    | #########8 |  99% openssl-3.0.0        | 2.9 MB    | ########## | 100% 
-setuptools-60.8.1    | 1.2 MB    |            |   0% setuptools-60.8.1    | 1.2 MB    | ######8    |  69% setuptools-60.8.1    | 1.2 MB    | ########## | 100% 
-_openmp_mutex-4.5    | 22 KB     |            |   0% _openmp_mutex-4.5    | 22 KB     | ########## | 100% 
-libgomp-11.2.0       | 426 KB    |            |   0% libgomp-11.2.0       | 426 KB    | ########## | 100% libgomp-11.2.0       | 426 KB    | ########## | 100% 
-libnsl-2.0.0         | 31 KB     |            |   0% libnsl-2.0.0         | 31 KB     | ########## | 100% 
-python_abi-3.7       | 4 KB      |            |   0% python_abi-3.7       | 4 KB      | ########## | 100% 
-python-3.7.12        | 57.3 MB   |            |   0% python-3.7.12        | 57.3 MB   | 1          |   1% python-3.7.12        | 57.3 MB   | 3          |   3% python-3.7.12        | 57.3 MB   | 5          |   5% python-3.7.12        | 57.3 MB   | 7          |   7% python-3.7.12        | 57.3 MB   | 9          |   9% python-3.7.12        | 57.3 MB   | #1         |  11% python-3.7.12        | 57.3 MB   | #3         |  13% python-3.7.12        | 57.3 MB   | #5         |  15% python-3.7.12        | 57.3 MB   | #7         |  17% python-3.7.12        | 57.3 MB   | #8         |  19% python-3.7.12        | 57.3 MB   | ##         |  21% python-3.7.12        | 57.3 MB   | ##2        |  23% python-3.7.12        | 57.3 MB   | ##4        |  25% python-3.7.12        | 57.3 MB   | ##6        |  27% python-3.7.12        | 57.3 MB   | ##8        |  29% python-3.7.12        | 57.3 MB   | ###        |  31% python-3.7.12        | 57.3 MB   | ###2       |  33% python-3.7.12        | 57.3 MB   | ###4       |  35% python-3.7.12        | 57.3 MB   | ###6       |  37% python-3.7.12        | 57.3 MB   | ###8       |  39% python-3.7.12        | 57.3 MB   | ####       |  41% python-3.7.12        | 57.3 MB   | ####2      |  43% python-3.7.12        | 57.3 MB   | ####4      |  45% python-3.7.12        | 57.3 MB   | ####6      |  47% python-3.7.12        | 57.3 MB   | ####8      |  48% python-3.7.12        | 57.3 MB   | #####      |  50% python-3.7.12        | 57.3 MB   | #####2     |  52% python-3.7.12        | 57.3 MB   | #####4     |  54% python-3.7.12        | 57.3 MB   | #####6     |  56% python-3.7.12        | 57.3 MB   | #####8     |  58% python-3.7.12        | 57.3 MB   | ######     |  60% python-3.7.12        | 57.3 MB   | ######2    |  62% python-3.7.12        | 57.3 MB   | ######4    |  64% python-3.7.12        | 57.3 MB   | ######6    |  66% python-3.7.12        | 57.3 MB   | ######8    |  68% python-3.7.12        | 57.3 MB   | #######    |  70% python-3.7.12        | 57.3 MB   | #######2   |  72% python-3.7.12        | 57.3 MB   | #######4   |  74% python-3.7.12        | 57.3 MB   | #######6   |  76% python-3.7.12        | 57.3 MB   | #######8   |  78% python-3.7.12        | 57.3 MB   | ########   |  80% python-3.7.12        | 57.3 MB   | ########2  |  82% python-3.7.12        | 57.3 MB   | ########4  |  84% python-3.7.12        | 57.3 MB   | ########6  |  86% python-3.7.12        | 57.3 MB   | ########8  |  88% python-3.7.12        | 57.3 MB   | #########  |  90% python-3.7.12        | 57.3 MB   | #########2 |  92% python-3.7.12        | 57.3 MB   | #########4 |  94% python-3.7.12        | 57.3 MB   | #########6 |  96% python-3.7.12        | 57.3 MB   | #########8 |  98% python-3.7.12        | 57.3 MB   | ########## | 100% 
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-#
-# To activate this environment, use
-#
-#     $ conda activate cpdb
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
-
-[91m
-CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-To initialize your shell, run
-
-    $ conda init <SHELL_NAME>
-
-Currently supported shells are:
-  - bash
-  - fish
-  - tcsh
-  - xonsh
-  - zsh
-  - powershell
-
-See 'conda init --help' for more information and options.
-
-IMPORTANT: You may need to close and restart your shell after running 'conda init'.
-
-
-[0mService 'singlecell_jupyter' failed to build: The command '/bin/sh -c conda create -n cpdb python=3.7     && conda activate cpdb     && pip install cellphonedb     && conda deactivate     && python -m venv sccaf-venv     && . sccaf-venv/bin/activate     && pip install sccaf     && deactivate     && python -m venv pyscenic-venv     && . pyscenic-venv/bin/activate     && pip install pyscenic     && deactivate     && python -m venv scgen-venv     && . scgen-venv/bin/activate     && pip install scgen     && deactivate     && conda create -n cell2cell -y python=3.7.8 jupyter numpy scipy matplotlib pandas seaborn     && conda init bash     && . ~/.bashrc     && conda activate cell2cell     && pip install 'cell2cell==0.2.2'     && pip install git+https://github.com/BubaVV/Pyevolve     && pip install obonet umap-learn     && conda deactivate     && python -m venv saverx-venv     && . saverx-venv/bin/activate     && pip install sctransfer     && R -e "remotes::install_github('jingshuw/SAVERX')"     && pip install obonet umap-learn     && deactivate     && wget http://www.fftw.org/fftw-3.3.8.tar.gz     && tar zxvf fftw-3.3.8.tar.gz     && rm fftw-3.3.8.tar.gz     && cd fftw-3.3.8     && ./configure     && make     && make install     && git clone https://github.com/KlugerLab/FIt-SNE.git     && cd FIt-SNE/     && g++ -std=c++11 -O3  src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm     && cp bin/fast_tsne /usr/local/bin/     && cd     && rm -rf ~/fftw-3.3.8     && R -e "remotes::install_github(c('MacoskoLab/liger'))"     && conda clean -i -t -y' returned a non-zero code: 1
