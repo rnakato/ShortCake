@@ -1,4 +1,4 @@
-# ShortCake
+# ShortCake🍰
 A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Changelog
