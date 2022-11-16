@@ -1,6 +1,4 @@
-# Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-
-FROM docker_r_singlecell_jupyter_r
+FROM docker_r_shortcale_r
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -20,8 +18,6 @@ RUN conda update conda && conda update --all \
     && conda install -y -c bioconda kallisto \
     && conda install -y -c conda-forge fa2 louvain leidenalg \
     && conda install -y -c statiskit libboost
-#    && conda install -y cython python-igraph
-#    && conda install -c conda-forge fa2
 
 # MACS2
 RUN wget --progress=dot:giga https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.6.tar.gz \
