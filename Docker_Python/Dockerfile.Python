@@ -1,4 +1,4 @@
-FROM docker_r_shortcale_r
+FROM docker_r_shortcake_r
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
