@@ -1,7 +1,11 @@
-# docker_singlecell_jupyter
-0;136;0cA docker image for single-cell analyses. It's on docker-hub and GitHub.
+# ShortCake
+A docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Changelog
+
+- 2022.11.16 
+
+    - rename to **ShortCake** 🍰
 
 - 2022.08.2 (2022-08)
 
