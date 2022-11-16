@@ -1,5 +1,6 @@
 # ShortCake🍰
 A docker image for single-cell analyses. It's on docker-hub and GitHub.
+This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
 ## Changelog
 
