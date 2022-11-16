@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  singlecell_jupyter_r:
+  shortcake_r:
     build:
       context: "."
       dockerfile: Dockerfile.R
