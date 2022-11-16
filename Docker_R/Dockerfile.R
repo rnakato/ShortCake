@@ -1,5 +1,3 @@
-# Single-cell analysis pipeline for "Integrated analysis and regulation of cellular diversity"
-
 FROM rnakato/r_python_gpu:2022.08.2
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
@@ -28,11 +26,6 @@ RUN set -x && \
     && rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]
-
-# R for jupyterbook
-#RUN R -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest'))" \
-#    && R -e "remotes::install_github('IRkernel/IRkernel')" \
-#    && R -e "IRkernel::installspec()" \
 
 RUN R -e "BiocManager::install(c('DelayedMatrixStats','limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'MeSH.Hsa.eg.db', 'MAST','clusterExperiment', 'scTensor', 'clusterProfiler'))" \
     && R -e "options(timeout=6000); BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))" \

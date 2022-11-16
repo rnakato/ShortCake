@@ -1,6 +1,5 @@
-#SeuratData/
-#bedops_linux_x86_64-v2.4.39/
-Docker202202/
-data/
-old/
-log/
+archives
+Docker_Python/archives/
+Docker_Python/log/
+Docker_R/SeuratData/
+Docker_R/log/
