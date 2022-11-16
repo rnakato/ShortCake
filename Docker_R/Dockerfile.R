@@ -34,11 +34,11 @@ CMD ["/bin/bash"]
 #    && R -e "remotes::install_github('IRkernel/IRkernel')" \
 #    && R -e "IRkernel::installspec()" \
 
-RUN R -e "BiocManager::install(c('DelayedMatrixStats','limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'MeSH.Hsa.eg.db', 'MAST','clusterExperiment', 'scTensor'))" \
+RUN R -e "BiocManager::install(c('DelayedMatrixStats','limma','scater','pcaMethods','WGCNA','preprocessCore', 'RCA', 'scmap', 'mixtools', 'stringi', 'rbokeh', 'DT', 'NMF', 'pheatmap', 'R2HTML', 'doMC', 'doRNG', 'scran', 'slingshot','DropletUtils', 'monocle', 'MeSH.Hsa.eg.db', 'MAST','clusterExperiment', 'scTensor', 'clusterProfiler'))" \
     && R -e "options(timeout=6000); BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', 'BSgenome.Hsapiens.UCSC.hg38', 'BSgenome.Mmusculus.UCSC.mm10', 'BSgenome.Scerevisiae.UCSC.sacCer3', 'BSgenome.Dmelanogaster.UCSC.dm6'))" \
     && R -e "BiocManager::install(c('EnsDb.Hsapiens.v75','EnsDb.Hsapiens.v79', 'EnsDb.Hsapiens.v86', 'EnsDb.Mmusculus.v79'))" \
     && R -e "remotes::install_github(c('jokergoo/ComplexHeatmap'))" \
-    && R -e "install.packages(c('dyngen','gam'))"
+    && R -e "install.packages(c('dyngen','gam','gprofiler2'))"
 
 # Seurat
 COPY SeuratData SeuratData

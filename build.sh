@@ -1,8 +1,4 @@
-#docker-compose build
-#docker-compose -f docker-compose.R.yml build #--no-cache
-#docker-compose -f docker-compose.yml build   #--no-cache
-
-tag=2022.08
+tag=2022.08.2
 docker tag rnakato/singlecell_jupyter:latest rnakato/singlecell_jupyter:$tag
 
 for tag in $tag latest
@@ -11,6 +7,9 @@ do
 done
 
 exit
+
+
+
 
 for tag in latest #2020.12
 do

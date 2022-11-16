@@ -1,7 +1,11 @@
 # docker_singlecell_jupyter
-A docker image for single-cell analyses. It's on docker-hub and GitHub.
+0;136;0cA docker image for single-cell analyses. It's on docker-hub and GitHub.
 
 ## Changelog
+
+- 2022.08.2 (2022-08)
+
+    - Create separate environments for python tools to avoid version conflict. They can be executed from Jupyter notebook
 
 - 2022.03 (2022-03-03)
 

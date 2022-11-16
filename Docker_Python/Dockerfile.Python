@@ -47,20 +47,9 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.8.tar.gz \
  #   && conda clean -i -t -y
 
 ### Virtual environment
-RUN conda init bash \
-    && . ~/.bashrc \
-    && . activate \
-    && conda create -n CellRank jupyter notebook ipykernel seaborn \
-    && source activate CellRank \
-    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
-#cellrank==1.5.1-0
-    && pip install --no-cache-dir session-info \
-    && python -m ipykernel install --name=CellRank \
-    && jupyter kernelspec list \
-    && conda deactivate
 # scVI
 RUN . activate \
-    && conda create -n scVI jupyter notebook ipykernel seaborn \
+    && conda create -n scVI python=3.9 jupyter notebook ipykernel seaborn \
     && source activate scVI \
     && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
     && python -m ipykernel install --name=scVI \
@@ -77,7 +66,7 @@ RUN . activate \
     && jupyter kernelspec list \
     && conda deactivate \
 # SCCAF
-    && conda create -n SCCAF jupyter notebook ipykernel seaborn \
+    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel seaborn \
     && source activate SCCAF \
     && pip install --no-cache-dir sccaf session-info \
     && python -m ipykernel install --name=SCCAF \
@@ -92,7 +81,7 @@ RUN conda create -y -n pySCENIC python=3.7 jupyter notebook ipykernel seaborn \
     && jupyter kernelspec list \
     && conda deactivate
 # scGen
-RUN conda create -y -n scGen jupyter notebook ipykernel seaborn \
+RUN conda create -y -n scGen python=3.8 jupyter notebook ipykernel seaborn \
     && source activate scGen \
     && pip install --no-cache-dir scgen[tutorials] session-info \
     && python -m ipykernel install --name=scGen \
@@ -108,7 +97,7 @@ RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
     && jupyter kernelspec list \
     && conda deactivate \
 # SAVER-X
-    && conda create -y -n SAVER-X jupyter notebook ipykernel seaborn \
+    && conda create -y -n SAVER-X python=3.9 jupyter notebook ipykernel seaborn \
     && source activate SAVER-X \
     && pip install --no-cache-dir sctransfer session-info \
     && R -e "remotes::install_github('jingshuw/SAVERX')" \
@@ -129,6 +118,21 @@ RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
 #    && python -m ipykernel install --name=CellAssign \
 #    && jupyter kernelspec list \
 #    && conda deactivate
+
+# CellRank
+RUN conda init bash \
+    && . ~/.bashrc \
+    && . activate \
+    && conda create -n CellRank python=3.9 numpy=1.21 jupyter notebook ipykernel seaborn \
+    && source activate CellRank \
+    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
+#cellrank==1.5.1 \
+    && pip install --no-cache-dir igraph session-info \
+    && pip install --no-cache-dir git+https://github.com/broadinstitute/wot \
+    && python -m ipykernel install --name=CellRank \
+    && jupyter kernelspec list \
+    && conda deactivate
+
 # doubletdetection
 RUN conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel seaborn \
     && source activate doubletdetection \
