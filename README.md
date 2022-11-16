@@ -66,31 +66,38 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 For Docker:
 
     # pull docker image
-    docker pull rnakato/singlecell_jupyter
+    docker pull rnakato/shortcake
 
     # container login
-    docker run [--gpus all] --rm -it rnakato/singlecell_jupyter /bin/bash
+    docker run [--gpus all] --rm -it rnakato/shortcake /bin/bash
     # jupyter notebook (see 'mnt/' directory in the notebook )
-    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/singlecell_jupyter jupyternotebook.sh
+    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
 
 For Singularity:
 
     # build image
-    singularity build -F rnakato_singlecell_jupyter.sif docker://rnakato/singlecell_jupyter
+    singularity build -F shortcake.sif docker://rnakato/shortcake
     # jupyter notebook
-    singularity exec [--nv] rnakato_singlecell_jupyter.sif jupyternotebook.sh
+    singularity exec [--nv] shortcake.sif jupyternotebook.sh
     # execute R directory
-    singularity exec [--nv] rnakato_singlecell_jupyter.sif R
+    singularity exec [--nv] shortcake.sif R
 
 ## Build image from Dockerfile
 First clone and move to the repository
 
-    git clone https://github.com/rnakato/docker_singlecell.git
-    cd docker_singlecell
+    git clone https://github.com/rnakato/ShortCake
+    cd ShortCake
 
-Because the Dockerfile installs many packages from GitHub, please add [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `docker-compose.R.yml` and `docker-compose.yml`. Then type:
+- Because the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `Docker_R/docker-compose.R.yml` and `Docker_Python/docker-compose.yml`. 
+- Download the dataset of [SeuratData](https://github.com/satijalab/seurat-data) from [our GoogleDrive](https://drive.google.com/file/d/1oQbZztyt3tLppWjklvS0Fn4ayG_zhvq4/view?usp=sharing) and unzip it in ``Docker_R`` directory.
 
+Then build packages:
+
+    # build R packages
+    cd Docker_R
     docker-compose -f docker-compose.R.yml build
+    # Then build Python packages
+    cd ../Docker_Python/
     docker-compose -f docker-compose.yml build
 
 ## Contact
