@@ -6,7 +6,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 
 - 2022.11.16 
 
-    - rename to **ShortCake** 🍰
+    - Rename to **ShortCake** 🍰
 
 - 2022.08.2 (2022-08)
 
