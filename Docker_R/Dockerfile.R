@@ -1,10 +1,10 @@
-FROM rnakato/r_python_gpu:2022.08.2
+FROM rnakato/r_python_gpu:2022.11
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
+#ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
 
 ARG GITHUB_PAT
 RUN set -x && \
@@ -121,6 +121,7 @@ RUN R -e "BiocManager::install('tanaylab/metacell')" \
 # cisTopic, scAI
     && R -e "remotes::install_github(c('aertslab/cisTopic', 'sqjin/scAI'))" \
 # SCDC, MuSiC
+    && R -e "BiocManager::install(c('TOAST'))" \
     && R -e "remotes::install_github(c('renozao/xbioc','meichendong/SCDC', 'xuranw/MuSiC'))" \
 # MOFA2
     && R -e "remotes::install_github('bioFAM/MOFA2', build_opts = c('--no-resave-data --no-build-vignettes'))" \

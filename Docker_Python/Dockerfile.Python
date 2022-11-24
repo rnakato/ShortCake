@@ -55,8 +55,8 @@ RUN . activate \
 RUN . activate \
     && conda create -n cellphoneDB python=3.7 jupyter notebook ipykernel seaborn nbconvert==5.6.1 \
     && source activate cellphoneDB \
-    && pip uninstall -y jupyterlab-server \
-    && pip install --no-cache-dir cellphonedb session-info \
+#    && pip uninstall -y jupyterlab-server \
+    && pip install --no-cache-dir cellphonedb session-info jinja2==3.0.3 \
     && cellphonedb database download \
     && python -m ipykernel install --name=cellphoneDB \
     && jupyter kernelspec list \
