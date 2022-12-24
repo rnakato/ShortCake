@@ -50,7 +50,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 - Doublet finding: Scrublet, DoubletFinder
 - Batch correction and data integration: Harmony, scmap, scBio, SingleCellNet
 - Clustering: SC3, metacell, SCCAF, Constclust, bigSCale2
-- Cluster annotation: RCA, CellAssign, garnett, scCatch, SingleR
+- Cluster annotation: RCA, garnett, scCatch, SingleR
 - Trajectory analysis: Monocle2/3, slingshot, Palantir, FROWMAP
 - RNA velocity: velocyto, scVelo, CellRank, Dynamo
 - Gene network: WGCNA, SCENIC (pySCENIC), CellOracle
