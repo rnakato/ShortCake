@@ -117,7 +117,7 @@ RUN git clone https://github.com/BUStools/bustools.git \
 # metacells
 RUN R -e "BiocManager::install('tanaylab/metacell')" \
 # motif database
-    && R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020','JASPER2022'))" \
+    && R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020','JASPAR2022'))" \
 # cisTopic, scAI
     && R -e "remotes::install_github(c('aertslab/cisTopic', 'sqjin/scAI'))" \
 # SCDC, MuSiC
