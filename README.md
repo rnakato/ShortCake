@@ -53,9 +53,9 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 - Cluster annotation: RCA, CellAssign, garnett, scCatch, SingleR
 - Trajectory analysis: Monocle2/3, slingshot, Palantir, FROWMAP
 - RNA velocity: velocyto, scVelo, CellRank, Dynamo
-- Gene network: WGCNA, SCENIC (pySCENIC)
+- Gene network: WGCNA, SCENIC (pySCENIC), CellOracle
 - Cell-to-cell interaction: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
-- Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE
+- Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE, RECODE
 - Multi-modal: LIGER, scAI, MOFA2
 - Bulk deconvolution: SCDC, MuSiC
 - Simulation: Splatter, dyngen
@@ -64,7 +64,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 
 - Database (genome): BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
 - Database (gene): EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v79
-- Database (motif): JASPAR2016, JASPAR2018, JASPAR2020
+- Database (motif): JASPAR2016, JASPAR2018, JASPAR2020, JASPAR2022
 - SeuratData: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.2, ssHippo_3.1.4
 
 ## Run
