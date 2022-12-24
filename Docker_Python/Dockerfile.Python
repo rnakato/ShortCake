@@ -168,9 +168,8 @@ RUN conda create -n celloracle python=3.8 jupyter notebook ipykernel seaborn Cyt
     && jupyter kernelspec list \
     && conda deactivate
 
-
 RUN conda uninstall TBB \
- && pip install --no-cache-dir -U velocyto scvelo pybind11 dash black==19.10b0 \
+    && pip install --no-cache-dir -U velocyto scvelo screcode pybind11 dash black==19.10b0 \
     && pip install --no-cache-dir daal==2021.2.3 scrublet constclust monet xlrd
 # Theis_Tutorial
 RUN pip install --no-cache-dir gprofiler-official anndata2ri bbknn \

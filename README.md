@@ -6,7 +6,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 
 - 2022.12.24: version 1.1.0
 
-    - Add CellOracle and JASPAR2022
+    - Add CellOracle, RECODE and JASPAR2022
     - Bug fix to remove a warning "/opt/conda/lib/libtinfo.so.6: no version information available"
 
 - 2022.11.16
