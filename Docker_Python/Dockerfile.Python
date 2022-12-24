@@ -5,7 +5,7 @@ USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
+#ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
 
 ARG GITHUB_PAT
 RUN set -x && \
@@ -25,22 +25,20 @@ RUN wget --progress=dot:giga https://github.com/macs3-project/MACS/archive/refs/
     && python setup.py install \
     && rm -rf /opt/v2.2.6.tar.gz /opt/MACS-2.2.6/
 # LIGER (FFTW, FIt-SNE)
-RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.8.tar.gz \
-    && tar zxvf fftw-3.3.8.tar.gz \
-    && rm fftw-3.3.8.tar.gz \
-    && cd fftw-3.3.8 \
+RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
+    && tar zxvf fftw-3.3.10.tar.gz \
+    && rm fftw-3.3.10.tar.gz \
+    && cd fftw-3.3.10 \
     && ./configure \
     && make \
     && make install \
-    && git clone https://github.com/KlugerLab/FIt-SNE.git \
+    && sudo git clone https://github.com/KlugerLab/FIt-SNE.git \
     && cd FIt-SNE/ \
-    && g++ -std=c++11 -O3 src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp -o bin/fast_tsne -pthread -lfftw3 -lm \
+    && g++ -std=c++11 -O3 src/sptree.cpp src/tsne.cpp src/nbodyfft.cpp -o bin/fast_tsne -pthread -lfftw3 -lm -Wno-address-of-packed-member \
     && cp bin/fast_tsne /usr/local/bin/ \
     && cd \
-    && rm -rf /opt/fftw-3.3.8 \
+    && rm -rf /opt/fftw-3.3.10 \
     && R -e "install.packages('rliger')"
- #   && R -e "remotes::install_github(c('MacoskoLab/liger'))" \
- #   && conda clean -i -t -y
 
 ### Virtual environment
 # scVI
@@ -86,9 +84,7 @@ RUN conda create -y -n scGen python=3.8 jupyter notebook ipykernel seaborn \
 # cell2cell
 RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
     && source activate cell2cell \
-    && pip install --no-cache-dir 'cell2cell==0.2.2' session-info \
-    && pip install --no-cache-dir git+https://github.com/BubaVV/Pyevolve \
-    && pip install --no-cache-dir obonet umap-learn \
+    && pip install --no-cache-dir cell2cell session-info obonet umap-learn \
     && python -m ipykernel install --name=cell2cell \
     && jupyter kernelspec list \
     && conda deactivate \
@@ -164,6 +160,14 @@ RUN conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel seaborn \
     && python -m ipykernel install --name=harmonypy \
     && jupyter kernelspec list \
     && conda deactivate
+# CellOracle
+RUN conda create -n celloracle python=3.8 jupyter notebook ipykernel seaborn Cython \
+    && source activate celloracle \
+    && pip install --no-cache-dir celloracle \
+    && python -m ipykernel install --name=celloracle \
+    && jupyter kernelspec list \
+    && conda deactivate
+
 
 RUN conda uninstall TBB \
  && pip install --no-cache-dir -U velocyto scvelo pybind11 dash black==19.10b0 \

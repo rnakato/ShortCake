@@ -117,7 +117,7 @@ RUN git clone https://github.com/BUStools/bustools.git \
 # metacells
 RUN R -e "BiocManager::install('tanaylab/metacell')" \
 # motif database
-    && R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020'))" \
+    && R -e "BiocManager::install(c('JASPAR2016','JASPAR2018','JASPAR2020','JASPER2022'))" \
 # cisTopic, scAI
     && R -e "remotes::install_github(c('aertslab/cisTopic', 'sqjin/scAI'))" \
 # SCDC, MuSiC
@@ -150,5 +150,13 @@ RUN R -e "install.packages('NMF')" \
     && R CMD INSTALL geomnet_0.3.1.tar.gz \
     && rm geomnet_0.3.1.tar.gz \
     && R -e "remotes::install_github('edroaldo/fusca')"
+
+# 202212
+RUN R -e "remotes::install_github('immunogenomics/presto')" \
+    && R -e "remotes::install_github('aet21/EpiSCORE')" \
+    && R -e "install.packages('UpSetR')"
+
+# CIBERSORTx EcoTyper resigstration needed
+# https://github.com/digitalcytometry/ecotyper
 
 RUN rm ~/.Renviron

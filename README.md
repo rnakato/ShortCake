@@ -4,9 +4,14 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 
 ## Changelog
 
-- 2022.11.16 
+- 2022.12.24: version 1.1.0
 
-    - Rename to **ShortCake** 🍰
+    - Add CellOracle and JASPAR2022
+    - Bug fix to remove a warning "/opt/conda/lib/libtinfo.so.6: no version information available"
+
+- 2022.11.16
+
+    - Rename to **ShortCake** (version 1.0.0)
 
 - 2022.08.2 (2022-08)
 
@@ -89,7 +94,7 @@ First clone and move to the repository
     git clone https://github.com/rnakato/ShortCake
     cd ShortCake
 
-- Because the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `Docker_R/docker-compose.R.yml` and `Docker_Python/docker-compose.yml`. 
+- Because the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `Docker_R/docker-compose.R.yml` and `Docker_Python/docker-compose.yml`.
 - Download the dataset of [SeuratData](https://github.com/satijalab/seurat-data) from [our GoogleDrive](https://drive.google.com/file/d/1oQbZztyt3tLppWjklvS0Fn4ayG_zhvq4/view?usp=sharing) and unzip it in ``Docker_R`` directory.
 
 Then build packages:
