@@ -3,6 +3,9 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
 ## Changelog
+- 2023.1.7: version 1.1.1
+
+    - Downgrade jinja2 to v3.0.3 to avoid the error in html conversion in Jupyter notebook (see [issue #6](https://github.com/rnakato/ShortCake/issues/6)).
 
 - 2022.12.24: version 1.1.0
 
