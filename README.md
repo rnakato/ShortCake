@@ -3,7 +3,7 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
 ## Changelog
-- 2023.1.26: version 1.2.0
+- 2023.2.2: version 1.2.0
 
     - Add [ikarus](https://github.com/BIMSBbioinfo/ikarus) https://github.com/BIMSBbioinfo/ikarus---auxiliary
     - Add [scTriangulate](https://github.com/frankligy/scTriangulate)
