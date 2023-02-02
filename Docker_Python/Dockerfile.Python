@@ -43,7 +43,7 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
 ### Virtual environment
 # scVI
 RUN . activate \
-    && conda create -n scVI python=3.9 jupyter notebook ipykernel seaborn \
+    && conda create -n scVI python=3.9 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate scVI \
     && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
     && python -m ipykernel install --name=scVI \
@@ -60,14 +60,14 @@ RUN . activate \
     && jupyter kernelspec list \
     && conda deactivate \
 # SCCAF
-    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel seaborn \
+    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate SCCAF \
     && pip install --no-cache-dir sccaf session-info \
     && python -m ipykernel install --name=SCCAF \
     && jupyter kernelspec list \
     && conda deactivate
 # pySCENIC
-RUN conda create -y -n pySCENIC python=3.7 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n pySCENIC python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate pySCENIC \
     && conda install -y -c anaconda cytoolz \
     && pip install --no-cache-dir pyscenic session-info \
@@ -75,21 +75,21 @@ RUN conda create -y -n pySCENIC python=3.7 jupyter notebook ipykernel seaborn \
     && jupyter kernelspec list \
     && conda deactivate
 # scGen
-RUN conda create -y -n scGen python=3.8 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n scGen python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate scGen \
     && pip install --no-cache-dir scgen[tutorials] session-info \
     && python -m ipykernel install --name=scGen \
     && jupyter kernelspec list \
     && conda deactivate
 # cell2cell
-RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate cell2cell \
     && pip install --no-cache-dir cell2cell session-info obonet umap-learn \
     && python -m ipykernel install --name=cell2cell \
     && jupyter kernelspec list \
     && conda deactivate \
 # SAVER-X
-    && conda create -y -n SAVER-X python=3.9 jupyter notebook ipykernel seaborn \
+    && conda create -y -n SAVER-X python=3.9 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate SAVER-X \
     && pip install --no-cache-dir sctransfer session-info \
     && R -e "remotes::install_github('jingshuw/SAVERX')" \
@@ -115,7 +115,7 @@ RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn \
 RUN conda init bash \
     && . ~/.bashrc \
     && . activate \
-    && conda create -n CellRank python=3.9 numpy=1.21 jupyter notebook ipykernel seaborn \
+    && conda create -n CellRank python=3.9 numpy=1.21 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate CellRank \
     && conda install -y -c conda-forge -c bioconda cellrank-krylov \
 #cellrank==1.5.1 \
@@ -126,51 +126,70 @@ RUN conda init bash \
     && conda deactivate
 
 # doubletdetection
-RUN conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate doubletdetection \
     && pip install --no-cache-dir doubletdetection session-info \
     && python -m ipykernel install --name=doubletdetection \
     && jupyter kernelspec list \
     && conda deactivate
 # dynamo
-RUN conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 \
+RUN conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 jinja2==3.0.3 \
     && source activate dynamo \
     && pip install --no-cache-dir dynamo-release pycairo session-info \
     && python -m ipykernel install --name=dynamo \
     && jupyter kernelspec list \
     && conda deactivate
 # episcanpy
-RUN conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate episcanpy \
     && pip install --no-cache-dir episcanpy \
     && python -m ipykernel install --name=episcanpy \
     && jupyter kernelspec list \
     && conda deactivate
 # novosparc
-RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate novosparc \
     && pip install --no-cache-dir novosparc \
     && python -m ipykernel install --name=novosparc \
     && jupyter kernelspec list \
     && conda deactivate
 # harmonypy
-RUN conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel seaborn \
+RUN conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
     && source activate harmonypy \
     && pip install --no-cache-dir harmonypy \
     && python -m ipykernel install --name=harmonypy \
     && jupyter kernelspec list \
     && conda deactivate
 # CellOracle
-RUN conda create -n celloracle python=3.8 jupyter notebook ipykernel seaborn Cython \
+RUN conda create -n celloracle python=3.8 jupyter notebook ipykernel seaborn Cython jinja2==3.0.3 \
     && source activate celloracle \
     && pip install --no-cache-dir celloracle \
     && python -m ipykernel install --name=celloracle \
     && jupyter kernelspec list \
     && conda deactivate
+# Dictys
+RUN conda create -y -n dictys -c conda-forge python=3.9 mamba jupyter notebook ipykernel seaborn \
+    && source activate dictys \
+    && mamba install -y -c lingfeiwang -c bioconda -c conda-forge -c pytorch dictys cpuonly \
+    && jupyter kernelspec list \
+    && conda deactivate
+# scmomat
+RUN conda create -y -n scmomat python=3.8 jupyter notebook ipykernel seaborn \
+    && source activate scmomat \
+    && pip install --no-cache-dir scmomat \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# MARIO
+    && conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn \
+    && source activate mario \
+    && pip install --no-cache-dir pyMARIO \
+    && jupyter kernelspec list \
+    && conda deactivate
 
 RUN conda uninstall TBB \
-    && pip install --no-cache-dir -U velocyto scvelo screcode pybind11 dash black==19.10b0 \
-    && pip install --no-cache-dir daal==2021.2.3 scrublet constclust monet xlrd
+    && pip install --no-cache-dir velocyto scvelo screcode pybind11 dash black==19.10b0 \
+    && pip install --no-cache-dir daal==2021.2.3 scrublet constclust monet xlrd jinja2==3.0.3 \
+    && pip install --no-cache-dir ikarus sctriangulate autogenes
 # Theis_Tutorial
 RUN pip install --no-cache-dir gprofiler-official anndata2ri bbknn \
 # Palantir, MAGIC

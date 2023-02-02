@@ -22,6 +22,7 @@ RUN set -x && \
     libssl-dev \
     libunwind-dev \
     libxt-dev \
+    pandoc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -154,7 +155,10 @@ RUN R -e "install.packages('NMF')" \
 # 202212
 RUN R -e "remotes::install_github('immunogenomics/presto')" \
     && R -e "remotes::install_github('aet21/EpiSCORE')" \
-    && R -e "install.packages('UpSetR')"
+    && R -e "install.packages('UpSetR')" \
+    && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
+    && R -e "remotes::install_github('Danko-Lab/BayesPrism/BayesPrism')" \
+    && R -e "remotes::install_github('carmonalab/SignatuR')" \
 
 # CIBERSORTx EcoTyper resigstration needed
 # https://github.com/digitalcytometry/ecotyper
