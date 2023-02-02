@@ -5,16 +5,19 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 ## Changelog
 - 2023.2.2: version 1.2.0
 
-    - Add [ikarus](https://github.com/BIMSBbioinfo/ikarus) https://github.com/BIMSBbioinfo/ikarus---auxiliary
+    - Add [ikarus](https://github.com/BIMSBbioinfo/ikarus)
     - Add [scTriangulate](https://github.com/frankligy/scTriangulate)
-    - Add [DropletQC](https://github.com/powellgenomicslab/DropletQC) https://github.com/powellgenomicslab/dropletQC_paper
+    - Add [DropletQC](https://github.com/powellgenomicslab/DropletQC)
     - Add [Dictys](https://github.com/pinellolab/dictys)
     - Add [AutoGeneS](https://github.com/theislab/AutoGeneS)
     - Add [BayesPrism](https://github.com/Danko-Lab/BayesPrism)
     - Add [SignatuR](https://github.com/carmonalab/SignatuR)
     - Add [scMoMaT](https://github.com/PeterZZQ/scMoMaT)
     - Add [MARIO](https://github.com/shuxiaoc/mario-py)
-
+<!-- 
+ https://github.com/BIMSBbioinfo/ikarus---auxiliary
+ https://github.com/powellgenomicslab/dropletQC_paper
+-->
 - 2023.1.7: version 1.1.1
 
     - Downgrade jinja2 to v3.0.3 to avoid the error in html conversion in Jupyter notebook (see [issue #6](https://github.com/rnakato/ShortCake/issues/6)).
