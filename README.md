@@ -6,7 +6,6 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 - 2023.1.26: version 1.2.0
 
     - Add [ikarus](https://github.com/BIMSBbioinfo/ikarus) https://github.com/BIMSBbioinfo/ikarus---auxiliary
-    - DeepCycle https://github.com/andreariba/DeepCycle
     - Add [scTriangulate](https://github.com/frankligy/scTriangulate)
     - Add [DropletQC](https://github.com/powellgenomicslab/DropletQC) https://github.com/powellgenomicslab/dropletQC_paper
     - Add [Dictys](https://github.com/pinellolab/dictys)
