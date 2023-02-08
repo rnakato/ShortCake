@@ -5,8 +5,6 @@ USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
-#ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib/
-
 ARG GITHUB_PAT
 RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
@@ -195,10 +193,15 @@ RUN pip install --no-cache-dir gprofiler-official anndata2ri bbknn \
 # Palantir, MAGIC
     && pip install --no-cache-dir PhenoGraph palantir rpy2 magic-impute
 
+### Final setting
+RUN mkdir /opt/scripts \
+    && mv /opt/jupyternotebook.sh /opt/rserver.sh /opt/rstudio.sh /opt/scripts
+COPY bedtools-2.30.0 /opt/scripts/bedtools
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
-ENV PATH $PATH:/opt:/opt/bin:/opt/bedops_linux_x86_64-v2.4.39:
+RUN chmod 777 /opt/scripts/jupyternotebook.sh /opt/scripts/rserver.sh
 
-RUN chmod 777 /opt/jupyternotebook.sh /opt/rserver.sh
+ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
+
 RUN rm ~/.Renviron
 
 CMD ["jupyternotebook.sh"]

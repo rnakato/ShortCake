@@ -3,6 +3,11 @@ A docker image for single-cell analyses. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
 ## Changelog
+- 2023.2.8: version 1.3.0
+
+    - Add [bedtools](https://bedtools.readthedocs.io/en/latest/) version 2.30.0
+    - move scripts (jupyternotebook.sh etc) to /opt/scripts folder
+
 - 2023.2.2: version 1.2.0
 
     - Add [ikarus](https://github.com/BIMSBbioinfo/ikarus)
@@ -14,7 +19,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
     - Add [SignatuR](https://github.com/carmonalab/SignatuR)
     - Add [scMoMaT](https://github.com/PeterZZQ/scMoMaT)
     - Add [MARIO](https://github.com/shuxiaoc/mario-py)
-<!-- 
+<!--
  https://github.com/BIMSBbioinfo/ikarus---auxiliary
  https://github.com/powellgenomicslab/dropletQC_paper
 -->
