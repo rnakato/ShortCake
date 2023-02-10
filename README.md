@@ -16,12 +16,12 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Trajectory (pseudo-time) analysis**: [Monocle2/3](https://cole-trapnell-lab.github.io/monocle3/), [slingshot](https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html), [Palantir](https://github.com/dpeerlab/Palantir), [FROWMAP](https://github.com/zunderlab/FLOWMAP/)
 - **RNA velocity**: [velocyto](http://velocyto.org/), [scVelo](https://scvelo.readthedocs.io/en/stable/), [CellRank](https://cellrank.readthedocs.io/en/stable/), [Dynamo](https://dynamo-release.readthedocs.io/en/latest/)
 - **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/)
-- **Cell-cell interaction**: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
-- **Data imputation**: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE, RECODE
-- **Multi-modal analysis**: LIGER, scAI, MOFA2
-- **Bulk deconvolution**: SCDC, MuSiC
-- **Simulation**: Splatter, dyngen
-- **Others**: scGen, sleepwalk, singleCellHaystack, ComplexHeatmap
+- **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://lewislab.ucsd.edu/cell2cell/), [CellChat](http://www.cellchat.org/)
+- **Data imputation**: [MAGIC](https://github.com/KrishnaswamyLab/MAGIC), [SAVER](https://github.com/mohuangx/SAVER), [scImpute](https://github.com/Vivianstats/scImpute), [SCRABBLE](https://github.com/tanlabcode/SCRABBLE), [RECODE](https://yusuke-imoto-lab.github.io/RECODE/)
+- **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [scAI](https://github.com/sqjin/scAI), [MOFA2](https://biofam.github.io/MOFA2/)
+- **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html)
+- **Simulation**: [Splatter](https://github.com/Oshlack/splatter), [dyngen](https://github.com/dynverse/dyngen), [scGen](https://github.com/theislab/scgen)
+- **Others**: [Sleepwalk](https://anders-biostat.github.io/sleepwalk/), [singleCellHaystack](https://github.com/alexisvdb/singleCellHaystack), [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/)
 - **scATAC-seq**: cicero, chromVAR, ArchR, Signac, cisTopic, episcanpy
 
 - **Database (genome)**: BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
