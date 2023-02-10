@@ -7,8 +7,8 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 ## Included tools (latest)
 
-- **Pipeline**: Seurat (and wrappers), scater, scran, scanpy, scVI, monet, Pagoda2, kallisto (bustools)
-- **Doublet finding**: Scrublet, DoubletFinder
+- **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [monet](https://github.com/flo-compbio/monet), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/)
+- **Doublet finding**: Scrublet, DoubletFinder \
 - **Batch correction and data integration**: Harmony, scmap, scBio, SingleCellNet
 - **Clustering**: SC3, metacell, SCCAF, Constclust, bigSCale2
 - **Cell-type annotation**: RCA, garnett, scCatch, SingleR
