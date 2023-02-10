@@ -8,11 +8,12 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 ## Included tools (latest)
 
 - **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [monet](https://github.com/flo-compbio/monet), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/)
-- **Doublet finding**: Scrublet, DoubletFinder \
-- **Batch correction and data integration**: Harmony, scmap, scBio, SingleCellNet
-- **Clustering**: SC3, metacell, SCCAF, Constclust, bigSCale2
-- **Cell-type annotation**: RCA, garnett, scCatch, SingleR
-- **Trajectory (pseudo-time) analysis**: Monocle2/3, slingshot, Palantir, FROWMAP
+- **Quality check**: [DropletQC](https://github.com/powellgenomicslab/DropletQC) 
+- **Doublet finding**: [Scrublet](https://github.com/swolock/scrublet), [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder)
+- **Batch correction and data integration**: [Harmony](https://portals.broadinstitute.org/harmony/articles/quickstart.html), [scmap](https://www.sanger.ac.uk/tool/scmap/), [scBio](https://bioinformaticshome.com/db/tool/scBio), [SingleCellNet](https://github.com/pcahan1/singleCellNet)
+- **Clustering**: [SC3](https://bioconductor.org/packages/release/bioc/html/SC3.html), [metacell](https://tanaylab.github.io/metacell/), [SCCAF](https://github.com/SCCAF/sccaf), [Constclust](https://constclust.readthedocs.io/en/latest/), [bigSCale2](https://github.com/iaconogi/bigSCale2)
+- **Cell-type annotation**: [RCA](https://github.com/prabhakarlab/RCAv2), [garnett](https://cole-trapnell-lab.github.io/garnett/), [scCatch](https://github.com/ZJUFanLab/scCATCH), [SingleR](https://github.com/dviraran/SingleR)
+- **Trajectory (pseudo-time) analysis**: [Monocle2/3](https://cole-trapnell-lab.github.io/monocle3/), [slingshot](https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html), [Palantir](https://github.com/dpeerlab/Palantir), [FROWMAP](https://github.com/zunderlab/FLOWMAP/)
 - **RNA velocity**: [velocyto](http://velocyto.org/), [scVelo](https://scvelo.readthedocs.io/en/stable/), [CellRank](https://cellrank.readthedocs.io/en/stable/), [Dynamo](https://dynamo-release.readthedocs.io/en/latest/)
 - **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/)
 - **Cell-cell interaction**: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
