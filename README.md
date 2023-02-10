@@ -13,8 +13,8 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - Clustering: SC3, metacell, SCCAF, Constclust, bigSCale2
 - Cluster annotation: RCA, garnett, scCatch, SingleR
 - Trajectory analysis: Monocle2/3, slingshot, Palantir, FROWMAP
-- RNA velocity: velocyto, scVelo, CellRank, Dynamo
-- Gene network: WGCNA, SCENIC (pySCENIC), CellOracle
+- RNA velocity: [velocyto](http://velocyto.org/), [scVelo](https://scvelo.readthedocs.io/en/stable/), [CellRank](https://cellrank.readthedocs.io/en/stable/), [Dynamo](https://dynamo-release.readthedocs.io/en/latest/)
+- Gene network: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/)
 - Cell-to-cell interaction: CellPhoneDB, SingleCellSingnalR, scTensor, cell2cell, CellChat
 - Data imputation: scImpute, MAGIC, SAVER, SAVER-X, SCRABBLE, RECODE
 - Multi-modal: LIGER, scAI, MOFA2
