@@ -193,14 +193,20 @@ RUN pip install --no-cache-dir gprofiler-official anndata2ri bbknn \
 # Palantir, MAGIC
     && pip install --no-cache-dir PhenoGraph palantir rpy2 magic-impute
 
+# bedtools
+ENV v 2.30.0
+COPY bedtools-$v.tar.gz bedtools-$v.tar.gz
+RUN tar zxvf bedtools-$v.tar.gz \
+    && cd bedtools2 && make \
+    && rm /opt/bedtools-$v.tar.gz
+
 ### Final setting
 RUN mkdir /opt/scripts \
     && mv /opt/jupyternotebook.sh /opt/rserver.sh /opt/rstudio.sh /opt/scripts
-COPY bedtools-2.30.0 /opt/scripts/bedtools
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
 RUN chmod 777 /opt/scripts/jupyternotebook.sh /opt/scripts/rserver.sh
 
-ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
+ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39:/opt/bedtools2/bin
 
 RUN rm ~/.Renviron
 
