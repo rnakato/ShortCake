@@ -69,7 +69,8 @@ RUN R -e "install.packages(c('sleepwalk','bit64','here','zoo','scBio','Seurat','
     && rm -rf SeuratData
 
 # scImpute, singleCellHaystack, scCATCH
-RUN R -e "remotes::install_github(c('Vivianstats/scImpute', 'alexisvdb/singleCellHaystack', 'ZJUFanLab/scCATCH'))" \
+RUN R -e "install.packages('singleCellHaystack')" \
+    && R -e "remotes::install_github(c('Vivianstats/scImpute', 'ZJUFanLab/scCATCH'))" \
 # velocyto.R
     && R -e "remotes::install_github(c('aertslab/SCopeLoomR', 'velocyto-team/velocyto.R'))" \
     && R -e "install.packages('pagoda2')" \
