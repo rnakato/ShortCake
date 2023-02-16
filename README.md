@@ -69,6 +69,10 @@ Then build packages:
     cd ../Docker_Python/
     docker-compose -f docker-compose.yml build
 
+## Singularity images
+
+Prebuild singularity images (version 3.8.5) are available on our [Google Drive](https://drive.google.com/drive/folders/1x1mqN3Im4RGZKnuhiDKfqYLcL86an7s8?usp=sharing).
+
 ## Contact
 
 Ryuichiro Nakato: rnakato AT iqb.u-tokyo.ac.jp
