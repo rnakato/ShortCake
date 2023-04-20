@@ -1,0 +1,56 @@
+FROM rnakato/r_python_gpu:2023.03
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+
+COPY SeuratData SeuratData
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libgmp-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Seurat
+RUN set -e \
+    && R -e "remotes::install_github('satijalab/seurat', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/seurat-data', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/azimuth', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/seurat-wrappers', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('stuart-lab/signac', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('bnprks/BPCells', quiet = TRUE)" \
+    && R -e "remotes::install_github('mojaveazure/seurat-disk')" \
+# Others
+    && R -e "install.packages(c('bit64', \
+                                'sleepwalk', \
+                                'scBio', \
+                                'qqconf', \
+                                'metap'))" \
+    && R -e "BiocManager::install(c('ggbio', 'scry'))" \
+# Wrapper (LIGER, Harmony, conos, CoGAPS, GLM-PCA, fastMNN (batchelor), ALRA (rsvd), Nebulosa, CIPR, miQC, tricycle)
+    && R -e "install.packages(c('glmpca','harmony','rliger','rsvd'))" \
+    && R -e "BiocManager::install(c('batchelor', 'CoGAPS', 'Nebulosa', 'tricycle'))" \
+    && R -e "remotes::install_github('kharchenkolab/conos')" \
+    && R -e "remotes::install_github('atakanekiz/CIPR-Package')" \
+    && R -e "remotes::install_github('greenelab/miQC')" \
+# SeuratData
+    && R -e "install.packages('SeuratData/ifnb.SeuratData_3.1.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/panc8.SeuratData_3.0.2.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/pbmcsca.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/celegans.embryo.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/cbmc.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/hcabm40k.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/thp1.eccite.SeuratData_3.1.5.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/stxBrain.SeuratData_0.1.1.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/stxKidney.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/bmcite.SeuratData_0.3.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/pbmcMultiome.SeuratData_0.1.2.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/ssHippo.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
+    && rm -rf SeuratData
+
+RUN rm ~/.Renviron

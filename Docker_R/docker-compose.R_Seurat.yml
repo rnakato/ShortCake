@@ -1,8 +1,8 @@
 version: "3.3"
 services:
-  shortcake_r:
+  shortcake_r_seurat:
     build:
       context: "."
-      dockerfile: Dockerfile.R
+      dockerfile: Dockerfile.Seurat
       args:
         - GITHUB_PAT=${GITHUB_PAT}
