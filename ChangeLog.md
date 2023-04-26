@@ -1,6 +1,7 @@
 # Changelog
 
 - 2023.4.26: version 1.4.0
+    - Update Seurat to v5
     - Several bug fixes for installation
     - Separate Seurat-related tools from Dockerfile.R (now Dockerfile.Seurat)
 

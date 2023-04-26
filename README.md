@@ -5,6 +5,7 @@ This repository is an update of [singlecell_jupyter](https://hub.docker.com/repo
 ## Changelog
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
+
 ## Included tools (latest)
 
 - **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [monet](https://github.com/flo-compbio/monet), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/)
