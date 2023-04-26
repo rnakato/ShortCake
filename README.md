@@ -64,6 +64,7 @@ Then build packages:
 
     # build R packages
     cd Docker_R
+    docker compose -f docker-compose.R_Seurat.yml build 
     docker-compose -f docker-compose.R.yml build
     # Then build Python packages
     cd ../Docker_Python/
@@ -71,7 +72,7 @@ Then build packages:
 
 ## Singularity images
 
-Prebuild singularity images (version 3.8.5) are available on our [Google Drive](https://drive.google.com/drive/folders/1x1mqN3Im4RGZKnuhiDKfqYLcL86an7s8?usp=sharing).
+Prebuild singularity images (version 3.8.5) are available on our [OneDrive](https://univtokyo-my.sharepoint.com/:f:/g/personal/5389587184_utac_u-tokyo_ac_jp/EgzSeVrPk9VHkRMa0oZqUJwBLj4Kl3IL-vVhtWht3ekAkg?e=waoBEM).
 
 ## Contact
 

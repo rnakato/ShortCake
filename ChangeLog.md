@@ -1,5 +1,9 @@
 # Changelog
 
+- 2023.4.26: version 1.4.0
+    - Several bug fixes for installation
+    - Separate Seurat-related tools from Dockerfile.R (now Dockerfile.Seurat)
+
 - 2023.2.10: version 1.3.1
     - Modify bedtools files from the static binary file to ones compiled from the source
     - Move Changelog to `ChangeLog.md`
