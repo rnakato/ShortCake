@@ -64,9 +64,24 @@ In addition, R command and all R tools are available in ``R`` environment.
 
 <img src="https://github.com/rnakato/ShortCake/blob/master/img/jupyter_kernel.png" width="240" valign="middle" alt="jupyter_kernel" />
 
-### 3.2 Rstudio (desktop/server)
+### 3.2 Rstudio
+
+ShortCake also provides Rstudio environment:
+
+    singularity exec [--nv] shortcake.sif rstudio
+
+<!-- If you are an administrator of a computational server, you can also execute Rstudio server using ShortCake:
+
+    singularity exec [--nv] shortcake.sif rserver.sh <port>
+-->
 
 ### 3.2 Command line
+
+Of course, you can use ShortCake to use command-line tools. For example:
+
+    singularity exec [--nv] shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
+
+
 
 ## 4. Build image from Dockerfile
 First clone and move to the repository
