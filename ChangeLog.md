@@ -5,6 +5,7 @@
     - Add ``run_env.sh`` to activate virtual environments in Python
     - Several bug fixes for installation
     - Separate Seurat-related tools from Dockerfile.R (now Dockerfile.Seurat)
+    - Add ``wget.sh`` to download SeuratData for Docker building
 
 - 2023.2.10: version 1.3.1
     - Modify bedtools files from the static binary file to ones compiled from the source
