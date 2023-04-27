@@ -1,5 +1,6 @@
 # ShortCake🍰
-A docker image for single-cell analyses. It's on docker-hub and GitHub.
+
+A docker image for single-cell analysis. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
 ## 0. Changelog
@@ -59,14 +60,14 @@ We recommend using Jupyter notebook to use ShortCake:
 
     singularity exec shortcake.sif jupyternotebook.sh
 
-To isolate the environment, ShortCake prepares virtual environments for several tools. Specify the corresponding kernel to use them.
-In addition, R command and all R tools are available in ``R`` environment.
+To isolate the environment, ShortCake prepares virtual environments for several tools. Specify the appropriate kernel to use them.
+In addition, the R command and all R tools are usable in the ``R`` kernel.
 
 <img src="https://github.com/rnakato/ShortCake/blob/master/img/jupyter_kernel.png" width="240" valign="middle" alt="jupyter_kernel" />
 
 ### 3.2 Rstudio
 
-ShortCake also provides Rstudio environment:
+ShortCake also provides the Rstudio environment:
 
     singularity exec shortcake.sif rstudio
 
@@ -77,19 +78,25 @@ ShortCake also provides Rstudio environment:
 
 ### 3.2 Command line
 
-Of course, you can use ShortCake to use command-line tools. For example:
+Of course, you can also use ShortCake with command line tools. For example:
 
     singularity exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
 
+If you want to use a virtual Python environment from the command line, use ``run_env.sh`` to activate it:
+
+    singularity exec shortcake.sif run_env.sh <environment> <command>
+    # Example to activate "celloracle" environment
+    singularity exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
 ## 4. Build image from Dockerfile
+
 First clone and move to the repository
 
     git clone https://github.com/rnakato/ShortCake
     cd ShortCake
 
-- Because the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it in `Docker_R/docker-compose.R.yml` and `Docker_Python/docker-compose.yml`.
-- Download the dataset of [SeuratData](https://github.com/satijalab/seurat-data) from [our GoogleDrive](https://drive.google.com/file/d/1oQbZztyt3tLppWjklvS0Fn4ayG_zhvq4/view?usp=sharing) and unzip it in ``Docker_R`` directory.
+- Since the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it to `Docker_R/docker-compose.Seurat.yml`, `Docker_R/docker-compose.R.yml`, and `Docker_Python/docker-compose.yml`.
+- Before building, download the [SeuratData](https://github.com/satijalab/seurat-data) dataset using ``wget.sh`` in the ``Docker_R/SeuratData`` directory.
 
 Then build packages:
 
