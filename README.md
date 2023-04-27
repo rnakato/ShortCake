@@ -54,6 +54,20 @@ For Singularity:
 
 ## 3. Usage
 
+### 3.1 Jupyter
+We recommend using Jupyter notebook to use ShortCake:
+
+    singularity exec [--nv] shortcake.sif jupyternotebook.sh
+
+To isolate the environment, ShortCake prepares virtual environments for several tools. Specify the corresponding kernel to use them.
+In addition, R command and all R tools are available in ``R`` environment.
+
+<img src="https://github.com/rnakato/ShortCake/blob/master/img/jupyter_kernel.png" width="640" valign="middle" alt="jupyter_kernel" />
+
+### 3.2 Rstudio (desktop/server)
+
+### 3.2 Command line
+
 ## 4. Build image from Dockerfile
 First clone and move to the repository
 
