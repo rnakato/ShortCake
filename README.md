@@ -57,7 +57,7 @@ For Singularity:
 ### 3.1 Jupyter
 We recommend using Jupyter notebook to use ShortCake:
 
-    singularity exec [--nv] shortcake.sif jupyternotebook.sh
+    singularity exec shortcake.sif jupyternotebook.sh
 
 To isolate the environment, ShortCake prepares virtual environments for several tools. Specify the corresponding kernel to use them.
 In addition, R command and all R tools are available in ``R`` environment.
@@ -68,7 +68,7 @@ In addition, R command and all R tools are available in ``R`` environment.
 
 ShortCake also provides Rstudio environment:
 
-    singularity exec [--nv] shortcake.sif rstudio
+    singularity exec shortcake.sif rstudio
 
 <!-- If you are an administrator of a computational server, you can also execute Rstudio server using ShortCake:
 
@@ -79,8 +79,7 @@ ShortCake also provides Rstudio environment:
 
 Of course, you can use ShortCake to use command-line tools. For example:
 
-    singularity exec [--nv] shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
-
+    singularity exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
 
 
 ## 4. Build image from Dockerfile
