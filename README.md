@@ -2,11 +2,11 @@
 A docker image for single-cell analyses. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
-## Changelog
+## 0. Changelog
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
-## Included tools (latest)
+## 1. Included tools (latest)
 
 - **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [monet](https://github.com/flo-compbio/monet), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/)
 - **Quality check**: [DropletQC](https://github.com/powellgenomicslab/DropletQC)
@@ -31,7 +31,7 @@ scTriangulate](https://github.com/frankligy/scTriangulate)
 - **Database (motif)**: JASPAR2016, JASPAR2018, JASPAR2020, JASPAR2022
 - **SeuratData**: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.2, ssHippo_3.1.4
 
-## Run
+## 2. Run
 
 For Docker:
 
@@ -52,7 +52,9 @@ For Singularity:
     # execute R directory
     singularity exec [--nv] shortcake.sif R
 
-## Build image from Dockerfile
+## 3. Usage
+
+## 4. Build image from Dockerfile
 First clone and move to the repository
 
     git clone https://github.com/rnakato/ShortCake
@@ -70,10 +72,6 @@ Then build packages:
     # Then build Python packages
     cd ../Docker_Python/
     docker-compose -f docker-compose.yml build
-
-## Singularity images
-
-Prebuild singularity images (version 3.8.5) are available on our [OneDrive](https://univtokyo-my.sharepoint.com/:f:/g/personal/5389587184_utac_u-tokyo_ac_jp/EgzSeVrPk9VHkRMa0oZqUJwBi7JWWea0PpkTkNou_SmKiQ?e=e4TseC).
 
 ## Contact
 

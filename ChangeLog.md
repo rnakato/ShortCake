@@ -2,6 +2,7 @@
 
 - 2023.4.26: version 1.4.0
     - Update Seurat to v5
+    - Add ``run_env.sh`` to activate virtual environments in Python
     - Several bug fixes for installation
     - Separate Seurat-related tools from Dockerfile.R (now Dockerfile.Seurat)
 
