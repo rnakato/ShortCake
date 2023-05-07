@@ -1,5 +1,8 @@
 # Changelog
 
+- 2023.5.7: version 1.4.1
+    - Bug fix: issue #8
+
 - 2023.4.26: version 1.4.0
     - Update Seurat to v5
     - Add [EEISP](https://github.com/nakatolab/EEISP)

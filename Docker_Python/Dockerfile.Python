@@ -200,4 +200,7 @@ ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
 
 RUN rm ~/.Renviron
 
+### Fix issue: https://github.com/rnakato/ShortCake/issues/8
+RUN rm -rf /root/.cpanm/work/*
+
 CMD ["jupyternotebook.sh"]
