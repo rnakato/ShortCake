@@ -82,6 +82,7 @@ RUN set -e \
                                     'slingshot', \
                                     'splatter', \
                                     'stringi', \
+                                    'tricycle', \
                                     'WGCNA'))" \
     && R -e "install.packages(c('ClusterR', \
                                 'DDRTree', \
@@ -97,6 +98,9 @@ RUN set -e \
                                        'immunogenomics/presto', \
                                        'aet21/EpiSCORE', \
                                        'carmonalab/SignatuR', \
+                                       'SONGDONGYUAN1994/scDesign3', \
+                                       'BlishLab/scriabin', \
+                                       'https://github.com/saezlab/liana', \
                                        'dviraran/SingleR'))" \
     && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
 # scImpute, singleCellHaystack, scCATCH

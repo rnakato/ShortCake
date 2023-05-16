@@ -1,5 +1,22 @@
 # Changelog
 
+- 2023.5.16: version 1.5.0
+    - Add [STELLAR](http://snap.stanford.edu/stellar/)
+    - Add [GEARS](https://github.com/snap-stanford/GEARS)
+    - Add [SATURN](https://github.com/snap-stanford/SATURN)
+    - Add [tricycle](https://github.com/hansenlab/tricycle)
+    - Add [SEACells](https://github.com/dpeerlab/SEACells)
+    - Add [Moscot](https://moscot.readthedocs.io/en/latest/)
+    - Add [Scriabin](https://github.com/BlishLab/scriabin)
+    - Add [scDesign3](https://github.com/SONGDONGYUAN1994/scDesign3)
+    - Add [scReadSim](https://github.com/JSB-UCLA/scReadSim)
+    - Add [CellTypist](https://github.com/Teichlab/celltypist)
+    - Add [LIANA](https://github.com/saezlab/liana) and [LIANA-py](https://github.com/saezlab/liana-py)
+    - Add [RENGE](https://github.com/masastat/RENGE)
+
+- 2023.5.11: version 1.4.2
+    - Remove /root/.cpanm/work directory
+
 - 2023.5.7: version 1.4.1
     - Bug fix: issue #8
 
