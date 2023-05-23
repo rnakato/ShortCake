@@ -94,6 +94,7 @@ RUN set -e \
                                 'SAVER', \
                                 'UpSetR'))" \
     && R -e "remotes::install_github(c('Danko-Lab/BayesPrism/BayesPrism', \
+                                       'humengying0907/InstaPrism', \
                                        'jokergoo/ComplexHeatmap', \
                                        'immunogenomics/presto', \
                                        'aet21/EpiSCORE', \
@@ -119,8 +120,8 @@ RUN set -e \
 # chromVAR
     && R -e "BiocManager::install(c('chromVAR'))" \
     && R -e "remotes::install_github(c('GreenleafLab/chromVARmotifs','GreenleafLab/motifmatchr'))"
-# Monocle3
 
+# Monocle3
 COPY speedglm-master.tar.gz speedglm-master.tar.gz
 RUN set -e \
     && R CMD INSTALL speedglm-master.tar.gz \
