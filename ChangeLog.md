@@ -1,5 +1,10 @@
 # Changelog
 
+- 2023.5.23: version 1.5.1
+    - Add [InstaPrism](https://github.com/humengying0907/InstaPrism)
+    - Add the `shortcake_default` jupyter kernel to avoid the version conflict. The tools that do not have their own kernel are included in it.
+    - Merge several jupyter kernels
+
 - 2023.5.16: version 1.5.0
     - Add [STELLAR](http://snap.stanford.edu/stellar/)
     - Add [GEARS](https://github.com/snap-stanford/GEARS)
@@ -13,6 +18,7 @@
     - Add [CellTypist](https://github.com/Teichlab/celltypist)
     - Add [LIANA](https://github.com/saezlab/liana) and [LIANA-py](https://github.com/saezlab/liana-py)
     - Add [RENGE](https://github.com/masastat/RENGE)
+    - Add [MultiVelo](https://github.com/welch-lab/MultiVelo)
 
 - 2023.5.11: version 1.4.2
     - Remove /root/.cpanm/work directory

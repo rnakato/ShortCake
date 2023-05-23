@@ -1,8 +1,8 @@
-
 toollist="
     llvmlite \
     numba \
     cython \
+    celltypist \
     louvain \
     leidenalg \
     magic \
@@ -18,10 +18,12 @@ for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake python -c "import "$tool""
+    docker run -it --rm rnakato/shortcake run_env.sh shortcake_default python -c "import "$tool""
 done
 
 toollist="
+    liana \
+    moscot \
     cell2cell \
     celloracle \
     cellrank \
@@ -34,9 +36,7 @@ toollist="
     ikarus \
     monet \
     novosparc \
-    pyscenic \
-    scgen \
-    scvi
+    pyscenic 
 "
 
 for tool in $toollist
@@ -46,12 +46,34 @@ do
     docker run -it --rm rnakato/shortcake run_env.sh $tool python -c "import $tool"
 done
 
-echo "SAVERX"
-docker run -it --rm rnakato/shortcake run_env.sh saver-x R -e "library(SAVERX)"
+for tool in scvi scgen scmomat
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake run_env.sh scvi-scgen-scmomat python -c "import $tool"
+done
+
+for tool in gears
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake run_env.sh stellar-gears-saturn python -c "import $tool"
+done
+
+echo "scReadSim"
+docker run -it --rm rnakato/shortcake run_env.sh screadsim python -c "import scReadSim"
+
+echo "SEACells"
+docker run -it --rm rnakato/shortcake run_env.sh seacells python -c "import SEACells"
+
+#echo "STELLAR"
+#docker run -it --rm rnakato/shortcake run_env.sh stellar python -c "from STELLAR import STELLAR"
+
+#echo "SAVERX"
+#docker run -it --rm rnakato/shortcake run_env.sh saver-x R -e "library(SAVERX)"
 
 echo "SCCAF"
 docker run -it --rm rnakato/shortcake run_env.sh SCCAF python -c "from SCCAF import SCCAF_assessment"
 
 echo "EEISP"
 docker run -it --rm rnakato/shortcake eeisp --version
-

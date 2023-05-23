@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  shortcake:
+    build:
+      context: "."
+      dockerfile: Dockerfile.CellOracle
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+        

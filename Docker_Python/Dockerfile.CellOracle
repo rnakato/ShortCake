@@ -1,0 +1,109 @@
+FROM docker_r-shortcake_r
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+### conda install
+### Virtual environment
+RUN set -e \
+    && conda init bash \
+    && source ~/.bashrc \
+    && conda create -n shortcake_default python=3.8 jupyter notebook ipykernel seaborn \
+    && source activate shortcake_default \
+    && conda config --add channels conda-forge \
+    && conda install -y llvmlite numba cython python-igraph \
+    && conda install -y -c bioconda kallisto \
+    && conda install -y -c conda-forge fa2 louvain leidenalg \
+    && conda install -y -c statiskit libboost \
+# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo, CellOracle
+    && pip install --no-cache-dir anndata2ri \
+                                  autogenes \
+                                  bbknn \
+#                                  celloracle \
+                                  celltypist \
+                                  dash \
+                                  eeisp \
+                                  gprofiler-official \
+                                  magic-impute \
+                                  multivelo \
+                                  palantir \
+                                  PhenoGraph \
+                                  pybind11 \
+                                  renge \
+                                  rpy2 \
+                                  screcode \
+                                  scrublet \
+                                  sctriangulate \
+                                  scvelo \
+                                  velocyto \
+                                  xlrd \
+                                  session-info \
+    && python -m ipykernel install --name=shortcake_default \
+    && jupyter kernelspec list \
+    && conda deactivate 
+
+
+RUN set -e \
+    && conda init bash \
+    && source ~/.bashrc \
+    && conda create -n celloracle python=3.7 jupyter notebook ipykernel numpy Cython openblas mamba \
+    && source activate celloracle \
+    && conda install -c bioconda pybigwig pysam \
+#    && pip install --no-cache-dir gimmemotifs==0.16.0 \
+    && mamba install -c bioconda -c conda-forge gimmemotifs \
+#    && conda install -y -c conda-forge -c bioconda gimmemotifs \
+    && pip install --no-cache-dir celloracle \
+    && python -m ipykernel install --name=celloracle \
+    && jupyter kernelspec list \
+    && conda deactivate
+
+
+#RUN set -e \
+#    && conda install -y llvmlite numba cython python-igraph \
+#    && conda install -y -c bioconda kallisto gimmemotifs==0.16.0 \ 
+#    && conda install -y -c conda-forge fa2 louvain leidenalg \
+#    && conda install -y -c statiskit libboost \
+# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo, CellOracle
+#    && pip install --no-cache-dir anndata2ri \
+#                                  autogenes \
+#                                  bbknn \
+#                                  celloracle \
+#                                  celltypist \
+#                                  dash \
+#                                  eeisp \
+#                                  gprofiler-official \
+#                                  magic-impute \
+#                                  multivelo \
+#                                  palantir \
+#                                  PhenoGraph \
+#                                  pybind11 \
+#                                  renge \
+#                                  rpy2 \
+#                                  screcode \
+#                                  scrublet \
+#                                  sctriangulate \
+#                                  scvelo \
+#                                  velocyto \
+#                                  xlrd 
+
+#RUN false
+# docker run --rm -it docker_python_shortcake run_env.sh celloracle python -c "import celloracle"
+
+### Final setting
+RUN conda clean --all -y && pip cache purge
+COPY run_env.sh /opt/scripts/run_env.sh
+RUN chmod +x /opt/scripts/run_env.sh
+
+ENV PATH $PATH:/opt:/opt/scripts:/opt/conda/envs/shortcake_default/bin/
+RUN rm ~/.Renviron
+
+CMD ["jupyternotebook.sh"]
+
+

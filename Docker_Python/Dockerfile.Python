@@ -1,4 +1,4 @@
-FROM docker_r-shortcake_r
+FROM docker_python_shortcake
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -10,47 +10,33 @@ RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
     && cat ~/.Renviron
 
-### conda install
-RUN set -e \
-    && conda install -y llvmlite numba cython python-igraph \
-    && conda install -y -c bioconda kallisto \
-    && conda install -y -c conda-forge fa2 louvain leidenalg \
-    && conda install -y -c statiskit libboost \
-# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE
-    && pip install --no-cache-dir anndata2ri \
-                                  autogenes \
-                                  bbknn \
-                                  dash \
-                                  eeisp \
-                                  gprofiler-official \
-                                  magic-impute \
-                                  palantir \
-                                  PhenoGraph \
-                                  pybind11 \
-                                  renge \
-                                  rpy2 \
-                                  screcode \
-                                  scrublet \
-                                  sctriangulate \
-                                  scvelo \
-                                  velocyto \
-                                  xlrd
+RUN git clone https://github.com/xianyi/OpenBLAS.git \
+    && cd OpenBLAS \
+    && make \
+    && rm -rf OpenBLAS
 
 ### Virtual environment
+# liana openblas
 RUN set -e \
-    && conda init bash \
-    && source ~/.bashrc \
+    && conda create -n liana python=3.8 jupyter notebook ipykernel numpy TBB numba \
+    && source activate liana \
+    && pip install --no-cache-dir liana session-info \
+    && python -m ipykernel install --name=liana \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# constclust
     && conda create -n constclust python=3.7 jupyter notebook ipykernel seaborn \
     && source activate constclust \
+    && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir constclust session-info \
     && python -m ipykernel install --name=constclust \
     && jupyter kernelspec list \
-    && conda deactivate \
+    && conda deactivate 
 # cellphoneDB
-    && source ~/.bashrc \
+RUN source ~/.bashrc \
     && conda create -n cellphonedb python=3.7 jupyter notebook ipykernel seaborn nbconvert==5.6.1 \
     && source activate cellphonedb \
-#    && pip uninstall -y jupyterlab-server \
+    && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir cellphonedb session-info jinja2==3.0.3 \
     && cellphonedb database download \
     && python -m ipykernel install --name=cellphonedb \
@@ -63,82 +49,194 @@ RUN set -e \
     && python -m ipykernel install --name=monet \
     && jupyter kernelspec list \
     && conda deactivate \
-# liana
-    && conda create -n liana python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate liana \
-    && pip install --no-cache-dir liana session-info \
-    && python -m ipykernel install --name=liana \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# celltypist
-    && conda create -n celltypist python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate celltypist \
-    && pip install --no-cache-dir celltypist session-info \
-    && python -m ipykernel install --name=celltypist \
-    && jupyter kernelspec list \
-    && conda deactivate \
 # scReadSim
-    && conda create -n screadsim python=3.8 jupyter notebook ipykernel seaborn \
+    && conda create -n screadsim python=3.8 jupyter notebook ipykernel \
     && source activate screadsim \
     && pip install --no-cache-dir scReadSim session-info \
     && python -m ipykernel install --name=screadsim \
     && jupyter kernelspec list \
-    && conda deactivate \       
-# scVI
-    && conda create -n scvi python=3.9 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate scvi \
-    && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
-    && python -m ipykernel install --name=scvi \
+    && conda deactivate 
+# scVI, scGen (scGen uses scVI internally) openblas
+RUN conda create -n scvi-scgen-scmomat python=3.9 jupyter notebook ipykernel numba \
+    && source activate scvi-scgen-scmomat \
+    && pip install --no-cache-dir numpy \
+#    && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
+    && conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia \
+    && conda install -c conda-forge jax jaxlib \
+    && conda install -c conda-forge scvi-tools \
+    && pip install --no-cache-dir scgen[tutorials] scmomat session-info \
+    && python -m ipykernel install --name=scvi-scgen-scmomat \
     && jupyter kernelspec list \
     && conda deactivate \
 # SCCAF
-    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
+    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel numpy \
     && source activate SCCAF \
+    && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir sccaf session-info \
     && python -m ipykernel install --name=SCCAF \
     && jupyter kernelspec list \
-    && conda deactivate \
-# ikarus
-    && conda create -y -n ikarus python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
+    && conda deactivate 
+# ikarus openblas
+RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB numba \
     && source activate ikarus \
     && pip install --no-cache-dir ikarus session-info \
     # To avoid the error "ModuleNotFoundError: No module named 'pyscenic.genesig'"
     # issue: https://github.com/BIMSBbioinfo/ikarus/issues/12
-    &&  sed -i 's/pyscenic\.genesig/ctxcore.genesig/g' /opt/conda/envs/ikarus/lib/python3.8/site-packages/ikarus/classifier.py \
+    && sed -i 's/pyscenic\.genesig/ctxcore.genesig/g' /opt/conda/envs/ikarus/lib/python3.8/site-packages/ikarus/classifier.py \
     && python -m ipykernel install --name=ikarus \
     && jupyter kernelspec list \
     && conda deactivate \
 # pySCENIC
-    && conda create -y -n pyscenic python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
+    && conda create -y -n pyscenic python=3.7 jupyter notebook ipykernel numpy \
     && source activate pyscenic \
+    && pip install --no-cache-dir --upgrade jupyter_client \
     && conda install -y -c anaconda cytoolz \
     && pip install --no-cache-dir pyscenic session-info \
     && python -m ipykernel install --name=pyscenic \
     && jupyter kernelspec list \
-    && conda deactivate \
-# scGen
-    && conda create -y -n scgen python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate scgen \
-    && pip install --no-cache-dir scgen[tutorials] session-info \
-    && python -m ipykernel install --name=scgen \
-    && jupyter kernelspec list \
-    && conda deactivate \
+    && conda deactivate
 # cell2cell
-    && conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
+RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel numpy \
     && source activate cell2cell \
+    && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir cell2cell session-info obonet umap-learn \
     && python -m ipykernel install --name=cell2cell \
     && jupyter kernelspec list \
+    && conda deactivate
+# CellRank
+RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel numpy  \
+    && source activate cellrank \
+    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
+    && pip install --no-cache-dir igraph session-info \
+    && pip install --no-cache-dir git+https://github.com/broadinstitute/wot \
+    && python -m ipykernel install --name=cellrank \
+    && jupyter kernelspec list \
     && conda deactivate \
-# SAVER-X
-    && conda create -y -n SAVER-X python=3.9 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate SAVER-X \
-    && pip install --no-cache-dir sctransfer session-info \
-    && R -e "remotes::install_github('jingshuw/SAVERX')" \
-    && pip install --no-cache-dir obonet umap-learn \
-    && python -m ipykernel install --name=SAVER-X \
+# doubletdetection
+    && conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel numpy \
+    && source activate doubletdetection \
+    && pip install --no-cache-dir --upgrade jupyter_client \
+    && pip install --no-cache-dir doubletdetection session-info \
+    && python -m ipykernel install --name=doubletdetection \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# episcanpy
+    && conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel numpy \
+    && source activate episcanpy \
+    && pip install --no-cache-dir --upgrade jupyter_client \
+    && pip install --no-cache-dir episcanpy \
+    && python -m ipykernel install --name=episcanpy \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# dynamo
+    && conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 numpy \
+    && source activate dynamo \
+    && pip install --no-cache-dir --upgrade jupyter_client \
+    && pip install --no-cache-dir dynamo-release pycairo session-info \
+    && python -m ipykernel install --name=dynamo \
+    && jupyter kernelspec list \
+    && conda deactivate 
+# novosparc openblas
+RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel numpy TBB numba \
+    && source activate novosparc \
+    && pip install --no-cache-dir novosparc \
+    && python -m ipykernel install --name=novosparc \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# harmonypy
+    && conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel numpy TBB openblas \
+    && source activate harmonypy \
+    && pip install --no-cache-dir harmonypy \
+    && python -m ipykernel install --name=harmonypy \
+    && jupyter kernelspec list \
+    && conda deactivate 
+# scmomat
+#RUN conda create -y -n scmomat python=3.8 jupyter notebook ipykernel seaborn numpy  \
+#    && source activate scmomat \
+#    && conda install pytorch cudatoolkit=11.3 -c pytorch \
+##    && pip install --no-cache-dir scmomat \
+ #   && python -m ipykernel install --name=scmomat \
+ #   && jupyter kernelspec list \
+ #   && conda deactivate \
+# MARIO openblas
+RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy \
+    && source activate mario \
+    && pip install --no-cache-dir pyMARIO \
+    && python -m ipykernel install --name=mario \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# STELLAR, GEARS, SATURN
+    && conda create -y -n stellar-gears-saturn python=3.8 jupyter notebook ipykernel seaborn numpy \
+    && source activate stellar-gears-saturn \
+    && conda install pytorch cudatoolkit=11.3 -c pytorch \
+    && conda install pyg -c pyg \
+    && pip install --no-cache-dir torchvision==0.11.3 \
+    && git clone https://github.com/snap-stanford/SATURN.git \
+    && pip install --no-cache-dir -r SATURN/requirements.txt \
+    && rm -rf SATURN \
+    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
+    && git clone https://github.com/snap-stanford/stellar.git \
+    && pip install --no-cache-dir -r stellar/requirements.txt \
+    && pip install --no-cache-dir cell-gears \
+    && python -m ipykernel install --name=stellar-gears-saturn \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# STELLAR
+#    && conda create -y -n stellar python=3.8 jupyter notebook ipykernel seaborn numpy \
+#    && source activate stellar \
+#    && conda install pytorch cudatoolkit=11.3 -c pytorch \
+#    && conda install pyg -c pyg \
+#    && git clone https://github.com/snap-stanford/stellar.git \
+#    && pip install --no-cache-dir -r stellar/requirements.txt \
+#    && python -m ipykernel install --name=stellar \
+#    && jupyter kernelspec list \
+#    && conda deactivate \
+# GEARS
+#    && conda create -y -n gears python=3.8 jupyter notebook ipykernel seaborn numpy \
+#    && source activate gears \
+#    && conda install pyg -c pyg \
+#    && pip install --no-cache-dir cell-gears \
+#    && python -m ipykernel install --name=gears \
+#    && jupyter kernelspec list \
+#    && conda deactivate \
+# SATURN
+#    && conda create -y -n saturn python=3.8 jupyter notebook ipykernel seaborn numpy \
+#    && source activate saturn \
+#    && pip install --no-cache-dir torchvision==0.11.3 \
+#    && git clone https://github.com/snap-stanford/SATURN.git \
+#    && pip install --no-cache-dir -r SATURN/requirements.txt \
+#    && rm -rf SATURN \
+#    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
+#    && python -m ipykernel install --name=saturn \
+#    && jupyter kernelspec list \
+#    && conda deactivate \
+# SEACells
+    && conda create -y -n seacells -c conda-forge python=3.8 jupyter notebook ipykernel cmake numpy \
+    && source activate seacells \
+    && pip install --no-cache-dir SEACells \
+    && python -m ipykernel install --name=seacells \
+    && jupyter kernelspec list \
+    && conda deactivate \
+# Moscot
+    && conda create -y -n moscot -c conda-forge python=3.8 jupyter notebook ipykernel seaborn numpy \
+    && source activate moscot \
+    && pip install --no-cache-dir moscot \
+    && python -m ipykernel install --name=moscot \
     && jupyter kernelspec list \
     && conda deactivate
+
+# SAVER-X ( tensorflow==2.2.0 not found)
+#RUN conda create -y -n SAVER-X python=3.6 ipykernel numpy \
+#    && source activate SAVER-X \
+#    && conda uninstall certifi \
+#    && pip install -U pip \
+#    && pip install --no-cache-dir tensorflow==2.2.0 \
+#    && pip install --no-cache-dir sctransfer==0.1.0 session-info \
+#    && R -e "remotes::install_github('jingshuw/SAVERX')" \
+#    && pip install --no-cache-dir obonet umap-learn \
+#    && python -m ipykernel install --name=SAVER-X \
+#    && jupyter kernelspec list \
+#    && conda deactivate
 # CellAssign (purged)
 #RUN . activate \
 #    && conda create -n CellAssign -y python=3.7 jupyter notebook ipykernel seaborn pyzmq \
@@ -148,127 +246,10 @@ RUN set -e \
 #    && R -e "install.packages('tensorflow')" \
 #    && R -e "tensorflow::install_tensorflow(extra_packages='tensorflow-probability', version = '2.1.0')" \
 #    && R -e "tensorflow::tf_config()" \
- #   && R -e "remotes::install_github('Irrationone/cellassign')" \
+#    && R -e "remotes::install_github('Irrationone/cellassign')" \
 #    && python -m ipykernel install --name=CellAssign \
 #    && jupyter kernelspec list \
 #    && conda deactivate
-
-# CellRank
-RUN set -e \
-    && conda init bash \
-    && . ~/.bashrc \
-    && . activate \
-    && conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate cellrank \
-    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
-    && pip install --no-cache-dir igraph session-info \
-    && pip install --no-cache-dir git+https://github.com/broadinstitute/wot \
-    && python -m ipykernel install --name=cellrank \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# doubletdetection
-    && conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate doubletdetection \
-    && pip install --no-cache-dir doubletdetection session-info \
-    && python -m ipykernel install --name=doubletdetection \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# episcanpy
-    && conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate episcanpy \
-    && pip install --no-cache-dir episcanpy \
-    && python -m ipykernel install --name=episcanpy \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# dynamo
-    && conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 jinja2==3.0.3 \
-    && source activate dynamo \
-    && pip install --no-cache-dir dynamo-release pycairo session-info \
-    && python -m ipykernel install --name=dynamo \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# novosparc
-    && conda create -y -n novosparc python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate novosparc \
-    && pip install --no-cache-dir novosparc \
-    && python -m ipykernel install --name=novosparc \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# harmonypy
-    && conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel seaborn jinja2==3.0.3 \
-    && source activate harmonypy \
-    && pip install --no-cache-dir harmonypy \
-    && python -m ipykernel install --name=harmonypy \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# CellOracle
-    && conda create -n celloracle python=3.8 jupyter notebook ipykernel seaborn Cython jinja2==3.0.3 \
-    && source activate celloracle \
-    && pip install --no-cache-dir celloracle \
-    && python -m ipykernel install --name=celloracle \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# scmomat
-    && conda create -y -n scmomat python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate scmomat \
-    && pip install --no-cache-dir scmomat \
-    && python -m ipykernel install --name=scmomat \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# MARIO
-    && conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate mario \
-    && pip install --no-cache-dir pyMARIO \
-    && python -m ipykernel install --name=mario \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# STELLAR
-    && conda init bash \
-    && . ~/.bashrc \
-    && . activate \
-    && conda create -y -n stellar python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate stellar \
-    && conda install pytorch cudatoolkit=11.3 -c pytorch \
-    && conda install pyg -c pyg \
-    && git clone https://github.com/snap-stanford/stellar.git \
-    && pip install --no-cache-dir -r stellar/requirements.txt \
-    && python -m ipykernel install --name=stellar \
-    && jupyter kernelspec list \
-    && conda deactivate \
-    && rm -rf stellar \
-# GEARS
-    && conda create -y -n gears python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate gears \
-    && pip install --no-cache-dir cell-gears \
-    && python -m ipykernel install --name=gears \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# SATURN
-    && conda create -y -n saturn python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate saturn \
-    && pip install --no-cache-dir torchvision==0.11.3 \
-    && git clone https://github.com/snap-stanford/SATURN.git \
-    && pip install --no-cache-dir -r SATURN/requirements.txt \
-    && rm -rf SATURN \
-    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
-    && python -m ipykernel install --name=saturn \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# SEACells
-    && conda create -y -n seacells -c conda-forge python=3.8 jupyter notebook ipykernel seaborn cmake \
-    && source activate seacells \
-    && pip install --no-cache-dir SEACells \
-    && python -m ipykernel install --name=seacells \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# Moscot
-    && conda create -y -n moscot -c conda-forge python=3.8 jupyter notebook ipykernel seaborn \
-    && source activate moscot \
-    && pip install --no-cache-dir moscot \
-    && python -m ipykernel install --name=moscot \
-    && jupyter kernelspec list \
-    && conda deactivate
-
 # GLUE (too long conflict)
 #[GLUE](https://github.com/gao-lab/GLUE)
 #RUN conda create -y -n glue -c conda-forge python=3.8 jupyter notebook ipykernel seaborn \
@@ -290,10 +271,10 @@ RUN set -e \
 ### Final setting
 RUN conda clean --all -y && pip cache purge
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
-COPY run_env.sh /opt/scripts/run_env.sh
-RUN chmod +x /opt/scripts/run_env.sh
+#COPY run_env.sh /opt/scripts/run_env.sh
+#RUN chmod +x /opt/scripts/run_env.sh
 
-ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
+ENV PATH $PATH:/opt:/opt/scripts:/opt/conda/envs/shortcake_default/bin/:/opt/bedops_linux_x86_64-v2.4.39
 
 RUN rm ~/.Renviron
 
