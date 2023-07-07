@@ -224,6 +224,18 @@ RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy
     && python -m ipykernel install --name=moscot \
     && jupyter kernelspec list \
     && conda deactivate
+# UniTVelo 
+# https://github.com/StatBiomed/UniTVelo
+RUN conda create -y -n unitvelo python=3.7 jupyter notebook ipykernel \
+    && source activate unitvelo \
+    && pip install --no-cache-dir unitvelo session-info \
+    && python -m ipykernel install --name=unitvelo \
+    && jupyter kernelspec list \
+    && conda deactivate 
+# scranPY 
+# https://github.com/sfortma2/scranPY/?anything
+RUN pip install --no-cache-dir pyqt5 pyqtwebengine ruamel-yaml clyent==1.2.1 nbformat==5.4.0 \
+    && pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git
 
 # SAVER-X ( tensorflow==2.2.0 not found)
 #RUN conda create -y -n SAVER-X python=3.6 ipykernel numpy \

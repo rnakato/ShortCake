@@ -1,5 +1,9 @@
 # Changelog
 
+- 2023.5.16: version 1.6.0
+    - Add [UniTVelo](https://github.com/StatBiomed/UniTVelo)
+    - Add [scranPY](https://github.com/sfortma2/scranPY/)
+
 - 2023.5.23: version 1.5.1
     - Add [InstaPrism](https://github.com/humengying0907/InstaPrism)
     - Add the `shortcake_default` jupyter kernel to avoid the version conflict. The tools that do not have their own kernel are included in it.
