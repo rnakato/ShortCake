@@ -36,7 +36,8 @@ toollist="
     ikarus \
     monet \
     novosparc \
-    pyscenic 
+    pyscenic \
+    rapids_singlecell 
 "
 
 for tool in $toollist
@@ -46,14 +47,14 @@ do
     docker run -it --rm rnakato/shortcake run_env.sh $tool python -c "import $tool"
 done
 
-for tool in scvi scgen scmomat
+for tool in #scvi scgen scmomat
 do
     command="python -c \"import "$tool"\""
     echo $command
     docker run -it --rm rnakato/shortcake run_env.sh scvi-scgen-scmomat python -c "import $tool"
 done
 
-for tool in gears
+for tool in #gears
 do
     command="python -c \"import "$tool"\""
     echo $command
@@ -72,8 +73,8 @@ docker run -it --rm rnakato/shortcake run_env.sh seacells python -c "import SEAC
 #echo "SAVERX"
 #docker run -it --rm rnakato/shortcake run_env.sh saver-x R -e "library(SAVERX)"
 
-echo "SCCAF"
-docker run -it --rm rnakato/shortcake run_env.sh SCCAF python -c "from SCCAF import SCCAF_assessment"
+#echo "SCCAF"
+#docker run -it --rm rnakato/shortcake run_env.sh SCCAF python -c "from SCCAF import *"
 
 echo "EEISP"
 docker run -it --rm rnakato/shortcake eeisp --version

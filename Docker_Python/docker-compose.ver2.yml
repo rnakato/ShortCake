@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  shortcake_ver2:
+    build:
+      context: "."
+      dockerfile: Dockerfile.Python_ver2
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+    image: rnakato/shortcake_ver2

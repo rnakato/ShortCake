@@ -1,4 +1,4 @@
-FROM rnakato/r_python_gpu:2023.05
+FROM rnakato/r_python_gpu:2023.10
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -38,19 +38,19 @@ RUN set -e \
     && R -e "remotes::install_github('atakanekiz/CIPR-Package')" \
     && R -e "remotes::install_github('greenelab/miQC')" \
 # SeuratData
-    && R -e "install.packages('SeuratData/ifnb.SeuratData_3.1.0.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/panc8.SeuratData_3.0.2.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/pbmcsca.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/celegans.embryo.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/cbmc.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/hcabm40k.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/thp1.eccite.SeuratData_3.1.5.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/stxBrain.SeuratData_0.1.1.tar.gz', repos = NULL, type = 'source')" \
-    && R -e "install.packages('SeuratData/stxKidney.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/bmcite.SeuratData_0.3.0.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/pbmcMultiome.SeuratData_0.1.2.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/cbmc.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/pbmcsca.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/celegans.embryo.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/ssHippo.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/hcabm40k.SeuratData_3.0.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/stxBrain.SeuratData_0.1.1.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/ifnb.SeuratData_3.1.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/stxKidney.SeuratData_0.1.0.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/panc8.SeuratData_3.0.2.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/thp1.eccite.SeuratData_3.1.5.tar.gz', repos = NULL, type = 'source')" \
+    && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
     && rm -rf SeuratData
 
 RUN rm ~/.Renviron

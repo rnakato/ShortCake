@@ -39,6 +39,7 @@ RUN set -e \
                                     'clusterExperiment', \
                                     'clusterProfiler', \
                                     'DelayedMatrixStats', \
+                                    'DESeq2', \
                                     'doMC', \
                                     'doRNG', \
                                     'DropletUtils', \
@@ -57,6 +58,7 @@ RUN set -e \
                                     'limma', \
                                     'MAST', \
                                     'MeSH.Hsa.eg.db', \
+                                    'tanaylab/metacell', \
                                     'mixtools', \
                                     'monocle', \
                                     'NMF', \
@@ -82,6 +84,7 @@ RUN set -e \
                                     'slingshot', \
                                     'splatter', \
                                     'stringi', \
+                                    'sva', \
                                     'tricycle', \
                                     'WGCNA'))" \
     && R -e "install.packages(c('ClusterR', \
@@ -89,32 +92,38 @@ RUN set -e \
                                 'densityClust', \
                                 'dyngen', \
                                 'gam', \
+                                'gganimate', \
                                 'gprofiler2', \
                                 'irlba', \
                                 'SAVER', \
+                                'singleCellHaystack', \
                                 'UpSetR'))" \
     && R -e "remotes::install_github(c('Danko-Lab/BayesPrism/BayesPrism', \
-                                       'humengying0907/InstaPrism', \
+                                       'sqjin/CellChat', \
+                                       'jokergoo/circlize', \
+                                       'aertslab/cisTopic', \
                                        'jokergoo/ComplexHeatmap', \
-                                       'immunogenomics/presto', \
+                                       'chris-mcginnis-ucsf/DoubletFinder', \
                                        'aet21/EpiSCORE', \
-                                       'carmonalab/SignatuR', \
-                                       'SONGDONGYUAN1994/scDesign3', \
-                                       'BlishLab/scriabin', \
+                                       'humengying0907/InstaPrism', \
                                        'https://github.com/saezlab/liana', \
+                                       'immunogenomics/presto', \
+                                       'sqjin/scAI', \
+                                       'ZJUFanLab/scCATCH', \
+                                       'SONGDONGYUAN1994/scDesign3', \
+                                       'Vivianstats/scImpute', \
+                                       'sunduanchen/Scissor', \
+                                       'software-github/SCRABBLE/R', \
+                                       'BlishLab/scriabin', \
+                                       'carmonalab/SignatuR', \
                                        'dviraran/SingleR'))" \
     && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
-# scImpute, singleCellHaystack, scCATCH
-    && R -e "install.packages('singleCellHaystack')" \
-    && R -e "remotes::install_github(c('Vivianstats/scImpute', 'ZJUFanLab/scCATCH'))" \
 # velocyto.R
     && R -e "remotes::install_github(c('aertslab/SCopeLoomR', 'velocyto-team/velocyto.R'))" \
     && R -e "install.packages('pagoda2')" \
 # SingleCellNet
     && R -e "remotes::install_github(c('pcahan1/singleCellNet'))" \
     && R -e "remotes::install_github('mojaveazure/loomR', ref = 'develop')" \
-# SCRABBLE
-    && R -e "remotes::install_github('software-github/SCRABBLE/R')" \
 # ArchR
     && R -e "devtools::install_github('GreenleafLab/ArchR', ref='master', repos = BiocManager::repositories())" \
 # chromVAR
@@ -132,12 +141,16 @@ RUN set -e \
     && R -e "remotes::install_github('cole-trapnell-lab/garnett', ref='monocle3')" \
 # cicero
     && R -e "remotes::install_github('cole-trapnell-lab/cicero-release', ref = 'monocle3')" \
-# DoubletFinder
-    && R -e "remotes::install_github('chris-mcginnis-ucsf/DoubletFinder')" \
 # Harmony
-    && R -e "install.packages('gganimate')" \
-    && R -e "BiocManager::install(c('sva','DESeq2'))" \
-    && R -e "remotes::install_github(c('immunogenomics/harmony','immunogenomics/presto','JEFworks/MUDAN'))"
+    && R -e "remotes::install_github(c('immunogenomics/harmony','immunogenomics/presto','JEFworks/MUDAN'))" \
+# SCDC, MuSiC
+    && R -e "BiocManager::install(c('TOAST'))" \
+    && R -e "remotes::install_github(c('renozao/xbioc','meichendong/SCDC', 'xuranw/MuSiC'))" \
+# MOFA2
+    && R -e "remotes::install_github('bioFAM/MOFA2', build_opts = c('--no-resave-data --no-build-vignettes'))" \
+# bigSCale2
+    && R -e "install.packages(c('fmsb','ClassDiscovery','ggalt','ggdendro','ggpubr'))" \
+    && R -e "remotes::install_github('iaconogi/bigSCale2')"
 
 # kallisto, bustools
 RUN set -e \
@@ -149,20 +162,6 @@ RUN set -e \
     && R -e "remotes::install_github(c('tidymodels/tidymodels','BUStools/BUSpaRse'))" \
     && rm -rf /work/bustools
 
-# metacells
-RUN set -e \
-    && R -e "BiocManager::install('tanaylab/metacell')" \
-# cisTopic, scAI
-    && R -e "remotes::install_github(c('aertslab/cisTopic', 'sqjin/scAI'))" \
-# SCDC, MuSiC
-    && R -e "BiocManager::install(c('TOAST'))" \
-    && R -e "remotes::install_github(c('renozao/xbioc','meichendong/SCDC', 'xuranw/MuSiC'))" \
-# MOFA2
-    && R -e "remotes::install_github('bioFAM/MOFA2', build_opts = c('--no-resave-data --no-build-vignettes'))" \
-# bigSCale2
-    && R -e "install.packages(c('fmsb','ClassDiscovery','ggalt','ggdendro','ggpubr'))" \
-    && R -e "remotes::install_github('iaconogi/bigSCale2')"
-
 # FROWMAP
 COPY SDMTools_1.1-221.2.tar.gz SDMTools_1.1-221.2.tar.gz
 RUN set -e \
@@ -172,17 +171,8 @@ RUN set -e \
     && R -e "BiocManager::install('flowCore')" \
     && R -e "remotes::install_github(c('nolanlab/scaffold','ParkerICI/vite','nolanlab/Rclusterpp','nolanlab/spade','zunderlab/FLOWMAP'))"
 
-# CellChat
-#RUN R -e "install.packages('NMF')" \
-RUN set -e \
-    && R -e "remotes::install_github('jokergoo/circlize')" \
-    && R -e "remotes::install_github('jokergoo/ComplexHeatmap')" \
-    && R -e "remotes::install_github('sqjin/CellChat')" \
-# scTenifoldKnk
-#    && R -e "remotes::install_github('cailab-tamu/scTenifoldKnk')" \
-# Scissor
-    && R -e "remotes::install_github('sunduanchen/Scissor')" \
 # FUSCA: CellComm
+RUN set -e \
     && wget https://cran.r-project.org/src/contrib/Archive/geomnet/geomnet_0.3.1.tar.gz \
     && R CMD INSTALL geomnet_0.3.1.tar.gz \
     && rm geomnet_0.3.1.tar.gz \
@@ -203,6 +193,10 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
     && cd \
     && rm -rf /opt/fftw-3.3.10 \
     && R -e "install.packages('rliger')"
+
+RUN set -e \
+    && R -e "remotes::install_github('igrabski/sc-SHC')" \
+    && R -e "remotes::install_github('zhanghao-njmu/SCP')"
 
 # CIBERSORTx EcoTyper resigstration needed
 # https://github.com/digitalcytometry/ecotyper

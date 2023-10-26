@@ -1,4 +1,4 @@
-FROM docker_python_shortcake
+FROM docker_python_celloracle
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -10,10 +10,12 @@ RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
     && cat ~/.Renviron
 
-RUN git clone https://github.com/xianyi/OpenBLAS.git \
-    && cd OpenBLAS \
-    && make \
-    && rm -rf OpenBLAS
+#COPY OpenBLAS-0.3.24.tar.gz OpenBLAS-0.3.24.tar.gz
+#RUN tar zxvf OpenBLAS-0.3.24.tar.gz \
+#    && cd OpenBLAS-0.3.24 \
+#    && make \
+#    && make install \
+#    && rm -rf OpenBLAS-0.3.24 OpenBLAS-0.3.24.tar.gz
 
 ### Virtual environment
 # liana openblas
@@ -31,7 +33,7 @@ RUN set -e \
     && pip install --no-cache-dir constclust session-info \
     && python -m ipykernel install --name=constclust \
     && jupyter kernelspec list \
-    && conda deactivate 
+    && conda deactivate
 # cellphoneDB
 RUN source ~/.bashrc \
     && conda create -n cellphonedb python=3.7 jupyter notebook ipykernel seaborn nbconvert==5.6.1 \
@@ -55,27 +57,15 @@ RUN source ~/.bashrc \
     && pip install --no-cache-dir scReadSim session-info \
     && python -m ipykernel install --name=screadsim \
     && jupyter kernelspec list \
-    && conda deactivate 
-# scVI, scGen (scGen uses scVI internally) openblas
-RUN conda create -n scvi-scgen-scmomat python=3.9 jupyter notebook ipykernel numba \
-    && source activate scvi-scgen-scmomat \
-    && pip install --no-cache-dir numpy \
-#    && pip install --no-cache-dir jupyterlab-server scikit-misc plotnine scvi-tools session-info \
-    && conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia \
-    && conda install -c conda-forge jax jaxlib \
-    && conda install -c conda-forge scvi-tools \
-    && pip install --no-cache-dir scgen[tutorials] scmomat session-info \
-    && python -m ipykernel install --name=scvi-scgen-scmomat \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# SCCAF
-    && conda create -n SCCAF python=3.7 jupyter notebook ipykernel numpy \
-    && source activate SCCAF \
-    && pip install --no-cache-dir --upgrade jupyter_client \
-    && pip install --no-cache-dir sccaf session-info \
-    && python -m ipykernel install --name=SCCAF \
-    && jupyter kernelspec list \
-    && conda deactivate 
+    && conda deactivate
+# SCCAF (outdated scanpy)
+#RUN conda create -n SCCAF python=3.7 jupyter notebook ipykernel \
+#    && source activate SCCAF \
+#    && pip install --no-cache-dir --upgrade jupyter_client session-info \
+#    && pip install --no-cache-dir sccaf \
+#    && python -m ipykernel install --name=SCCAF \
+#    && jupyter kernelspec list \
+#    && conda deactivate
 # ikarus openblas
 RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB numba \
     && source activate ikarus \
@@ -106,7 +96,8 @@ RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel numpy \
 # CellRank
 RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel numpy  \
     && source activate cellrank \
-    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
+#    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
+    && conda install -y -c conda-forge cellrank \
     && pip install --no-cache-dir igraph session-info \
     && pip install --no-cache-dir git+https://github.com/broadinstitute/wot \
     && python -m ipykernel install --name=cellrank \
@@ -135,7 +126,7 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel nu
     && pip install --no-cache-dir dynamo-release pycairo session-info \
     && python -m ipykernel install --name=dynamo \
     && jupyter kernelspec list \
-    && conda deactivate 
+    && conda deactivate
 # novosparc openblas
 RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel numpy TBB numba \
     && source activate novosparc \
@@ -149,15 +140,7 @@ RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel numpy TBB
     && pip install --no-cache-dir harmonypy \
     && python -m ipykernel install --name=harmonypy \
     && jupyter kernelspec list \
-    && conda deactivate 
-# scmomat
-#RUN conda create -y -n scmomat python=3.8 jupyter notebook ipykernel seaborn numpy  \
-#    && source activate scmomat \
-#    && conda install pytorch cudatoolkit=11.3 -c pytorch \
-##    && pip install --no-cache-dir scmomat \
- #   && python -m ipykernel install --name=scmomat \
- #   && jupyter kernelspec list \
- #   && conda deactivate \
+    && conda deactivate
 # MARIO openblas
 RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy \
     && source activate mario \
@@ -165,51 +148,6 @@ RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy
     && python -m ipykernel install --name=mario \
     && jupyter kernelspec list \
     && conda deactivate \
-# STELLAR, GEARS, SATURN
-    && conda create -y -n stellar-gears-saturn python=3.8 jupyter notebook ipykernel seaborn numpy \
-    && source activate stellar-gears-saturn \
-    && conda install pytorch cudatoolkit=11.3 -c pytorch \
-    && conda install pyg -c pyg \
-    && pip install --no-cache-dir torchvision==0.11.3 \
-    && git clone https://github.com/snap-stanford/SATURN.git \
-    && pip install --no-cache-dir -r SATURN/requirements.txt \
-    && rm -rf SATURN \
-    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
-    && git clone https://github.com/snap-stanford/stellar.git \
-    && pip install --no-cache-dir -r stellar/requirements.txt \
-    && pip install --no-cache-dir cell-gears \
-    && python -m ipykernel install --name=stellar-gears-saturn \
-    && jupyter kernelspec list \
-    && conda deactivate \
-# STELLAR
-#    && conda create -y -n stellar python=3.8 jupyter notebook ipykernel seaborn numpy \
-#    && source activate stellar \
-#    && conda install pytorch cudatoolkit=11.3 -c pytorch \
-#    && conda install pyg -c pyg \
-#    && git clone https://github.com/snap-stanford/stellar.git \
-#    && pip install --no-cache-dir -r stellar/requirements.txt \
-#    && python -m ipykernel install --name=stellar \
-#    && jupyter kernelspec list \
-#    && conda deactivate \
-# GEARS
-#    && conda create -y -n gears python=3.8 jupyter notebook ipykernel seaborn numpy \
-#    && source activate gears \
-#    && conda install pyg -c pyg \
-#    && pip install --no-cache-dir cell-gears \
-#    && python -m ipykernel install --name=gears \
-#    && jupyter kernelspec list \
-#    && conda deactivate \
-# SATURN
-#    && conda create -y -n saturn python=3.8 jupyter notebook ipykernel seaborn numpy \
-#    && source activate saturn \
-#    && pip install --no-cache-dir torchvision==0.11.3 \
-#    && git clone https://github.com/snap-stanford/SATURN.git \
-#    && pip install --no-cache-dir -r SATURN/requirements.txt \
-#    && rm -rf SATURN \
-#    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
-#    && python -m ipykernel install --name=saturn \
-#    && jupyter kernelspec list \
-#    && conda deactivate \
 # SEACells
     && conda create -y -n seacells -c conda-forge python=3.8 jupyter notebook ipykernel cmake numpy \
     && source activate seacells \
@@ -220,73 +158,50 @@ RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy
 # Moscot
     && conda create -y -n moscot -c conda-forge python=3.8 jupyter notebook ipykernel seaborn numpy \
     && source activate moscot \
-    && pip install --no-cache-dir moscot \
+    && pip install --no-cache-dir moscot rich \
     && python -m ipykernel install --name=moscot \
     && jupyter kernelspec list \
     && conda deactivate
-# UniTVelo 
+# UniTVelo
 # https://github.com/StatBiomed/UniTVelo
 RUN conda create -y -n unitvelo python=3.7 jupyter notebook ipykernel \
     && source activate unitvelo \
     && pip install --no-cache-dir unitvelo session-info \
     && python -m ipykernel install --name=unitvelo \
     && jupyter kernelspec list \
-    && conda deactivate 
-# scranPY 
+    && conda deactivate
+
+# rapids-singlecell
+#RUN conda create -y -n rapids-singlecell python=3.10 jupyter notebook ipykernel \
+#    && source activate rapids-singlecell \
+#    && pip install 'rapids-singlecell[rapids11]' --extra-index-url=https://pypi.nvidia.com \
+#    && pip install --no-cache-dir session-info \
+#    && python -m ipykernel install --name=rapids-singlecell \
+#    && jupyter kernelspec list \
+#    && conda deactivate
+
+COPY rapids_singlecell_v0.9.1.tar.gz rapids_singlecell_v0.9.1.tar.gz
+RUN tar zxvf rapids_singlecell_v0.9.1.tar.gz \
+    && cd rapids_singlecell-0.9.1 \
+    && conda env create -f conda/rsc_rapids_23.04.yml \
+    && source activate rapids_singlecell \
+    && python -m ipykernel install --name=rapids_singlecell \
+    && jupyter kernelspec list \
+    && conda deactivate \
+    && rm -rf /opt/rapids_singlecell-0.9.1 /opt/rapids_singlecell_v0.9.1.tar.gz
+
+# scranPY
 # https://github.com/sfortma2/scranPY/?anything
 RUN pip install --no-cache-dir pyqt5 pyqtwebengine ruamel-yaml clyent==1.2.1 nbformat==5.4.0 \
-    && pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git
-
-# SAVER-X ( tensorflow==2.2.0 not found)
-#RUN conda create -y -n SAVER-X python=3.6 ipykernel numpy \
-#    && source activate SAVER-X \
-#    && conda uninstall certifi \
-#    && pip install -U pip \
-#    && pip install --no-cache-dir tensorflow==2.2.0 \
-#    && pip install --no-cache-dir sctransfer==0.1.0 session-info \
-#    && R -e "remotes::install_github('jingshuw/SAVERX')" \
-#    && pip install --no-cache-dir obonet umap-learn \
-#    && python -m ipykernel install --name=SAVER-X \
-#    && jupyter kernelspec list \
-#    && conda deactivate
-# CellAssign (purged)
-#RUN . activate \
-#    && conda create -n CellAssign -y python=3.7 jupyter notebook ipykernel seaborn pyzmq \
-#    && conda activate CellAssign \
-#    && conda install -c conda-forge -c bioconda r-cellassign \
-#    && pip install --no-cache-dir tensorflow==2.1.0 tensorflow_gpu==2.1.0 \
-#    && R -e "install.packages('tensorflow')" \
-#    && R -e "tensorflow::install_tensorflow(extra_packages='tensorflow-probability', version = '2.1.0')" \
-#    && R -e "tensorflow::tf_config()" \
-#    && R -e "remotes::install_github('Irrationone/cellassign')" \
-#    && python -m ipykernel install --name=CellAssign \
-#    && jupyter kernelspec list \
-#    && conda deactivate
-# GLUE (too long conflict)
-#[GLUE](https://github.com/gao-lab/GLUE)
-#RUN conda create -y -n glue -c conda-forge python=3.8 jupyter notebook ipykernel seaborn \
-#    && source activate glue \
-#    && conda install -c conda-forge -c bioconda scglue pytorch-gpu \
-#    && python -m ipykernel install --name=glue \
-#    && jupyter kernelspec list \
-#    && conda deactivate
-
-# Dictys (Installation error)
-#    && conda create -y -n dictys -c conda-forge python=3.9 mamba jupyter notebook ipykernel seaborn \
-#    && source activate dictys \
-#    && conda install --channel conda-forge --channel bioconda pybedtools \
-#    && mamba install -y -c lingfeiwang -c bioconda -c conda-forge -c pytorch dictys cudatoolkit=11.8 \
-#    && python -m ipykernel install --name=dictys \
-#    && jupyter kernelspec list \
-#    && conda deactivate
+    && pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git \
+    && pip install --no-cache-dir scdrs==1.0.2
 
 ### Final setting
 RUN conda clean --all -y && pip cache purge
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
-#COPY run_env.sh /opt/scripts/run_env.sh
-#RUN chmod +x /opt/scripts/run_env.sh
 
 ENV PATH $PATH:/opt:/opt/scripts:/opt/conda/envs/shortcake_default/bin/:/opt/bedops_linux_x86_64-v2.4.39
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/compat/
 
 RUN rm ~/.Renviron
 
