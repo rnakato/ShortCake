@@ -10,13 +10,6 @@ RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
     && cat ~/.Renviron
 
-#COPY OpenBLAS-0.3.24.tar.gz OpenBLAS-0.3.24.tar.gz
-#RUN tar zxvf OpenBLAS-0.3.24.tar.gz \
-#    && cd OpenBLAS-0.3.24 \
-#    && make \
-#    && make install \
-#    && rm -rf OpenBLAS-0.3.24 OpenBLAS-0.3.24.tar.gz
-
 ### Virtual environment
 # liana openblas
 RUN set -e \
@@ -164,22 +157,14 @@ RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy
     && conda deactivate
 # UniTVelo
 # https://github.com/StatBiomed/UniTVelo
-RUN conda create -y -n unitvelo python=3.7 jupyter notebook ipykernel \
-    && source activate unitvelo \
-    && pip install --no-cache-dir unitvelo session-info \
-    && python -m ipykernel install --name=unitvelo \
-    && jupyter kernelspec list \
-    && conda deactivate
-
-# rapids-singlecell
-#RUN conda create -y -n rapids-singlecell python=3.10 jupyter notebook ipykernel \
-#    && source activate rapids-singlecell \
-#    && pip install 'rapids-singlecell[rapids11]' --extra-index-url=https://pypi.nvidia.com \
-#    && pip install --no-cache-dir session-info \
-#    && python -m ipykernel install --name=rapids-singlecell \
+#RUN conda create -y -n unitvelo python=3.7 jupyter notebook ipykernel \
+#    && source activate unitvelo \
+#    && pip install --no-cache-dir unitvelo session-info \
+#    && python -m ipykernel install --name=unitvelo \
 #    && jupyter kernelspec list \
 #    && conda deactivate
 
+# rapids-singlecell
 COPY rapids_singlecell_v0.9.1.tar.gz rapids_singlecell_v0.9.1.tar.gz
 RUN tar zxvf rapids_singlecell_v0.9.1.tar.gz \
     && cd rapids_singlecell-0.9.1 \
@@ -196,6 +181,12 @@ RUN pip install --no-cache-dir pyqt5 pyqtwebengine ruamel-yaml clyent==1.2.1 nbf
     && pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git \
     && pip install --no-cache-dir scdrs==1.0.2
 
+# UniTVelo
+# https://github.com/StatBiomed/UniTVelo
+RUN source activate shortcake_default \
+    && pip install --no-cache-dir unitvelo session-info \
+    && conda deactivate
+
 ### Final setting
 RUN conda clean --all -y && pip cache purge
 COPY bedops_linux_x86_64-v2.4.39 bedops_linux_x86_64-v2.4.39
@@ -204,5 +195,6 @@ ENV PATH $PATH:/opt:/opt/scripts:/opt/conda/envs/shortcake_default/bin/:/opt/bed
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/compat/
 
 RUN rm ~/.Renviron
+RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/bustools /opt/samtools-1.17
 
 CMD ["jupyternotebook.sh"]

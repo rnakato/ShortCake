@@ -12,7 +12,8 @@ toollist="
     scrublet \
     scvelo \
     bbknn \
-    screcode
+    screcode \
+    unitvelo
 "
 for tool in $toollist
 do

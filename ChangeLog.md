@@ -1,5 +1,9 @@
 # Changelog
 
+- 2023.12.11: version 1.8.0
+    - Added [miloR](https://github.com/MarioniLab/miloR)
+    - Removed the conda environment of UniTVelo and included it in `shortcake_default`
+
 - 2023.10.26: version 1.7.0
     - Added [UniTVelo](https://github.com/StatBiomed/UniTVelo)
     - Added [scranPY](https://github.com/sfortma2/scranPY/)

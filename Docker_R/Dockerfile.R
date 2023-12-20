@@ -160,7 +160,7 @@ RUN set -e \
     && cd build \
     && cmake .. && make && make install \
     && R -e "remotes::install_github(c('tidymodels/tidymodels','BUStools/BUSpaRse'))" \
-    && rm -rf /work/bustools
+    && rm -rf /opt/bustools
 
 # FROWMAP
 COPY SDMTools_1.1-221.2.tar.gz SDMTools_1.1-221.2.tar.gz
@@ -197,6 +197,7 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
 RUN set -e \
     && R -e "remotes::install_github('igrabski/sc-SHC')" \
     && R -e "remotes::install_github('zhanghao-njmu/SCP')"
+RUN R -e "BiocManager::install('miloR')"
 
 # CIBERSORTx EcoTyper resigstration needed
 # https://github.com/digitalcytometry/ecotyper
