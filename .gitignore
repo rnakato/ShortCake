@@ -17,3 +17,7 @@ Docker_R/SeuratData/ssHippo.SeuratData_3.1.4.tar.gz
 Docker_R/SeuratData/stxBrain.SeuratData_0.1.1.tar.gz
 Docker_R/SeuratData/stxKidney.SeuratData_0.1.0.tar.gz
 Docker_R/SeuratData/thp1.eccite.SeuratData_3.1.5.tar.gz
+Docker_single_tools/log
+testrun.log
+Docker_Python/testrun.log
+Docker_R/testrun.log
