@@ -13,8 +13,6 @@
     - Removed the conda environment of UniTVelo and included it in `shortcake_default`
 
 - 2023.10.26: version 1.7.0
-    - Added [UniTVelo](https://github.com/StatBiomed/UniTVelo)
-    - Added [scranPY](https://github.com/sfortma2/scranPY/)
     - Updated CellRank to version 2.0.0
     - Added [rapids_singlecell](https://github.com/scverse/rapids_singlecell)
     - Created ShortCake.ver2 (Dockerfile.Python.ver2) to separate several tools of ShortCake
