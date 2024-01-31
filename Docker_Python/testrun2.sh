@@ -18,3 +18,6 @@ do
     echo $command
     docker run -it --rm rnakato/shortcake_stellar-gears-saturn run_env.sh gears python -c "import $tool"
 done
+
+echo "STELLAR"
+docker run -it --rm rnakato/shortcake run_env.sh stellar python -c "from STELLAR import STELLAR"

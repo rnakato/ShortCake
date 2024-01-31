@@ -24,6 +24,7 @@ RUN set -x && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# metaboliteIDmapping: for OmnipathR and lianna
 RUN set -e \
     && R -e "BiocManager::install(c('BioQC', \
                                     'BSgenome.Hsapiens.UCSC.hg19', \
@@ -59,8 +60,8 @@ RUN set -e \
                                     'MAST', \
                                     'MeSH.Hsa.eg.db', \
                                     'tanaylab/metacell', \
+                                    'metaboliteIDmapping' , \
                                     'mixtools', \
-                                    'monocle', \
                                     'NMF', \
                                     'org.Hs.eg.db', \
                                     'org.Mm.eg.db', \
@@ -106,7 +107,7 @@ RUN set -e \
                                        'chris-mcginnis-ucsf/DoubletFinder', \
                                        'aet21/EpiSCORE', \
                                        'humengying0907/InstaPrism', \
-                                       'https://github.com/saezlab/liana', \
+                                       'saezlab/liana', \
                                        'immunogenomics/presto', \
                                        'sqjin/scAI', \
                                        'ZJUFanLab/scCATCH', \
@@ -114,6 +115,7 @@ RUN set -e \
                                        'Vivianstats/scImpute', \
                                        'sunduanchen/Scissor', \
                                        'software-github/SCRABBLE/R', \
+                                       'immunogenomics/SCENT', \
                                        'BlishLab/scriabin', \
                                        'carmonalab/SignatuR', \
                                        'dviraran/SingleR'))" \

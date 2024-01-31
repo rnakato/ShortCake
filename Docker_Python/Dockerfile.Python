@@ -11,7 +11,7 @@ RUN set -x && \
     && cat ~/.Renviron
 
 ### Virtual environment
-# liana openblas
+# liana
 RUN set -e \
     && conda create -n liana python=3.8 jupyter notebook ipykernel numpy TBB numba \
     && source activate liana \
@@ -51,14 +51,6 @@ RUN source ~/.bashrc \
     && python -m ipykernel install --name=screadsim \
     && jupyter kernelspec list \
     && conda deactivate
-# SCCAF (outdated scanpy)
-#RUN conda create -n SCCAF python=3.7 jupyter notebook ipykernel \
-#    && source activate SCCAF \
-#    && pip install --no-cache-dir --upgrade jupyter_client session-info \
-#    && pip install --no-cache-dir sccaf \
-#    && python -m ipykernel install --name=SCCAF \
-#    && jupyter kernelspec list \
-#    && conda deactivate
 # ikarus openblas
 RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB numba \
     && source activate ikarus \
@@ -79,13 +71,13 @@ RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB nu
     && jupyter kernelspec list \
     && conda deactivate
 # cell2cell
-RUN conda create -y -n cell2cell python=3.7 jupyter notebook ipykernel numpy \
+RUN conda create -y -n cell2cell python=3.8 jupyter notebook ipykernel numpy \
     && source activate cell2cell \
-    && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir cell2cell session-info obonet umap-learn \
     && python -m ipykernel install --name=cell2cell \
     && jupyter kernelspec list \
     && conda deactivate
+
 # CellRank
 RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel numpy  \
     && source activate cellrank \
@@ -113,7 +105,7 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel nu
     && jupyter kernelspec list \
     && conda deactivate \
 # dynamo
-    && conda create -y -n dynamo python=3.7 jupyter notebook ipykernel seaborn pandas==1.1.1 numpy \
+    && conda create -y -n dynamo python=3.8 jupyter notebook ipykernel seaborn pandas==1.1.1 numpy \
     && source activate dynamo \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir dynamo-release pycairo session-info \
@@ -155,14 +147,6 @@ RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy
     && python -m ipykernel install --name=moscot \
     && jupyter kernelspec list \
     && conda deactivate
-# UniTVelo
-# https://github.com/StatBiomed/UniTVelo
-#RUN conda create -y -n unitvelo python=3.7 jupyter notebook ipykernel \
-#    && source activate unitvelo \
-#    && pip install --no-cache-dir unitvelo session-info \
-#    && python -m ipykernel install --name=unitvelo \
-#    && jupyter kernelspec list \
-#    && conda deactivate
 
 # rapids-singlecell
 COPY rapids_singlecell_v0.9.1.tar.gz rapids_singlecell_v0.9.1.tar.gz
@@ -175,17 +159,51 @@ RUN tar zxvf rapids_singlecell_v0.9.1.tar.gz \
     && conda deactivate \
     && rm -rf /opt/rapids_singlecell-0.9.1 /opt/rapids_singlecell_v0.9.1.tar.gz
 
-# scranPY
-# https://github.com/sfortma2/scranPY/?anything
-RUN pip install --no-cache-dir pyqt5 pyqtwebengine ruamel-yaml clyent==1.2.1 nbformat==5.4.0 \
-    && pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git \
-    && pip install --no-cache-dir scdrs==1.0.2
-
-# UniTVelo
-# https://github.com/StatBiomed/UniTVelo
-RUN source activate shortcake_default \
-    && pip install --no-cache-dir unitvelo session-info \
+# cell2fate: https://github.com/BayraktarLab/cell2fate
+RUN conda create -y -n cell2fate python=3.9 jupyter notebook ipykernel importlib-metadata>=4.8.3 \
+    && source activate cell2fate \
+    && pip install --no-cache-dir git+https://github.com/BayraktarLab/cell2fate session-info \
+    && python -m ipykernel install --name=cell2fate \
+    && jupyter kernelspec list \
     && conda deactivate
+
+# scVI, scGen, unitvelo (scGen uses scVI internally) (UNItVelo uses scVI internally)
+# UniTVelo: https://github.com/StatBiomed/UniTVelo
+RUN set -e \
+    && conda create -n scvi-scgen-unitvelo-scmomat python=3.9 jupyter notebook ipykernel numba \
+    && source activate scvi-scgen-unitvelo-scmomat \
+    && conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia \
+    && pip install --no-cache-dir scvi-tools unitvelo scmomat session-info \
+    && pip install --no-cache-dir git+https://github.com/theislab/scgen.git \
+    && python -m ipykernel install --name=scvi-scgen-unitvelo-scmomat \
+    && jupyter kernelspec list \
+    && conda deactivate
+
+# RENGE
+#RUN set -e \
+#    && conda init bash \
+#    && source ~/.bashrc \
+#    && conda create -n renge python=3.9 jupyter notebook ipykernel \
+#    && source activate renge \
+#    && pip install --no-cache-dir numpy==1.19.5 pandas==1.1.5 scipy==1.4.1 scikit-learn==0.21.3 statsmodels==0.10.1 jax==0.2.0 jaxlib optuna==2.3.0 tqdm==4.60.0 \
+#    && pip install --no-cache-dir renge \
+#    && python -m ipykernel install --name=renge \
+#    && jupyter kernelspec list \
+#    && conda deactivate
+
+# SCCAF (outdated scanpy)
+#RUN conda create -n SCCAF python=3.7 jupyter notebook ipykernel \
+#    && source activate SCCAF \
+#    && pip install --no-cache-dir --upgrade jupyter_client session-info \
+#    && pip install --no-cache-dir sccaf \
+#    && python -m ipykernel install --name=SCCAF \
+#    && jupyter kernelspec list \
+#    && conda deactivate
+
+# shortcake_default (追加)
+#RUN source activate shortcake_default \
+#    && pip install --no-cache-dir \
+#    && conda deactivate
 
 ### Final setting
 RUN conda clean --all -y && pip cache purge

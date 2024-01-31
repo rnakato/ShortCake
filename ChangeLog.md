@@ -1,5 +1,13 @@
 # Changelog
 
+- 2024.1.31: version 1.9.0
+    - Added [Mowgli](https://github.com/cantinilab/mowgli)
+    - Added [SCENT](https://github.com/immunogenomics/SCENT)
+    - Added [moslin](https://github.com/theislab/moslin) (included in Moscot)
+    - Added [SCOT](https://rsinghlab.github.io/SCOT/)
+    - Added [cell2fate](https://github.com/BayraktarLab/cell2fate)
+    - Added [Genes2Genes](https://teichlab.github.io/Genes2Genes/)
+
 - 2023.12.11: version 1.8.0
     - Added [miloR](https://github.com/MarioniLab/miloR)
     - Removed the conda environment of UniTVelo and included it in `shortcake_default`

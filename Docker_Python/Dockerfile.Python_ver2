@@ -11,24 +11,7 @@ RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
     && cat ~/.Renviron
 
-#COPY OpenBLAS-0.3.24.tar.gz OpenBLAS-0.3.24.tar.gz
-#RUN tar zxvf OpenBLAS-0.3.24.tar.gz \
-#    && cd OpenBLAS-0.3.24 \
-#    && make \
-#    && make install \
-#    && rm -rf OpenBLAS-0.3.24 OpenBLAS-0.3.24.tar.gz
-
 ### Virtual environment
-# scVI, scGen (scGen uses scVI internally) openblas
-RUN set -e \
-    && conda create -n scvi-scgen python=3.8 jupyter notebook ipykernel numba \
-    && source activate scvi-scgen \
-    && conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia \
-    && pip install --no-cache-dir scvi-tools session-info \
-    && pip install --no-cache-dir git+https://github.com/theislab/scgen.git \
-    && python -m ipykernel install --name=scvi-scgen \
-    && jupyter kernelspec list \
-    && conda deactivate
 
 # Dictys
 RUN set -e \

@@ -10,7 +10,7 @@ RUN set -x && \
     echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
     && cat ~/.Renviron
 
-### Virtual environment
+### Virtual environment (shortcake_default)
 RUN set -e \
     && conda init bash \
     && source ~/.bashrc \
@@ -18,44 +18,49 @@ RUN set -e \
     && source activate shortcake_default \
     && conda config --add channels conda-forge \
     && conda install -y llvmlite numba cython python-igraph \
-    && conda install -y -c bioconda kallisto \
+    && conda install -y -c bioconda kallisto scvelo \
     && conda install -y -c conda-forge fa2 louvain leidenalg \
     && conda install -y -c statiskit libboost \
-# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo, CellOracle
+# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo
+# Mowgli: https://github.com/cantinilab/mowgli
+# Genes2genes: https://teichlab.github.io/Genes2Genes
+# SnapATAC2: https://kzhang.org/SnapATAC2/install.html
     && pip install --no-cache-dir anndata2ri \
                                   autogenes \
                                   bbknn \
                                   celltypist \
                                   dash \
                                   eeisp \
+                                  git+https://github.com/Teichlab/Genes2Genes.git \
                                   gprofiler-official \
                                   magic-impute \
+                                  mowgli \
                                   multivelo \
+                                  optuna \
+                                  "ortools<9.8.0" \
                                   palantir \
                                   PhenoGraph \
                                   pybind11 \
-                                  renge \
                                   rpy2 \
                                   screcode \
                                   scrublet \
                                   sctriangulate \
-                                  scvelo \
+                                  snapatac2 \
                                   velocyto \
                                   xlrd \
                                   session-info \
     && python -m ipykernel install --name=shortcake_default \
     && jupyter kernelspec list \
-    && conda deactivate 
+    && conda deactivate
 
+# CellOracle
 RUN set -e \
     && conda init bash \
     && source ~/.bashrc \
     && conda create -n celloracle python=3.7 jupyter notebook ipykernel numpy Cython openblas mamba \
     && source activate celloracle \
     && conda install -c bioconda pybigwig pysam \
-#    && pip install --no-cache-dir gimmemotifs==0.16.0 \
     && mamba install -c bioconda -c conda-forge gimmemotifs \
-#    && conda install -y -c conda-forge -c bioconda gimmemotifs \
     && pip install --no-cache-dir celloracle \
     && python -m ipykernel install --name=celloracle \
     && jupyter kernelspec list \

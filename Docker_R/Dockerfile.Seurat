@@ -1,4 +1,4 @@
-FROM rnakato/r_python_gpu:2023.11
+FROM rnakato/r_python_gpu:2024.01
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -19,11 +19,12 @@ RUN set -x && \
 RUN set -e \
     && R -e "remotes::install_github('satijalab/seurat', 'seurat5', quiet = TRUE)" \
     && R -e "remotes::install_github('satijalab/seurat-data', 'seurat5', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/azimuth', 'seurat5', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/azimuth', ref = 'master', quiet = TRUE)" \
     && R -e "remotes::install_github('satijalab/seurat-wrappers', 'seurat5', quiet = TRUE)" \
-    && R -e "remotes::install_github('stuart-lab/signac', 'seurat5', quiet = TRUE)" \
     && R -e "remotes::install_github('bnprks/BPCells', quiet = TRUE)" \
     && R -e "remotes::install_github('mojaveazure/seurat-disk')" \
+# Signac
+    && R -e "install.packages('Signac')" \
 # Others
     && R -e "install.packages(c('bit64', \
                                 'sleepwalk', \
