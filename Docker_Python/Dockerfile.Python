@@ -13,14 +13,14 @@ RUN set -x && \
 ### Virtual environment
 # liana
 RUN set -e \
-    && conda create -n liana python=3.8 jupyter notebook ipykernel numpy TBB numba \
+    && conda create -n liana python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy TBB numba \
     && source activate liana \
     && pip install --no-cache-dir liana session-info \
     && python -m ipykernel install --name=liana \
     && jupyter kernelspec list \
     && conda deactivate \
 # constclust
-    && conda create -n constclust python=3.7 jupyter notebook ipykernel seaborn \
+    && conda create -n constclust python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel seaborn \
     && source activate constclust \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir constclust session-info \
@@ -29,7 +29,7 @@ RUN set -e \
     && conda deactivate
 # cellphoneDB
 RUN source ~/.bashrc \
-    && conda create -n cellphonedb python=3.7 jupyter notebook ipykernel seaborn nbconvert==5.6.1 \
+    && conda create -n cellphonedb python=3.7 jupyter 'notebook<7' ipykernel seaborn nbconvert==5.6.1 \
     && source activate cellphonedb \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir cellphonedb session-info jinja2==3.0.3 \
@@ -38,21 +38,21 @@ RUN source ~/.bashrc \
     && jupyter kernelspec list \
     && conda deactivate \
 # monet
-    && conda create -n monet python=3.8 jupyter notebook ipykernel scikit-learn pandas cython plotly seaborn statsmodels numba pytables networkx click \
+    && conda create -n monet python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel scikit-learn pandas cython plotly seaborn statsmodels numba pytables networkx 'click<8' \
     && source activate monet \
     && pip install --no-cache-dir leidenalg scanpy monet session-info \
     && python -m ipykernel install --name=monet \
     && jupyter kernelspec list \
     && conda deactivate \
 # scReadSim
-    && conda create -n screadsim python=3.8 jupyter notebook ipykernel \
+    && conda create -n screadsim python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel \
     && source activate screadsim \
     && pip install --no-cache-dir scReadSim session-info \
     && python -m ipykernel install --name=screadsim \
     && jupyter kernelspec list \
     && conda deactivate
 # ikarus openblas
-RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB numba \
+RUN conda create -y -n ikarus python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy TBB numba \
     && source activate ikarus \
     && pip install --no-cache-dir ikarus session-info \
     # To avoid the error "ModuleNotFoundError: No module named 'pyscenic.genesig'"
@@ -62,7 +62,7 @@ RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB nu
     && jupyter kernelspec list \
     && conda deactivate \
 # pySCENIC
-    && conda create -y -n pyscenic python=3.7 jupyter notebook ipykernel numpy \
+    && conda create -y -n pyscenic python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
     && source activate pyscenic \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && conda install -y -c anaconda cytoolz \
@@ -71,7 +71,7 @@ RUN conda create -y -n ikarus python=3.8 jupyter notebook ipykernel numpy TBB nu
     && jupyter kernelspec list \
     && conda deactivate
 # cell2cell
-RUN conda create -y -n cell2cell python=3.8 jupyter notebook ipykernel numpy \
+RUN conda create -y -n cell2cell python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
     && source activate cell2cell \
     && pip install --no-cache-dir cell2cell session-info obonet umap-learn \
     && python -m ipykernel install --name=cell2cell \
@@ -79,17 +79,18 @@ RUN conda create -y -n cell2cell python=3.8 jupyter notebook ipykernel numpy \
     && conda deactivate
 
 # CellRank
-RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel numpy  \
+RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter 'notebook<7' 'nbconvert==6.5.4' 'pandas<2' ipykernel numpy  \
     && source activate cellrank \
 #    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
-    && conda install -y -c conda-forge cellrank \
+    && conda install -y -c conda-forge cellrank leidenalg \
     && pip install --no-cache-dir igraph session-info \
-    && pip install --no-cache-dir git+https://github.com/broadinstitute/wot \
+    git+https://github.com/broadinstitute/wot \
+#    git+https://github.com/theislab/scvelo.git@master \
     && python -m ipykernel install --name=cellrank \
     && jupyter kernelspec list \
     && conda deactivate \
 # doubletdetection
-    && conda create -y -n doubletdetection python=3.7 jupyter notebook ipykernel numpy \
+    && conda create -y -n doubletdetection python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
     && source activate doubletdetection \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir doubletdetection session-info \
@@ -97,7 +98,7 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel nu
     && jupyter kernelspec list \
     && conda deactivate \
 # episcanpy
-    && conda create -y -n episcanpy python=3.7 jupyter notebook ipykernel numpy \
+    && conda create -y -n episcanpy python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
     && source activate episcanpy \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir episcanpy \
@@ -105,43 +106,43 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter notebook ipykernel nu
     && jupyter kernelspec list \
     && conda deactivate \
 # dynamo
-    && conda create -y -n dynamo python=3.8 jupyter notebook ipykernel seaborn pandas==1.1.1 numpy \
+    && conda create -y -n dynamo python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel seaborn pandas==1.1.1 numpy \
     && source activate dynamo \
     && pip install --no-cache-dir --upgrade jupyter_client \
-    && pip install --no-cache-dir dynamo-release pycairo session-info \
+    && pip install --no-cache-dir dynamo-release pycairo importlib-metadata session-info \
     && python -m ipykernel install --name=dynamo \
     && jupyter kernelspec list \
     && conda deactivate
 # novosparc openblas
-RUN conda create -y -n novosparc python=3.8 jupyter notebook ipykernel numpy TBB numba \
+RUN conda create -y -n novosparc python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy TBB numba \
     && source activate novosparc \
     && pip install --no-cache-dir novosparc \
     && python -m ipykernel install --name=novosparc \
     && jupyter kernelspec list \
     && conda deactivate \
 # harmonypy
-    && conda create -y -n harmonypy python=3.8 jupyter notebook ipykernel numpy TBB openblas \
+    && conda create -y -n harmonypy python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy TBB openblas \
     && source activate harmonypy \
     && pip install --no-cache-dir harmonypy \
     && python -m ipykernel install --name=harmonypy \
     && jupyter kernelspec list \
     && conda deactivate
 # MARIO openblas
-RUN conda create -y -n mario python=3.8 jupyter notebook ipykernel seaborn numpy \
+RUN conda create -y -n mario python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel seaborn numpy \
     && source activate mario \
     && pip install --no-cache-dir pyMARIO \
     && python -m ipykernel install --name=mario \
     && jupyter kernelspec list \
     && conda deactivate \
 # SEACells
-    && conda create -y -n seacells -c conda-forge python=3.8 jupyter notebook ipykernel cmake numpy \
+    && conda create -y -n seacells -c conda-forge python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel cmake numpy \
     && source activate seacells \
     && pip install --no-cache-dir SEACells \
     && python -m ipykernel install --name=seacells \
     && jupyter kernelspec list \
     && conda deactivate \
 # Moscot
-    && conda create -y -n moscot -c conda-forge python=3.8 jupyter notebook ipykernel seaborn numpy \
+    && conda create -y -n moscot -c conda-forge python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel seaborn numpy \
     && source activate moscot \
     && pip install --no-cache-dir moscot rich \
     && python -m ipykernel install --name=moscot \
@@ -160,7 +161,7 @@ RUN tar zxvf rapids_singlecell_v0.9.1.tar.gz \
     && rm -rf /opt/rapids_singlecell-0.9.1 /opt/rapids_singlecell_v0.9.1.tar.gz
 
 # cell2fate: https://github.com/BayraktarLab/cell2fate
-RUN conda create -y -n cell2fate python=3.9 jupyter notebook ipykernel importlib-metadata>=4.8.3 \
+RUN conda create -y -n cell2fate python=3.9 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel importlib-metadata>=4.8.3 \
     && source activate cell2fate \
     && pip install --no-cache-dir git+https://github.com/BayraktarLab/cell2fate session-info \
     && python -m ipykernel install --name=cell2fate \
@@ -170,7 +171,7 @@ RUN conda create -y -n cell2fate python=3.9 jupyter notebook ipykernel importlib
 # scVI, scGen, unitvelo (scGen uses scVI internally) (UNItVelo uses scVI internally)
 # UniTVelo: https://github.com/StatBiomed/UniTVelo
 RUN set -e \
-    && conda create -n scvi-scgen-unitvelo-scmomat python=3.9 jupyter notebook ipykernel numba \
+    && conda create -n scvi-scgen-unitvelo-scmomat python=3.9 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numba \
     && source activate scvi-scgen-unitvelo-scmomat \
     && conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia \
     && pip install --no-cache-dir scvi-tools unitvelo scmomat session-info \

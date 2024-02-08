@@ -1,4 +1,4 @@
-tag=1.9.0
+tag=1.9.1
 docker tag rnakato/shortcake:latest rnakato/shortcake:$tag
 
 for tag in $tag latest

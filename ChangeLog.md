@@ -1,11 +1,16 @@
 # Changelog
 
+- 2024.2.6: version 1.9.1
+    - Downgrade notebook to 6.X to change back to UI of jupyter notebook 
+    - Fixed bug in CellRank environment: downgraded pandas to <2 to avoid "AttributeError: can't set attribute" error
+    - Added [cellAlign](https://github.com/shenorrLabTRDF/cellAlign)
+
 - 2024.1.31: version 1.9.0
     - Added [Mowgli](https://github.com/cantinilab/mowgli)
     - Added [SCENT](https://github.com/immunogenomics/SCENT)
     - Added [moslin](https://github.com/theislab/moslin) (included in Moscot)
     - Added [SCOT](https://rsinghlab.github.io/SCOT/)
-    - Added [cell2fate](https://github.com/BayraktarLab/cell2fate)
+    - ~~Added [cell2fate](https://github.com/BayraktarLab/cell2fate)~~
     - Added [Genes2Genes](https://teichlab.github.io/Genes2Genes/)
 
 - 2023.12.11: version 1.8.0

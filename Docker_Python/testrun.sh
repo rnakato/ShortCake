@@ -29,6 +29,7 @@ toollist="
     liana \
     moscot \
     cell2cell \
+    cell2fate \
     celloracle \
     cellrank \
     cellphonedb \

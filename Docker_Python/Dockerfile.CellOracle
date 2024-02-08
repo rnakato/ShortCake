@@ -14,7 +14,8 @@ RUN set -x && \
 RUN set -e \
     && conda init bash \
     && source ~/.bashrc \
-    && conda create -n shortcake_default python=3.8 jupyter notebook ipykernel seaborn \
+    && pip install --no-cache-dir notebook==6.5.6 nbconvert==6.5.4 \
+    && conda create -n shortcake_default python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel seaborn \
     && source activate shortcake_default \
     && conda config --add channels conda-forge \
     && conda install -y llvmlite numba cython python-igraph \
@@ -57,7 +58,7 @@ RUN set -e \
 RUN set -e \
     && conda init bash \
     && source ~/.bashrc \
-    && conda create -n celloracle python=3.7 jupyter notebook ipykernel numpy Cython openblas mamba \
+    && conda create -n celloracle python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy Cython openblas mamba \
     && source activate celloracle \
     && conda install -c bioconda pybigwig pysam \
     && mamba install -c bioconda -c conda-forge gimmemotifs \
@@ -75,5 +76,3 @@ ENV PATH $PATH:/opt:/opt/scripts:/opt/conda/envs/shortcake_default/bin/
 RUN rm ~/.Renviron
 
 CMD ["/bin/bash"]
-
-

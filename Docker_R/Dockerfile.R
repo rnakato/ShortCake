@@ -91,6 +91,7 @@ RUN set -e \
     && R -e "install.packages(c('ClusterR', \
                                 'DDRTree', \
                                 'densityClust', \
+                                'dtw', \
                                 'dyngen', \
                                 'gam', \
                                 'gganimate', \
@@ -100,6 +101,7 @@ RUN set -e \
                                 'singleCellHaystack', \
                                 'UpSetR'))" \
     && R -e "remotes::install_github(c('Danko-Lab/BayesPrism/BayesPrism', \
+                                       'shenorrLab/cellAlign', \
                                        'sqjin/CellChat', \
                                        'jokergoo/circlize', \
                                        'aertslab/cisTopic', \

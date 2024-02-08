@@ -1,4 +1,4 @@
-FROM rnakato/r_python_gpu:2024.01
+FROM rnakato/r_python_gpu:2024.02
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -12,16 +12,17 @@ RUN set -x && \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
     libgmp-dev \
+    libglpk-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Seurat
+#    && R -e "remotes::install_github('satijalab/seurat', 'seurat5', quiet = TRUE)" \
 RUN set -e \
-    && R -e "remotes::install_github('satijalab/seurat', 'seurat5', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/seurat-data', 'seurat5', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/azimuth', ref = 'master', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/seurat-wrappers', 'seurat5', quiet = TRUE)" \
-    && R -e "remotes::install_github('bnprks/BPCells', quiet = TRUE)" \
+    && R -e "install.packages(c('Seurat','BPCells', 'presto', 'glmGamPoi'))" \
+    && R -e "remotes::install_github('satijalab/seurat-data', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/azimuth', quiet = TRUE)" \
+    && R -e "remotes::install_github('satijalab/seurat-wrappers', quiet = TRUE)" \
     && R -e "remotes::install_github('mojaveazure/seurat-disk')" \
 # Signac
     && R -e "install.packages('Signac')" \
