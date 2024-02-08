@@ -1,6 +1,6 @@
 # Changelog
 
-- 2024.2.6: version 1.9.1
+- 2024.2.8: version 1.9.1
     - Downgrade notebook to 6.X to change back to UI of jupyter notebook 
     - Fixed bug in CellRank environment: downgraded pandas to <2 to avoid "AttributeError: can't set attribute" error
        - See https://github.com/theislab/cellrank/issues/1078 for detail
