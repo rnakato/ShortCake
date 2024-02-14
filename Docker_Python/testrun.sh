@@ -1,15 +1,16 @@
 toollist="
     autogenes \
     bbknn \
+    cellmap \
     celltypist \
-    llvmlite \
-    numba \
     cython \
+    llvmlite \
     louvain \
     leidenalg \
     magic \
     mowgli \
     multivelo \
+    numba \
     palantir \
     phenograph \
     scvelo \
@@ -43,7 +44,6 @@ toollist="
     novosparc \
     pyscenic \
     "
-
 for tool in $toollist
 do
     command="python -c \"import "$tool"\""
@@ -51,12 +51,13 @@ do
     docker run -it --rm rnakato/shortcake run_env.sh $tool python -c "import $tool"
 done
 
-for tool in scvi scgen unitvelo scmomat
+for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake run_env.sh scvi-scgen-unitvelo-scmomat python -c "import $tool"
+    docker run -it --rm rnakato/shortcake run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
 done
+
 
 echo "scReadSim"
 docker run -it --rm rnakato/shortcake run_env.sh screadsim python -c "import scReadSim"

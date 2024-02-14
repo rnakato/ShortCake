@@ -13,25 +13,6 @@ RUN set -x \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# STELLAR, GEARS, SATURN
-#RUN set -e \
-#    && conda create -y -n stellar-gears-saturn python=3.8 jupyter notebook ipykernel \
-#    && source activate stellar-gears-saturn \
-#    && pip install anndata mudata==0.1.2 seaborn numpy \
-#    && conda install pytorch cudatoolkit=11.3 -c pytorch \
-#    && conda install pyg -c pyg \
-#    && pip install --no-cache-dir torchvision==0.11.3 \
-#    && git clone https://github.com/snap-stanford/SATURN.git \
-#    && pip install --no-cache-dir -r SATURN/requirements.txt \
-#    && rm -rf SATURN \
-#    && pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
-#    && git clone https://github.com/snap-stanford/stellar.git \
-#    && pip install --no-cache-dir -r stellar/requirements.txt \
-#    && pip install --no-cache-dir cell-gears \
-#    && python -m ipykernel install --name=stellar-gears-saturn \
-#    && jupyter kernelspec list \
-#    && conda deactivate
-
 # STELLAR
 RUN conda create -y -n stellar python=3.8 jupyter notebook ipykernel seaborn numpy \
     && source activate stellar \

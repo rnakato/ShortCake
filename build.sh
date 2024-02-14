@@ -1,7 +1,10 @@
-tag=1.9.1
-docker tag rnakato/shortcake:latest rnakato/shortcake:$tag
+tag=2.0.0
 
-for tag in $tag latest
+for name in shortcake shortcake_ver2
 do
-    docker push rnakato/shortcake:$tag
+    docker tag rnakato/$name:latest rnakato/$name:$tag
+    for tag in $tag latest
+    do
+         docker push rnakato/$name:$tag
+    done
 done

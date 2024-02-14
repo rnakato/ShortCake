@@ -1,5 +1,12 @@
 # Changelog
 
+- 2024.2.14: version 2.0.0
+    - Frozen ShortCake.Python (version1) Dockerfile
+    - Released ShortCake.Python version2 (`ShortCake_ver2`)
+    - Added [CellTypist](https://github.com/Teichlab/celltypist)
+    - Added [CellMap](https://github.com/yusuke-imoto-lab/CellMap)
+    - Fixed bug in `scvi-scgen-scmomat-unitvelo` Conda environment by adjusting the version of `jax`.
+
 - 2024.2.8: version 1.9.1
     - Downgrade notebook to 6.X to change back to UI of jupyter notebook 
     - Fixed bug in CellRank environment: downgraded pandas to <2 to avoid "AttributeError: can't set attribute" error
