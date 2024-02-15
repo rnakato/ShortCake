@@ -43,15 +43,20 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
 For Docker:
 
-    # pull docker image
-    docker pull rnakato/shortcake
+You can pull (download) the ShortCake docker image with this command:
 
-    # container login
-    docker run [--gpus all] --rm -it rnakato/shortcake /bin/bash
-    # jupyter notebook (see 'mnt/' directory in the notebook )
-    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
+    docker pull rnakato/shortcake:<version>
 
 **Note**: The size of the ShortCake docker image is large (about 100GB). It requires a large amount of space on the docker cache directory.
+
+Then you can run ShortCake with the command:
+
+    # Container login
+    docker run [--gpus all] --rm -it rnakato/shortcake /bin/bash
+    # Execute jupyter notebook (see 'mnt/' directory in the notebook )
+    docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
+
+The `--gpus all` option is needed if you use a GPU (e.g., scvi-tools).
 
 ### 2.2. Singularity
 
@@ -68,7 +73,7 @@ Then you can run ShortCake with the command:
     # Execute R directory
     singularity exec [--nv] shortcake.sif R
 
-The `--nv` option is needed if you are using a GPU (e.g., scvi-tools).
+The `--nv` option is needed if you use a GPU (e.g., scvi-tools).
 
 ## 3. Usage
 
