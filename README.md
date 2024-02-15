@@ -65,7 +65,7 @@ You can build the singularity file (.sif) of ShortCake with this command:
 
     singularity build -F shortcake.sif docker://rnakato/shortcake    
     
-Instead, you can download the singularity image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0).
+Instead, you can download the singularity image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0) (We use singularity version 3.8.5).
 
 Then you can run ShortCake with the command:
 
