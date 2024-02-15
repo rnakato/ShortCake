@@ -39,6 +39,8 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
 ## 2. Run
 
+### 2.1 Docker
+
 For Docker:
 
     # pull docker image
@@ -49,18 +51,29 @@ For Docker:
     # jupyter notebook (see 'mnt/' directory in the notebook )
     docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
 
-For Singularity:
+**Note**: The size of the ShortCake docker image is large (about 100GB). It requires a large amount of space on the docker cache directory.
 
-    # build image
-    singularity build -F shortcake.sif docker://rnakato/shortcake
-    # jupyter notebook
+### 2.2. Singularity
+
+You can build the singularity file (.sif) of ShortCake with this command:
+
+    singularity build -F shortcake.sif docker://rnakato/shortcake    
+    
+Instead, you can download the singularity image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0).
+
+Then you can run ShortCake with the command:
+
+    # Execute jupyter notebook (Python and R)
     singularity exec [--nv] shortcake.sif jupyternotebook.sh
-    # execute R directory
+    # Execute R directory
     singularity exec [--nv] shortcake.sif R
+
+The `--nv` option is needed if you are using a GPU (e.g., scvi-tools).
 
 ## 3. Usage
 
 ### 3.1 Jupyter
+
 We recommend using Jupyter notebook to use ShortCake:
 
     singularity exec shortcake.sif jupyternotebook.sh
@@ -93,9 +106,9 @@ If you want to use a virtual Python environment from the command line, use ``run
     # Example to activate "celloracle" environment
     singularity exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
-## 4. Build image from Dockerfile
+## 4. Build the image from Dockerfile
 
-First clone and move to the repository
+First, clone and move to the repository
 
     git clone https://github.com/rnakato/ShortCake
     cd ShortCake
@@ -112,7 +125,3 @@ Then build packages:
     # Then build Python packages
     cd ../Docker_Python/
     docker-compose -f docker-compose.yml build
-
-## Contact
-
-Ryuichiro Nakato: rnakato AT iqb.u-tokyo.ac.jp
