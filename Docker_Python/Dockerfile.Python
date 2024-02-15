@@ -83,7 +83,7 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter 'notebook<7' 'nbconve
     && source activate cellrank \
 #    && conda install -y -c conda-forge -c bioconda cellrank-krylov \
     && conda install -y -c conda-forge cellrank leidenalg \
-    && pip install --no-cache-dir igraph rpy2>=3.3.0 session-info \
+    && pip install --no-cache-dir igraph 'rpy2>=3.3.0' session-info \
     git+https://github.com/broadinstitute/wot \
     && python -m ipykernel install --name=cellrank \
     && jupyter kernelspec list \
@@ -160,7 +160,7 @@ RUN tar zxvf rapids_singlecell_v0.9.1.tar.gz \
     && rm -rf /opt/rapids_singlecell-0.9.1 /opt/rapids_singlecell_v0.9.1.tar.gz
 
 # cell2fate: https://github.com/BayraktarLab/cell2fate
-RUN conda create -y -n cell2fate python=3.9 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel importlib-metadata>=4.8.3 \
+RUN conda create -y -n cell2fate python=3.9 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel 'importlib-metadata>=4.8.3' \
     && source activate cell2fate \
     && pip install --no-cache-dir git+https://github.com/BayraktarLab/cell2fate session-info \
     && python -m ipykernel install --name=cell2fate \
