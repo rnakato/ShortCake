@@ -53,6 +53,7 @@ Then you can run ShortCake with the command:
 
     # Container login
     docker run [--gpus all] --rm -it rnakato/shortcake /bin/bash
+    
     # Execute jupyter notebook (see 'mnt/' directory in the notebook )
     docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
 
@@ -70,6 +71,7 @@ Then you can run ShortCake with the command:
 
     # Execute jupyter notebook (Python and R)
     singularity exec [--nv] shortcake.sif jupyternotebook.sh
+    
     # Execute R directory
     singularity exec [--nv] shortcake.sif R
 
@@ -108,6 +110,7 @@ Of course, you can also use ShortCake with command line tools. For example:
 If you want to use a virtual Python environment from the command line, use ``run_env.sh`` to activate it:
 
     singularity exec shortcake.sif run_env.sh <environment> <command>
+    
     # Example to activate "celloracle" environment
     singularity exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
@@ -127,6 +130,10 @@ Then build packages:
     cd Docker_R
     docker compose -f docker-compose.R_Seurat.yml build 
     docker-compose -f docker-compose.R.yml build
-    # Then build Python packages
+    
+    # Move to 'Python' directory
     cd ../Docker_Python/
-    docker-compose -f docker-compose.yml build
+    # Then build Python packages
+    docker-compose -f docker-compose.celloracle.yml build 
+    docker-compose -f docker-compose.yml build       # for ShortCake
+    docker-compose -f docker-compose.ver2.yml build  # for ShortCake_ver2
