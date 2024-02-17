@@ -6,6 +6,7 @@
     - Added [CellTypist](https://github.com/Teichlab/celltypist)
     - Added [CellMap](https://github.com/yusuke-imoto-lab/CellMap)
     - Fixed bug in `scvi-scgen-scmomat-unitvelo` Conda environment by adjusting the version of `jax`.
+    - Fixed bug in `celloracle` Conda environment by updating the Python version from 3.7 to 3.8.
 
 - 2024.2.8: version 1.9.1
     - Downgrade notebook to 6.X to change back to UI of jupyter notebook 

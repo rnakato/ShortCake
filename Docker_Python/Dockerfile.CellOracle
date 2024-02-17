@@ -58,7 +58,7 @@ RUN set -e \
 RUN set -e \
     && conda init bash \
     && source ~/.bashrc \
-    && conda create -n celloracle python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy Cython openblas mamba \
+    && conda create -n celloracle python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy Cython openblas mamba \
     && source activate celloracle \
     && conda install -c bioconda pybigwig pysam \
     && mamba install -c bioconda -c conda-forge gimmemotifs \
