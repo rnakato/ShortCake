@@ -1,4 +1,4 @@
-FROM rnakato/r_python_gpu:2024.02
+FROM rnakato/r_python_gpu:2024.02.2
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root

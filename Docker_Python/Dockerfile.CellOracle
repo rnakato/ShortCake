@@ -22,15 +22,17 @@ RUN set -e \
     && conda install -y -c bioconda kallisto scvelo \
     && conda install -y -c conda-forge fa2 louvain leidenalg \
     && conda install -y -c statiskit libboost \
-# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo
+# EEISP Palantir, MAGIC, Recode, Scrublet, AutogeneS, scReadSim, RENGE, celltypist, MultiVelo, doubletdetection
 # Mowgli: https://github.com/cantinilab/mowgli
 # Genes2genes: https://teichlab.github.io/Genes2Genes
 # SnapATAC2: https://kzhang.org/SnapATAC2/install.html
     && pip install --no-cache-dir anndata2ri \
                                   autogenes \
                                   bbknn \
+                                  cellmap \
                                   celltypist \
                                   dash \
+                                  doubletdetection \
                                   eeisp \
                                   git+https://github.com/Teichlab/Genes2Genes.git \
                                   gprofiler-official \
@@ -61,6 +63,7 @@ RUN set -e \
     && conda create -n celloracle python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy Cython openblas mamba \
     && source activate celloracle \
     && conda install -c bioconda pybigwig pysam \
+    && mamba install -c conda-forge fa2 \
     && mamba install -c bioconda -c conda-forge gimmemotifs \
     && pip install --no-cache-dir celloracle \
     && python -m ipykernel install --name=celloracle \

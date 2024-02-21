@@ -89,7 +89,7 @@ RUN conda create -n cellrank python=3.9 numpy=1.21 jupyter 'notebook<7' 'nbconve
     && jupyter kernelspec list \
     && conda deactivate \
 # doubletdetection
-    && conda create -y -n doubletdetection python=3.7 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
+    && conda create -y -n doubletdetection python=3.8 jupyter 'notebook<7' 'nbconvert==6.5.4' ipykernel numpy \
     && source activate doubletdetection \
     && pip install --no-cache-dir --upgrade jupyter_client \
     && pip install --no-cache-dir doubletdetection session-info \

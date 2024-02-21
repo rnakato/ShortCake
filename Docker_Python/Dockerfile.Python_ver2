@@ -1,5 +1,6 @@
 #FROM docker_python_celloracle
-FROM docker_r-shortcake_r
+#FROM docker_r-shortcake_r
+FROM rnakato/r_python_gpu:2024.02
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
