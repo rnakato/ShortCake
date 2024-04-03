@@ -1,4 +1,6 @@
-# ShortCake🍰
+
+# <img src = "img/ShortCakeLogo.jpg" width = 120ptx> ShortCake🍰 
+
 
 A docker image for single-cell analysis. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
