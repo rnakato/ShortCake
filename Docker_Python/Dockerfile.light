@@ -1,0 +1,39 @@
+FROM rnakato/shortcake_r:3.0.0
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+### base
+RUN pip install --no-cache-dir eeisp==0.5.0
+
+### shortcake_default
+COPY micromamba/env.shortcake_default.yaml /opt/env.shortcake_default.yaml
+RUN eval "$(micromamba shell hook --shell bash)" \
+    && micromamba create -y -n shortcake_default -f /opt/env.shortcake_default.yaml \
+    && micromamba run -n shortcake_default python -m ipykernel install --name=shortcake_default \
+    && micromamba run -n shortcake_default jupyter kernelspec list \
+    && micromamba clean --all --yes \
+    && rm /opt/env.shortcake_default.yaml
+
+### Final setting
+COPY run_env.sh /opt/scripts/run_env.sh
+RUN chmod +x /opt/scripts/run_env.sh
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENV PATH $PATH:/opt:/opt/scripts:
+RUN rm ~/.Renviron
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/bin/bash"]

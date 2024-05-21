@@ -1,10 +1,8 @@
-FROM rnakato/r_python_gpu:2024.02.2
+FROM rnakato/r_python_gpu:2024.04
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
-
-COPY SeuratData SeuratData
 
 ARG GITHUB_PAT
 RUN set -x && \
@@ -16,8 +14,8 @@ RUN set -x && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Seurat
-#    && R -e "remotes::install_github('satijalab/seurat', 'seurat5', quiet = TRUE)" \
+ENV Ncpus 16
+COPY SeuratData SeuratData
 RUN set -e \
     && R -e "install.packages(c('Seurat','BPCells', 'presto', 'glmGamPoi'))" \
     && R -e "remotes::install_github('satijalab/seurat-data', quiet = TRUE)" \
@@ -32,7 +30,7 @@ RUN set -e \
                                 'scBio', \
                                 'qqconf', \
                                 'metap'))" \
-    && R -e "BiocManager::install(c('ggbio', 'scry'))" \
+    && R -e "BiocManager::install(c('ggbio', 'scry','glmGamPoi'))" \
 # Wrapper (LIGER, Harmony, conos, CoGAPS, GLM-PCA, fastMNN (batchelor), ALRA (rsvd), Nebulosa, CIPR, miQC, tricycle)
     && R -e "install.packages(c('glmpca','harmony','rliger','rsvd'))" \
     && R -e "BiocManager::install(c('batchelor', 'CoGAPS', 'Nebulosa', 'tricycle'))" \
@@ -56,3 +54,14 @@ RUN set -e \
     && rm -rf SeuratData
 
 RUN rm ~/.Renviron
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENV PATH $PATH:/opt:/opt/scripts:
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/bin/bash"]

@@ -1,4 +1,4 @@
-FROM docker_r-shortcake_r_seurat:latest
+FROM rnakato/shortcake_seurat:3.0.0
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -24,8 +24,15 @@ RUN set -x && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+ENV Ncpus 16
 # metaboliteIDmapping: for OmnipathR and lianna
+COPY howmany_0.3-1.tar.gz howmany_0.3-1.tar.gz
+RUN R CMD INSTALL howmany_0.3-1.tar.gz \
+    && rm howmany_0.3-1.tar.gz
 RUN set -e \
+    # dbplyr v2.3.4: To avoid the erro of metaboliteIDmapping and JASPAR2022
+    # https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using
+    && R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \ 
     && R -e "BiocManager::install(c('BioQC', \
                                     'BSgenome.Hsapiens.UCSC.hg19', \
                                     'BSgenome.Hsapiens.UCSC.hg38', \
@@ -39,6 +46,7 @@ RUN set -e \
                                     'celldex', \
                                     'clusterExperiment', \
                                     'clusterProfiler', \
+                                    'DelayedArray', \
                                     'DelayedMatrixStats', \
                                     'DESeq2', \
                                     'doMC', \
@@ -100,7 +108,8 @@ RUN set -e \
                                 'SAVER', \
                                 'singleCellHaystack', \
                                 'UpSetR'))" \
-    && R -e "remotes::install_github(c('Danko-Lab/BayesPrism/BayesPrism', \
+    && R -e "remotes::install_github(c('prabhakarlab/Banksy', \
+                                       'Danko-Lab/BayesPrism/BayesPrism', \
                                        'shenorrLab/cellAlign', \
                                        'sqjin/CellChat', \
                                        'jokergoo/circlize', \
@@ -207,3 +216,14 @@ RUN R -e "BiocManager::install('miloR')"
 # https://github.com/digitalcytometry/ecotyper
 
 RUN rm ~/.Renviron
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENV PATH $PATH:/opt:/opt/scripts:
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/bin/bash"]

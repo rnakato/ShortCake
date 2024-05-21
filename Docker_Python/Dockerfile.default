@@ -1,0 +1,94 @@
+FROM rnakato/shortcake_light:3.0.0
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+# CellOracle
+COPY micromamba/env.CellOracle.yaml /opt/env.CellOracle.yaml
+RUN micromamba create -y -n celloracle -f /opt/env.CellOracle.yaml \
+    && micromamba run -n celloracle python -m ipykernel install --name=celloracle \
+    && micromamba run -n celloracle jupyter kernelspec list \
+    && micromamba clean --all --yes \
+    && rm /opt/env.CellOracle.yaml
+
+# MARIO
+RUN set -e \
+    && micromamba create -y -n mario python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n mario pip install --no-cache-dir pyMARIO==0.0.2 session-info \
+    && micromamba run -n mario python -m ipykernel install --name=mario \
+    && micromamba run -n mario jupyter kernelspec list \
+# episcanpy
+    && micromamba create -y -n episcanpy python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n episcanpy pip install --no-cache-dir episcanpy==0.4.0 session-info \
+    && micromamba run -n episcanpy python -m ipykernel install --name=episcanpy \
+    && micromamba run -n episcanpy jupyter kernelspec list \
+# SEACells
+    && micromamba create -y -n seacells -c defaults -c conda-forge python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 cmake \
+    && micromamba run -n seacells pip install --no-cache-dir SEACells==0.3.3 session-info \
+    && micromamba run -n seacells python -m ipykernel install --name=seacells \
+    && micromamba run -n seacells jupyter kernelspec list \
+# dynamo Moscot
+    && micromamba create -y -n dynamo-moscot python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults -c conda-forge \
+    && micromamba run -n dynamo-moscot pip install --no-cache-dir dynamo-release==1.4.0  moscot==0.3.4 rich pycairo importlib-metadata session-info \
+    && micromamba run -n dynamo-moscot python -m ipykernel install --name=dynamo-moscot \
+    && micromamba run -n dynamo-moscot jupyter kernelspec list \
+# Genes2Genes mowgli
+    && micromamba create -y -n genes2genes-mowgli python=3.9 'pandas<2.0' nbconvert==6.5.4 ipykernel==6.25.0 importlib-metadata==7.0.1 -c defaults \
+    && micromamba run -n genes2genes-mowgli pip install --no-cache-dir mowgli==0.3.0 session-info \
+    && micromamba run -n genes2genes-mowgli pip install --no-cache-dir git+https://github.com/Teichlab/Genes2Genes.git \
+    && micromamba run -n genes2genes-mowgli python -m ipykernel install --name=genes2genes-mowgli \
+    && micromamba run -n genes2genes-mowgli jupyter kernelspec list \
+# cell2cell screadsim
+    && micromamba create -y -n cell2cell-screadsim python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n cell2cell-screadsim pip install --no-cache-dir cell2cell==0.7.4 scReadSim==1.4.1 session-info obonet umap-learn \
+    && micromamba run -n cell2cell-screadsim python -m ipykernel install --name=cell2cell-screadsim \
+    && micromamba run -n cell2cell-screadsim jupyter kernelspec list \
+# novosparc ikarus
+    && micromamba create -y -n ikarus-novosparc python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 TBB==2021.11.0 numba==0.58.1 -c defaults -c conda-forge \
+    && micromamba run -n ikarus-novosparc pip install --no-cache-dir novosparc==0.4.4 ikarus==0.0.3 session-info \
+    # For ikarus: To avoid the error "ModuleNotFoundError: No module named 'pyscenic.genesig'"
+    # issue: https://github.com/BIMSBbioinfo/ikarus/issues/12
+    && micromamba run -n ikarus-novosparc sed -i 's/pyscenic\.genesig/ctxcore.genesig/g' /opt/micromamba/envs/ikarus-novosparc/lib/python3.8/site-packages/ikarus/classifier.py \
+    && micromamba run -n ikarus-novosparc python -m ipykernel install --name=ikarus-novosparc \
+    && micromamba run -n ikarus-novosparc jupyter kernelspec list \
+# cellphoneDB
+    && micromamba create -n cellphonedb python=3.8 ipykernel==6.25.0 nbconvert==5.6.1 -c defaults \
+    && micromamba run -n cellphonedb pip install --no-cache-dir cellphonedb==5.0.0 session-info \
+#    && micromamba run -n cellphonedb cellphonedb database download \
+    && micromamba run -n cellphonedb python -m ipykernel install --name=cellphonedb \
+    && micromamba run -n cellphonedb jupyter kernelspec list
+
+    # RENGE
+#    && micromamba create -n renge python=3.9 ipykernel -c defaults \
+#    && micromamba run -n renge pip install --no-cache-dir renge==0.0.2 jax jaxlib \
+#    && micromamba run -n renge python -m ipykernel install --name=renge \
+#    && micromamba run -n renge jupyter kernelspec list
+
+
+### Final setting
+RUN micromamba clean --all --yes && pip cache purge
+COPY bedops_linux_x86_64-v2.4.39.tar.gz bedops_linux_x86_64-v2.4.39.tar.gz
+RUN tar zxvf bedops_linux_x86_64-v2.4.39.tar.gz \
+    && rm bedops_linux_x86_64-v2.4.39.tar.gz
+
+ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/compat/
+
+RUN rm ~/.Renviron
+RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/bustools /opt/samtools-1.17
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["jupyternotebook.sh"]

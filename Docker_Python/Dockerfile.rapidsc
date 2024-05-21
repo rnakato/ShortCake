@@ -1,0 +1,34 @@
+FROM rnakato/shortcake_light:3.0.0
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+# rapids-singlecell
+COPY rapids_singlecell_v0.10.2.tar.gz rapids_singlecell_v0.10.2.tar.gz
+RUN tar zxvf rapids_singlecell_v0.10.2.tar.gz \
+    && cd rapids_singlecell-0.10.2 \
+    && micromamba create -f conda/rsc_rapids_24.04.yml \
+    && micromamba run -n rapids_singlecell python -m ipykernel install --name=rapids_singlecell \
+    && micromamba run -n rapids_singlecell jupyter kernelspec list \
+    && rm -rf /opt/rapids_singlecell-0.10.2 /opt/rapids_singlecell_v0.10.2.tar.gz
+
+### Final setting
+RUN micromamba clean --all --yes && pip cache purge
+
+RUN rm ~/.Renviron
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["jupyternotebook.sh"]

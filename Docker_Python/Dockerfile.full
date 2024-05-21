@@ -1,0 +1,75 @@
+FROM rnakato/shortcake:3.0.0
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+# Dictys
+RUN set -e \
+    && micromamba create -y -n dictys python=3.9 mamba pybedtools nbconvert==6.5.4 ipykernel==6.25.0 -c defaults -c conda-forge -c bioconda \
+    && micromamba install -y -n dictys -c lingfeiwang -c bioconda -c conda-forge -c pytorch -c nvidia dictys pytorch torchvision torchaudio pytorch-cuda=11.7 \
+    && micromamba run -n dictys python -m ipykernel install --name=dictys \
+    && jupyter kernelspec list
+# STELLAR
+RUN micromamba create -y -n stellar python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba install -n stellar pytorch cudatoolkit=11.3 -c pytorch -c defaults \
+    && micromamba install -n stellar pyg -c pyg -c defaults \
+    && git clone https://github.com/snap-stanford/stellar.git \
+    && micromamba run -n stellar pip install --no-cache-dir -r stellar/requirements.txt \
+    && micromamba run -n stellar python -m ipykernel install --name=stellar \
+    && micromamba run -n stellar jupyter kernelspec list \
+# GEARS
+    && micromamba create -y -n gears python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba install -n gears pyg -c pyg -c defaults \
+    && micromamba run -n gears pip install --no-cache-dir cell-gears==0.1.2 \
+    && micromamba run -n gears python -m ipykernel install --name=gears \
+    && jupyter kernelspec list \
+# SATURN
+    && micromamba create -y -n saturn python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n saturn pip install --no-cache-dir torchvision==0.11.3 \
+    && git clone https://github.com/snap-stanford/SATURN.git \
+    && micromamba run -n saturn pip install --no-cache-dir -r SATURN/requirements.txt \
+    && rm -rf SATURN \
+    && micromamba run -n saturn pip install --no-cache-dir torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html \
+    && micromamba run -n saturn python -m ipykernel install --name=saturn \
+    && micromamba run -n saturn jupyter kernelspec list
+
+# scVI, scGen, UnitVelo (scGen and UnitVelo use scVI internally)
+RUN set -e \
+    && micromamba create -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
+    && micromamba install -n scvi-scgen-scmomat-unitvelo pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=11.8 -c pytorch -c nvidia -c defaults \
+    && micromamba install -n scvi-scgen-scmomat-unitvelo jax==0.3.14 jaxlib==0.1.75 -c conda-forge \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir "scvi-tools[tutorials]==1.1.2" \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir git+https://github.com/theislab/scgen.git unitvelo==0.2.5.2 scmomat==0.2.2 session-info \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo python -m ipykernel install --name=scvi-scgen-scmomat-unitvelo \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list
+
+# rapids-singlecell
+COPY rapids_singlecell_v0.10.2.tar.gz rapids_singlecell_v0.10.2.tar.gz
+RUN tar zxvf rapids_singlecell_v0.10.2.tar.gz \
+    && cd rapids_singlecell-0.10.2 \
+    && micromamba create -f conda/rsc_rapids_24.04.yml \
+    && micromamba run -n rapids_singlecell python -m ipykernel install --name=rapids_singlecell \
+    && micromamba run -n rapids_singlecell jupyter kernelspec list \
+    && rm -rf /opt/rapids_singlecell-0.10.2 /opt/rapids_singlecell_v0.10.2.tar.gz
+
+### Final setting
+RUN micromamba clean --all --yes && pip cache purge
+
+RUN rm ~/.Renviron
+
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["jupyternotebook.sh"]

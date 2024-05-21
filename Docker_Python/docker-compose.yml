@@ -1,9 +1,41 @@
-version: "3.3"
+version: "3.8"
 services:
-  shortcake:
+  light:
+    image: rnakato/shortcake_light:${TAG}
     build:
-      context: "."
-      dockerfile: Dockerfile.Python
+      context: .
+      dockerfile: Dockerfile.light
       args:
         - GITHUB_PAT=${GITHUB_PAT}
-    image: rnakato/shortcake
+
+  default:
+    image: rnakato/shortcake:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+
+  full:
+    image: rnakato/shortcake_full:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile.full
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+
+  scvi:
+    image: rnakato/shortcake_scvi:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile.scVI
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+
+  rapidsc:
+    image: rnakato/shortcake_rapidsc:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile.rapidsc
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}

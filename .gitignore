@@ -1,6 +1,8 @@
 archives
+Docker_Python/.env
 Docker_Python/archives/
 Docker_Python/log/
+Docker_R/.env
 Docker_R/log/
 Docker_R/SeuratData/bmcite.SeuratData_0.3.0.tar.gz
 Docker_R/SeuratData/cbmc.SeuratData_3.1.4.tar.gz

@@ -1,78 +1,123 @@
+tag=3.0.0
+
 toollist="
     autogenes \
     bbknn \
     cellmap \
     celltypist \
+    constclust \
     cython \
+    doubletdetection \
+    harmonypy \
     llvmlite \
     louvain \
     leidenalg \
     magic \
-    mowgli \
     multivelo \
     numba \
+    optuna \
     palantir \
     phenograph \
+    pyscenic \
     scvelo \
+    scanpy \
+    cellrank \
+    liana \
+    pyscenic \
+    scanpy \
     screcode \
     scrublet \
     sctriangulate \
+    scvelo \
     snapatac2 \
-"
+    velocyto "
 for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake run_env.sh shortcake_default python -c "import "$tool""
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool""
 done
 
+# default
 toollist="
-    liana \
-    moscot \
-    cell2cell \
-    cell2fate \
     celloracle \
-    cellrank \
     cellphonedb \
-    constclust \
-    doubletdetection \
-    dynamo \
     episcanpy \
-    harmonypy \
-    ikarus \
-    monet \
-    novosparc \
-    pyscenic \
-    "
+    mario"
 for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake run_env.sh $tool python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import $tool"
 done
+
+for tool in genes2genes mowgli 
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import $tool"
+done
+
+for tool in dynamo moscot
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo-moscot python -c "import $tool"
+done
+
+for tool in cell2cell scReadSim
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import $tool"
+done
+
+for tool in ikarus novosparc
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh ikarus-novosparc python -c "import $tool"
+done
+
+echo "EEISP"
+docker run -it --rm rnakato/shortcake:$tag eeisp --version
+
+echo "SEACells"
+docker run -it --rm rnakato/shortcake:$tag run_env.sh seacells python -c "import SEACells"
+
+# Full
+# default
+#    cellrank \
+#   liana \
+toollist="
+    dictys \
+    gears \
+    rapids_singlecell"
+for tool in $toollist
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import $tool"
+done
+
+echo "STELLAR"
+docker run -it --rm rnakato/shortcake_full:$tag run_env.sh stellar python -c "from STELLAR import STELLAR"
 
 for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+    docker run -it --rm rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
 done
 
+# scVI
+for tool in scvi scgen scmomat unitvelo 
+do
+    command="python -c \"import "$tool"\""
+    echo scVI  $command
+    docker run -it --rm rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+done
 
-echo "scReadSim"
-docker run -it --rm rnakato/shortcake run_env.sh screadsim python -c "import scReadSim"
-
-echo "SEACells"
-docker run -it --rm rnakato/shortcake run_env.sh seacells python -c "import SEACells"
-
-echo "rapids_singlecell"
-docker run -it --gpus all --rm rnakato/shortcake run_env.sh rapids_singlecell python -c "import rapids_singlecell"
-
-#echo "SAVERX"
-#docker run -it --rm rnakato/shortcake run_env.sh saver-x R -e "library(SAVERX)"
-
-#echo "SCCAF"
-#docker run -it --rm rnakato/shortcake run_env.sh SCCAF python -c "from SCCAF import *"
-
-echo "EEISP"
-docker run -it --rm rnakato/shortcake eeisp --version
+#rapids_singlecell
+echo "rapids_singlecell rapids_singlecell"
+docker run -it --rm rnakato/shortcake_rapidsc:$tag run_env.sh rapids_singlecell python -c "import rapids_singlecell"

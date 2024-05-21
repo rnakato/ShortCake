@@ -1,0 +1,35 @@
+FROM rnakato/shortcake_light:3.0.0
+LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+
+USER root
+WORKDIR /opt
+SHELL ["/bin/bash", "-c"]
+
+ARG GITHUB_PAT
+RUN set -x && \
+    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
+    && cat ~/.Renviron
+
+# scVI, scGen, UnitVelo (scGen and UnitVelo use scVI internally)
+RUN set -e \
+    && micromamba create -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
+    && micromamba install -n scvi-scgen-scmomat-unitvelo pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=11.8 -c pytorch -c nvidia -c defaults \
+    && micromamba install -n scvi-scgen-scmomat-unitvelo jax==0.3.14 jaxlib==0.1.75 -c conda-forge \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir "scvi-tools[tutorials]==1.1.2" \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir git+https://github.com/theislab/scgen.git unitvelo==0.2.5.2 scmomat==0.2.2 session-info \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo python -m ipykernel install --name=scvi-scgen-scmomat-unitvelo \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list
+
+    ### Final setting
+RUN micromamba clean --all --yes && pip cache purge
+
+RUN rm ~/.Renviron
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /.singularity.d \
+    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && chmod +x /.singularity.d/runscript
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["jupyternotebook.sh"]
