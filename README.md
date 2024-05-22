@@ -39,9 +39,25 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Database (motif)**: JASPAR2016, JASPAR2018, JASPAR2020, ~~JASPAR2022~~
 - **SeuratData**: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.2, ssHippo_3.1.4
 
-## 2. Run
+## 2. (new!) Flavors of ShortCake
 
-### 2.1 Docker
+Since ShortCake version 3, we have created several flavors to reduce the image size and make it easier to use by, as shown below.
+
+- **shortcake_seurat**: Contains only Seurat and its related packages.
+- **shortcake_r**: Contains additional R packages installed on top of `shortcake_seurat`. Jupyter notebook is available, but Python tools are not installed.
+- **shortcake_light**: Installs the shortcake_default environment on top of `shortcake_r`. This flavor includes Seurat, Scanpy, Monocle3, and scVelo, and is sufficient for most users.
+- **shortcake**: Installs almost all Python virtual environments on top of `shortcake_light`. The only exceptions are the scVI and rapids_singlecell environments.
+- **rnakato/shortcake_scvi**: Installs the scVI environment on top of `shortcake_light`.
+- **rnakato/shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
+- **shortcake_full**: The full image with all tools installed.
+
+For example, you can use `shortcake_light` version 3.0.0 with this command:
+
+    docker run --rm -it rnakato/shortcake_light:3.0.0 jupyternotebook.sh
+
+## 3. Run
+
+### 3.1 Docker
 
 For Docker:
 
@@ -61,7 +77,7 @@ Then you can run ShortCake with the command:
 
 The `--gpus all` option is needed if you use a GPU (e.g., scvi-tools).
 
-### 2.2. Singularity
+### 3.2. Singularity
 
 You can build the singularity file (.sif) of ShortCake with this command:
 
@@ -79,20 +95,68 @@ Then you can run ShortCake with the command:
 
 The `--nv` option is needed if you use a GPU (e.g., scvi-tools).
 
-## 3. Usage
+## 4. Usage
 
-### 3.1 Jupyter
+### 4.1 Virtual environments for Python
 
-We recommend using Jupyter notebook to use ShortCake:
+To avoid version conflicts between tools, we created several Python environments with [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
+You can see the list of environments installed in the image as follows:
+
+    $ docker run -it --rm rnakato/shortcake:3.0.0 micromamba env list                                                                                                                                  (base)
+          Name                 Active  Path
+        ─────────────────────────────────────────────────────────────────────────
+          base                 *       /opt/micromamba
+          cell2cell-screadsim          /opt/micromamba/envs/cell2cell-screadsim
+          celloracle                   /opt/micromamba/envs/celloracle
+          cellphonedb                  /opt/micromamba/envs/cellphonedb
+          dynamo-moscot                /opt/micromamba/envs/dynamo-moscot
+          episcanpy                    /opt/micromamba/envs/episcanpy
+          genes2genes-mowgli           /opt/micromamba/envs/genes2genes-mowgli
+          ikarus-novosparc             /opt/micromamba/envs/ikarus-novosparc
+          mario                        /opt/micromamba/envs/mario
+          seacells                     /opt/micromamba/envs/seacells
+          shortcake_default            /opt/micromamba/envs/shortcake_default
+
+`shortcake_default` is the default environment with Python3.9 and contains vairous tools as below:
+
+- scanpy
+- scvelo
+- cellrank
+- harmonypy
+- kallisto
+- anndata2ri
+- autogenes
+- bbknn
+- cellmap
+- celltypist
+- doubletdetection
+- magic-impute
+- liana
+- pyscenic
+- palantir
+- constclust
+- multivelo
+- screcode
+- scrublet
+- sctriangulate
+- snapatac2
+- velocyto
+
+The other environments are named after the tools they contain.
+
+### 4.2 Jupyter
+
+We recommend using Jupyter Notebook (JupyterLab) to use ShortCake:
 
     singularity exec shortcake.sif jupyternotebook.sh
 
-To isolate the environment, ShortCake prepares virtual environments for several tools. Specify the appropriate kernel to use them.
+Specify the appropriate kernel (environment) to use them.
 In addition, the R command and all R tools are usable in the ``R`` kernel.
 
 <img src="https://github.com/rnakato/ShortCake/blob/master/img/jupyter_kernel.png" width="240" valign="middle" alt="jupyter_kernel" />
 
-### 3.2 Rstudio
+
+### 4.3 Rstudio
 
 ShortCake also provides the Rstudio environment:
 
@@ -103,39 +167,69 @@ ShortCake also provides the Rstudio environment:
     singularity exec [--nv] shortcake.sif rserver.sh <port>
 -->
 
-### 3.2 Command line
+### 4.4 Command line
 
 Of course, you can also use ShortCake with command line tools. For example:
 
     singularity exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
 
-If you want to use a virtual Python environment from the command line, use ``run_env.sh`` to activate it:
+If you want to use a virtual environment from the command line, use the ``run_env.sh`` script to activate it:
 
     singularity exec shortcake.sif run_env.sh <environment> <command>
     
     # Example to activate "celloracle" environment
     singularity exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
-## 4. Build the image from Dockerfile
+## 5. Build the image from Dockerfile
 
 First, clone and move to the repository
 
     git clone https://github.com/rnakato/ShortCake
     cd ShortCake
 
-- Since the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) and add it to `Docker_R/docker-compose.Seurat.yml`, `Docker_R/docker-compose.R.yml`, and `Docker_Python/docker-compose.yml`.
-- Before building, download the [SeuratData](https://github.com/satijalab/seurat-data) dataset using ``wget.sh`` in the ``Docker_R/SeuratData`` directory.
+## 5.1 Get GitHub token
+- Since the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token). Next, create `Docker_R/.env` and `Docker_Python/.env` files and store the token as follows:
+
+    GITHUB_PAT=<your GitHub token>
+
+## 5.2 Build shortcake_seurat and shortcake_r
+
+Move `Docker_R` directory:
+
+    cd Docker_R/
+
+Download the [SeuratData](https://github.com/satijalab/seurat-data) dataset using ``wget.sh`` in the ``Docker_R/SeuratData`` directory:
+
+    cd SeuratData/
+    sh wget.sh
 
 Then build packages:
 
-    # build R packages
     cd Docker_R
-    docker compose -f docker-compose.R_Seurat.yml build 
-    docker-compose -f docker-compose.R.yml build
-    
-    # Move to 'Python' directory
+    # build both shortcake_seurat and shortcake_r
+    docker-compose -f docker-compose.yml build
+    # build shortcake_seurat only
+    docker-compose -f docker-compose.yml build seurat 
+    # build shortcake_r only
+    docker-compose -f docker-compose.yml build r
+
+## 5.3 Build other flavors
+
+Move to 'Python' directory:
+
     cd ../Docker_Python/
-    # Then build Python packages
-    docker-compose -f docker-compose.celloracle.yml build 
-    docker-compose -f docker-compose.yml build       # for ShortCake
-    docker-compose -f docker-compose.ver2.yml build  # for ShortCake_ver2
+
+Then build Python packages:
+
+    # build all the flavors below
+    docker-compose -f docker-compose.yml build
+    # build shortcake_light
+    docker-compose -f docker-compose.yml build light
+    # build shortcake
+    docker-compose -f docker-compose.yml build default
+    # build shortcake_full
+    docker-compose -f docker-compose.yml build full
+    # build shortcake_scvi
+    docker-compose -f docker-compose.yml build scvi
+    # build shortcake_rapidsc
+    docker-compose -f docker-compose.yml build rapidsc
