@@ -20,7 +20,7 @@ RUN set -e \
     && micromamba run -n scvi-scgen-scmomat-unitvelo python -m ipykernel install --name=scvi-scgen-scmomat-unitvelo \
     && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list
 
-    ### Final setting
+### Final setting
 RUN micromamba clean --all --yes && pip cache purge
 
 RUN rm ~/.Renviron

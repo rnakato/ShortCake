@@ -64,7 +64,6 @@ RUN micromamba clean --all --yes && pip cache purge
 
 RUN rm ~/.Renviron
 
-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \

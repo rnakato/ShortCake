@@ -1,6 +1,6 @@
 # Changelog
 
-### 2024.X.X: version 3.0.0
+### 2024.5.22: version 3.0.0
 - Changed Python environment from conda to micromamba (`/opt/micromamba`)
 - Added `glmGamPoi` for faster computation.
 - Created different flavors of **ShortCake** to improve usability.

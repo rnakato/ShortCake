@@ -65,7 +65,7 @@ RUN set -e \
     && micromamba run -n cellphonedb python -m ipykernel install --name=cellphonedb \
     && micromamba run -n cellphonedb jupyter kernelspec list
 
-    # RENGE
+# RENGE
 #    && micromamba create -n renge python=3.9 ipykernel -c defaults \
 #    && micromamba run -n renge pip install --no-cache-dir renge==0.0.2 jax jaxlib \
 #    && micromamba run -n renge python -m ipykernel install --name=renge \
