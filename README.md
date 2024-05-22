@@ -100,7 +100,7 @@ The `--nv` option is needed if you use a GPU (e.g., scvi-tools).
 ### 4.1 Virtual environments for Python
 
 To avoid version conflicts between tools, we created several Python environments with [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
-You can see the list of environments installed in the image as follows:
+You can see the list of environments installed in the image with `micromamba env list` command as follows:
 
     $ docker run -it --rm rnakato/shortcake:3.0.0 micromamba env list                                                                                                                                  (base)
           Name                 Active  Path
