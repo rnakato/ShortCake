@@ -117,7 +117,7 @@ You can see the list of environments installed in the image with `micromamba env
           seacells                     /opt/micromamba/envs/seacells
           shortcake_default            /opt/micromamba/envs/shortcake_default
 
-Note that the `base' environment does not include any tools other than Jupyter notebook and EEISP.
+Note that the `base` environment does not include any tools other than Jupyter notebook and EEISP.
 `shortcake_default` is the default environment with Python3.9 and contains vairous tools as below:
 
 - scanpy
