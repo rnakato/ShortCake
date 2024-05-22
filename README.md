@@ -188,10 +188,10 @@ First, clone and move to the repository
     git clone https://github.com/rnakato/ShortCake
     cd ShortCake
 
-## 5.1 Get GitHub token
-- Since the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token). Next, create `Docker_R/.env` and `Docker_Python/.env` files and store the token as follows:
+## 5.1 Get your GitHub token
+Since the Dockerfile installs many packages from GitHub, first get [a GitHub token from your own repository](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token). Next, create `Docker_R/.env` and `Docker_Python/.env` files and store the token as follows:
 
-    GITHUB_PAT=<your GitHub token>
+    GITHUB_PAT=<your_GitHub_token>
 
 ## 5.2 Build shortcake_seurat and shortcake_r
 
