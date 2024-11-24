@@ -1,7 +1,6 @@
 
 # <img src = "img/ShortCakeLogo.jpg" width = 120ptx> ShortCake🍰 
 
-
 A docker image for single-cell analysis. It's on docker-hub and GitHub.
 This repository is an update of [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter).
 
@@ -27,11 +26,11 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/), [EEISP](https://github.com/nakatolab/EEISP)
 - **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://earmingol.github.io/cell2cell/), [CellChat](http://www.cellchat.org/), [Scriabin](https://github.com/BlishLab/scriabin)
 - **Data imputation**: [MAGIC](https://github.com/KrishnaswamyLab/MAGIC), [SAVER](https://github.com/mohuangx/SAVER), [scImpute](https://github.com/Vivianstats/scImpute), [SCRABBLE](https://github.com/tanlabcode/SCRABBLE), [RECODE](https://yusuke-imoto-lab.github.io/RECODE/)
-- **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [scAI](https://github.com/sqjin/scAI), [MOFA2](https://biofam.github.io/MOFA2/), [scMoMaT](https://github.com/PeterZZQ/scMoMaT), [Mowgli](https://github.com/cantinilab/mowgli), [MARIO](https://github.com/shuxiaoc/mario-py), [SATURN](https://github.com/snap-stanford/SATURN), [Moscot](https://moscot.readthedocs.io/en/latest/), [SCOT](https://rsinghlab.github.io/SCOT/)
+- **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [scAI](https://github.com/sqjin/scAI), [MOFA2](https://biofam.github.io/MOFA2/), [scMoMaT](https://github.com/PeterZZQ/scMoMaT), [Mowgli](https://github.com/cantinilab/mowgli), [MARIO](https://github.com/shuxiaoc/mario-py), [SATURN](https://github.com/snap-stanford/SATURN), [Moscot](https://moscot.readthedocs.io/en/latest/), [SCOT](https://rsinghlab.github.io/SCOT/), [DIRECT-NET](https://github.com/zhanglhbioinfor/DIRECT-NET)
 - **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html), [BayesPrism](https://github.com/Danko-Lab/BayesPrism), [InstaPrism](https://github.com/humengying0907/InstaPrism), [AutoGeneS](https://github.com/theislab/AutoGeneS)
 - **Gene perturbation prediction**: [GEARS](https://github.com/snap-stanford/GEARS)
 - **Simulation**: [Splatter](https://github.com/Oshlack/splatter), [dyngen](https://github.com/dynverse/dyngen), [scGen](https://github.com/theislab/scgen), [scReadSim](https://github.com/JSB-UCLA/scReadSim), [scDesign3](https://github.com/SONGDONGYUAN1994/scDesign3)
-- **Others**: [Sleepwalk](https://anders-biostat.github.io/sleepwalk/), [singleCellHaystack](https://github.com/alexisvdb/singleCellHaystack), [SignatuR](https://github.com/carmonalab/SignatuR), [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/)
+- **Others**: [Sleepwalk](https://anders-biostat.github.io/sleepwalk/), [singleCellHaystack](https://github.com/alexisvdb/singleCellHaystack), [SignatuR](https://github.com/carmonalab/SignatuR), [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/), [scplotter](https://pwwang.github.io/scplotter/index.html)
 - **scATAC-seq**: [Cicero](https://cole-trapnell-lab.github.io/cicero-release/docs_m3/), [chromVAR](https://bioconductor.org/packages/release/bioc/html/chromVAR.html), [ArchR](https://www.archrproject.com/), [Signac](https://stuartlab.org/signac/index.html), [cisTopic](https://github.com/aertslab/cisTopic), [EpiScanpy](https://episcanpy.readthedocs.io/en/latest/), [SCENT](https://github.com/immunogenomics/SCENT)
 
 - **Database (genome)**: BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
@@ -51,9 +50,9 @@ Since ShortCake version 3, we have created several flavors to reduce the image s
 - **rnakato/shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
 - **shortcake_full**: The full image with all tools installed.
 
-For example, you can use `shortcake_light` version 3.0.0 with this command:
+For example, you can use `shortcake_light` version 3.1.0 with this command:
 
-    docker run --rm -it rnakato/shortcake_light:3.0.0 jupyternotebook.sh
+    docker run --rm -it rnakato/shortcake_light:3.1.0 jupyternotebook.sh
 
 ## 3. Run
 

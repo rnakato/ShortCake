@@ -1,5 +1,17 @@
 # Changelog
 
+### 2024.11.24: version 3.1.0
+- Updated jaxlib to 0.3.7 in the ``scvi-scgen-scmomat-unitvelo`` environment to fix an installation issue (https://github.com/rnakato/ShortCake/issues/13)
+- Added [doubletdetection](https://github.com/JonathanShor/DoubletDetection) in the ``scvi-scgen-scmomat-unitvelo`` environment
+- Fixed an installation issue of velocyto-R
+- Added [GEMLI](https://github.com/UPSUTER/GEMLI)
+- Added [DIRECT-NET](https://github.com/zhanglhbioinfor/DIRECT-NET)
+- Added [scplotter](https://pwwang.github.io/scplotter/index.html)
+- Added [parallel-fastq-dump](https://github.com/rvalieris/parallel-fastq-dump)
+- Updated rapids_singlecell from 0.10.2 to 0.10.10
+- Updated SRA Toolkit from 3.0.10 to v3.1.1
+- Removed ``MeSH.Hsa.eg.db`` because it is not available for Bioconductor version '3.18'
+
 ### 2024.5.22: version 3.0.0
 - Changed Python environment from conda to micromamba (`/opt/micromamba`)
 - Added `glmGamPoi` for faster computation.

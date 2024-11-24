@@ -1,21 +1,21 @@
 FROM rnakato/shortcake_light:3.0.0
-LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
 ARG GITHUB_PAT
-RUN set -x && \
-    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
-    && cat ~/.Renviron
+ENV GITHUB_PAT=${GITHUB_PAT}
 
-# scVI, scGen, UnitVelo (scGen and UnitVelo use scVI internally)
+# scVI, scGen, UnitVelo, doubletdetection (scGen and UnitVelo use scVI internally)
 RUN set -e \
     && micromamba create -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
     && micromamba install -n scvi-scgen-scmomat-unitvelo pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=11.8 -c pytorch -c nvidia -c defaults \
-    && micromamba install -n scvi-scgen-scmomat-unitvelo jax==0.3.14 jaxlib==0.1.75 -c conda-forge \
+    && micromamba install -n scvi-scgen-scmomat-unitvelo jax[cuda11]==0.3.14 jaxlib==0.3.7 -c conda-forge \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir "scvi-tools[tutorials]==1.1.2" \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir doubletdetection \
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir anndata==0.10.8 \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir git+https://github.com/theislab/scgen.git unitvelo==0.2.5.2 scmomat==0.2.2 session-info \
     && micromamba run -n scvi-scgen-scmomat-unitvelo python -m ipykernel install --name=scvi-scgen-scmomat-unitvelo \
     && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list
@@ -23,7 +23,7 @@ RUN set -e \
 ### Final setting
 RUN micromamba clean --all --yes && pip cache purge
 
-RUN rm ~/.Renviron
+ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

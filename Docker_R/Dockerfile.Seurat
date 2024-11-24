@@ -1,13 +1,12 @@
-FROM rnakato/r_python_gpu:2024.04
+FROM rnakato/r_python_gpu:2024.10
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 
 ARG GITHUB_PAT
-RUN set -x && \
-    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
-    && apt-get update \
+ENV GITHUB_PAT=${GITHUB_PAT}
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libgmp-dev \
     libglpk-dev \
@@ -53,7 +52,7 @@ RUN set -e \
     && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
     && rm -rf SeuratData
 
-RUN rm ~/.Renviron
+ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

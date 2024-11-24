@@ -1,4 +1,4 @@
-tag=3.0.0
+tag=3.1.0
 
 toollist="
     autogenes \
@@ -37,6 +37,8 @@ do
     echo $command
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool""
 done
+
+#exit
 
 # default
 toollist="
@@ -85,6 +87,8 @@ docker run -it --rm rnakato/shortcake:$tag eeisp --version
 echo "SEACells"
 docker run -it --rm rnakato/shortcake:$tag run_env.sh seacells python -c "import SEACells"
 
+#exit
+
 # Full
 # default
 #    cellrank \
@@ -97,27 +101,29 @@ for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import $tool"
 done
 
 echo "STELLAR"
-docker run -it --rm rnakato/shortcake_full:$tag run_env.sh stellar python -c "from STELLAR import STELLAR"
+docker run -it --rm rnakato/shortcake_full:$tag run_env.sh stellar python /opt/stellar/STELLAR_run.py
 
 for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
 done
+
+#exit
 
 # scVI
 for tool in scvi scgen scmomat unitvelo 
 do
     command="python -c \"import "$tool"\""
     echo scVI  $command
-    docker run -it --rm rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
 done
 
 #rapids_singlecell
 echo "rapids_singlecell rapids_singlecell"
-docker run -it --rm rnakato/shortcake_rapidsc:$tag run_env.sh rapids_singlecell python -c "import rapids_singlecell"
+docker run -it --rm --gpus all rnakato/shortcake_rapidsc:$tag run_env.sh rapids_singlecell python -c "import rapids_singlecell"

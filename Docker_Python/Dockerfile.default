@@ -1,14 +1,12 @@
-FROM rnakato/shortcake_light:3.0.0
-LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+FROM rnakato/shortcake_light:3.1.0
+LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
 ARG GITHUB_PAT
-RUN set -x && \
-    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
-    && cat ~/.Renviron
+ENV GITHUB_PAT=${GITHUB_PAT}
 
 # CellOracle
 COPY micromamba/env.CellOracle.yaml /opt/env.CellOracle.yaml
@@ -78,12 +76,12 @@ COPY bedops_linux_x86_64-v2.4.39.tar.gz bedops_linux_x86_64-v2.4.39.tar.gz
 RUN tar zxvf bedops_linux_x86_64-v2.4.39.tar.gz \
     && rm bedops_linux_x86_64-v2.4.39.tar.gz
 
-ENV PATH $PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/compat/
+ENV PATH=$PATH:/opt:/opt/scripts:/opt/bedops_linux_x86_64-v2.4.39
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/compat/
 
-RUN rm ~/.Renviron
 RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/bustools /opt/samtools-1.17
 
+ENV GITHUB_PAT=
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \

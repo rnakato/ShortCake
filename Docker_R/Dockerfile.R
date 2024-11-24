@@ -1,48 +1,29 @@
-FROM rnakato/shortcake_seurat:3.0.0
-LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
+FROM rnakato/shortcake_seurat:3.1.0
+LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 
 ARG GITHUB_PAT
-RUN set -x && \
-    echo "GITHUB_PAT=$GITHUB_PAT" > ~/.Renviron \
-    && cat ~/.Renviron \
+ENV GITHUB_PAT=${GITHUB_PAT}
+RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-    libcurl4-openssl-dev \
-    libfftw3-dev \
-    libgfortran5 \
-    libgmp3-dev \
-    libgraphviz-dev \
-    libgtk-3-dev \
-    libgtkmm-3.0-dev \
-    libssl-dev \
-    libunwind-dev \
-    libxt-dev \
-    pandoc \
+    libgmp-dev \
+    libglpk-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV Ncpus 16
+ENV Ncpus=16
 # metaboliteIDmapping: for OmnipathR and lianna
 COPY howmany_0.3-1.tar.gz howmany_0.3-1.tar.gz
 RUN R CMD INSTALL howmany_0.3-1.tar.gz \
     && rm howmany_0.3-1.tar.gz
-RUN set -e \
-    # dbplyr v2.3.4: To avoid the erro of metaboliteIDmapping and JASPAR2022
-    # https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using
-    && R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \ 
+
+RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
+    && R -e "remotes::install_github(c('bokeh/rbokeh'))" \
     && R -e "BiocManager::install(c('BioQC', \
-                                    'BSgenome.Hsapiens.UCSC.hg19', \
-                                    'BSgenome.Hsapiens.UCSC.hg38', \
-                                    'BSgenome.Mmusculus.UCSC.mm10', \
-                                    'BSgenome.Mmusculus.UCSC.mm39', \
-                                    'BSgenome.Dmelanogaster.UCSC.dm6', \
-                                    'BSgenome.Drerio.UCSC.danRer10', \
-                                    'BSgenome.Celegans.UCSC.ce10', \
-                                    'BSgenome.Celegans.UCSC.ce11', \
-                                    'BSgenome.Scerevisiae.UCSC.sacCer3', \
+                                    'beachmat', \
                                     'celldex', \
                                     'clusterExperiment', \
                                     'clusterProfiler', \
@@ -53,29 +34,12 @@ RUN set -e \
                                     'doRNG', \
                                     'DropletUtils', \
                                     'DT', \
-                                    'EnsDb.Hsapiens.v75', \
-                                    'EnsDb.Hsapiens.v79', \
-                                    'EnsDb.Hsapiens.v86', \
-                                    'EnsDb.Mmusculus.v79', \
-                                    'EnsDb.Mmusculus.v86', \
-                                    'EnsDb.Dmelanogaster.v79', \
-                                    'EnsDb.Dmelanogaster.v86', \
-                                    'JASPAR2016', \
-                                    'JASPAR2018', \
-                                    'JASPAR2020', \
-                                    'JASPAR2022', \
                                     'limma', \
                                     'MAST', \
-                                    'MeSH.Hsa.eg.db', \
                                     'tanaylab/metacell', \
                                     'metaboliteIDmapping' , \
                                     'mixtools', \
                                     'NMF', \
-                                    'org.Hs.eg.db', \
-                                    'org.Mm.eg.db', \
-                                    'org.Dm.eg.db', \
-                                    'org.Ce.eg.db', \
-                                    'org.Sc.sgd.db', \
                                     'pcaMethods', \
                                     'pheatmap', \
                                     'preprocessCore', \
@@ -89,13 +53,38 @@ RUN set -e \
                                     'scRNAseq', \
                                     'scTensor', \
                                     'SingleCellExperiment', \
-                                    'SingleCellSignalR', \
                                     'slingshot', \
                                     'splatter', \
                                     'stringi', \
                                     'sva', \
-                                    'tricycle', \
                                     'WGCNA'))" \
+    && R -e "BiocManager::install(c('tricycle', \
+                                    'SingleCellSignalR'))" \
+    && R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', \
+                                    'BSgenome.Hsapiens.UCSC.hg38', \
+                                    'BSgenome.Mmusculus.UCSC.mm10', \
+                                    'BSgenome.Mmusculus.UCSC.mm39', \
+                                    'BSgenome.Dmelanogaster.UCSC.dm6', \
+                                    'BSgenome.Drerio.UCSC.danRer10', \
+                                    'BSgenome.Celegans.UCSC.ce10', \
+                                    'BSgenome.Celegans.UCSC.ce11', \
+                                    'BSgenome.Scerevisiae.UCSC.sacCer3', \
+                                    'EnsDb.Hsapiens.v75', \
+                                    'EnsDb.Hsapiens.v79', \
+                                    'EnsDb.Hsapiens.v86', \
+                                    'EnsDb.Mmusculus.v79', \
+                                    'EnsDb.Mmusculus.v86', \
+                                    'EnsDb.Dmelanogaster.v79', \
+                                    'EnsDb.Dmelanogaster.v86', \
+                                    'JASPAR2016', \
+                                    'JASPAR2018', \
+                                    'JASPAR2020', \
+                                    'JASPAR2022', \
+                                    'org.Hs.eg.db', \
+                                    'org.Mm.eg.db', \
+                                    'org.Dm.eg.db', \
+                                    'org.Ce.eg.db', \
+                                    'org.Sc.sgd.db'))" \
     && R -e "install.packages(c('ClusterR', \
                                 'DDRTree', \
                                 'densityClust', \
@@ -105,12 +94,12 @@ RUN set -e \
                                 'gganimate', \
                                 'gprofiler2', \
                                 'irlba', \
+                                'rbokeh', \
                                 'SAVER', \
                                 'singleCellHaystack', \
                                 'UpSetR'))" \
     && R -e "remotes::install_github(c('prabhakarlab/Banksy', \
                                        'Danko-Lab/BayesPrism/BayesPrism', \
-                                       'shenorrLab/cellAlign', \
                                        'sqjin/CellChat', \
                                        'jokergoo/circlize', \
                                        'aertslab/cisTopic', \
@@ -127,12 +116,16 @@ RUN set -e \
                                        'sunduanchen/Scissor', \
                                        'software-github/SCRABBLE/R', \
                                        'immunogenomics/SCENT', \
+                                       'pwwang/scplotter', \
                                        'BlishLab/scriabin', \
                                        'carmonalab/SignatuR', \
                                        'dviraran/SingleR'))" \
     && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
+    && R -e "remotes::install_github('UPSUTER/GEMLI', subdir='GEMLI_package_v0')" \
+    && R -e "remotes::install_github('shenorrLab/cellAlign')" \
 # velocyto.R
-    && R -e "remotes::install_github(c('aertslab/SCopeLoomR', 'velocyto-team/velocyto.R'))" \
+# We cloned and modified velocyto.R to fix an installation error: https://github.com/velocyto-team/velocyto.R/issues/211
+    && R -e "remotes::install_github(c('aertslab/SCopeLoomR', 'rnakato/velocyto.R'))" \
     && R -e "install.packages('pagoda2')" \
 # SingleCellNet
     && R -e "remotes::install_github(c('pcahan1/singleCellNet'))" \
@@ -163,7 +156,9 @@ RUN set -e \
     && R -e "remotes::install_github('bioFAM/MOFA2', build_opts = c('--no-resave-data --no-build-vignettes'))" \
 # bigSCale2
     && R -e "install.packages(c('fmsb','ClassDiscovery','ggalt','ggdendro','ggpubr'))" \
-    && R -e "remotes::install_github('iaconogi/bigSCale2')"
+    && R -e "remotes::install_github('iaconogi/bigSCale2')" \
+# DIRECT-NET
+    && R -e "remotes::install_github('zhanglhbioinfor/DIRECT-NET')"
 
 # kallisto, bustools
 RUN set -e \
@@ -215,7 +210,7 @@ RUN R -e "BiocManager::install('miloR')"
 # CIBERSORTx EcoTyper resigstration needed
 # https://github.com/digitalcytometry/ecotyper
 
-RUN rm ~/.Renviron
+ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
@@ -223,7 +218,7 @@ RUN chmod +x /entrypoint.sh \
     && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
-ENV PATH $PATH:/opt:/opt/scripts:
+ENV PATH=$PATH:/opt:/opt/scripts:
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/bin/bash"]
