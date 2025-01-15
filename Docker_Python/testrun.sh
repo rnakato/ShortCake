@@ -1,4 +1,4 @@
-tag=3.1.0
+tag=3.2.0
 
 toollist="
     autogenes \
@@ -113,8 +113,6 @@ do
     echo $command
     docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
 done
-
-#exit
 
 # scVI
 for tool in scvi scgen scmomat unitvelo 

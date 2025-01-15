@@ -1,4 +1,4 @@
-FROM rnakato/shortcake:3.1.0
+FROM rnakato/shortcake:3.2.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root

@@ -1,4 +1,4 @@
-FROM rnakato/shortcake_light:3.1.0
+FROM rnakato/shortcake_light:3.2.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -63,12 +63,20 @@ RUN set -e \
     && micromamba run -n cellphonedb python -m ipykernel install --name=cellphonedb \
     && micromamba run -n cellphonedb jupyter kernelspec list
 
+# SCENIC+
+RUN micromamba create -y -n scenicplus python=3.11 nbconvert ipykernel -c defaults \
+    && git clone https://github.com/aertslab/scenicplus \
+    && cd scenicplus \
+    && git checkout development \
+    && micromamba run -n scenicplus pip install . \
+    && micromamba run -n scenicplus python -m ipykernel install --name=scenicplus \
+    && jupyter kernelspec list
+
 # RENGE
 #    && micromamba create -n renge python=3.9 ipykernel -c defaults \
 #    && micromamba run -n renge pip install --no-cache-dir renge==0.0.2 jax jaxlib \
 #    && micromamba run -n renge python -m ipykernel install --name=renge \
 #    && micromamba run -n renge jupyter kernelspec list
-
 
 ### Final setting
 RUN micromamba clean --all --yes && pip cache purge

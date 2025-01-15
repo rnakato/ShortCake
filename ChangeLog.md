@@ -1,5 +1,17 @@
 # Changelog
 
+## 2025.1.31: version 3.2.0
+- Added [SCENIC+](https://github.com/aertslab/scenicplus) in the ``scenicplus`` environment
+- Added [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) in the ``shortcake_default`` environment
+- In the ``shortcake_default`` environment,
+   - Updated Python from 3.9 to 3.10
+   - Updated scanpy from 1.9.8 to 1.10.4
+   - Updated cellrank from 1.5.1 to 2.0.6
+   - Updated pandas from 1.2.1 to 1.5.0
+   - Updated scvelo from 0.2.5 to 0.3.1
+   - Updated screcode from 0.2.5 to 1.0.0
+
+
 ### 2024.11.24: version 3.1.0
 - Updated jaxlib to 0.3.7 in the ``scvi-scgen-scmomat-unitvelo`` environment to fix an installation issue (https://github.com/rnakato/ShortCake/issues/13)
 - Added [doubletdetection](https://github.com/JonathanShor/DoubletDetection) in the ``scvi-scgen-scmomat-unitvelo`` environment
