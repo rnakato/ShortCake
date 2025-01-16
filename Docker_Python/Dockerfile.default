@@ -64,10 +64,9 @@ RUN set -e \
     && micromamba run -n cellphonedb jupyter kernelspec list
 
 # SCENIC+
-RUN micromamba create -y -n scenicplus python=3.11 nbconvert ipykernel -c defaults \
+RUN micromamba create -y -n scenicplus python=3.11.8 nbconvert ipykernel -c defaults \
     && git clone https://github.com/aertslab/scenicplus \
     && cd scenicplus \
-    && git checkout development \
     && micromamba run -n scenicplus pip install . \
     && micromamba run -n scenicplus python -m ipykernel install --name=scenicplus \
     && jupyter kernelspec list

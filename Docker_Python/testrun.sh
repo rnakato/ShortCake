@@ -1,5 +1,6 @@
 tag=3.2.0
 
+#    sctriangulate \
 toollist="
     autogenes \
     bbknn \
@@ -21,13 +22,13 @@ toollist="
     pyscenic \
     scvelo \
     scanpy \
+    squidpy \
     cellrank \
     liana \
     pyscenic \
     scanpy \
     screcode \
     scrublet \
-    sctriangulate \
     scvelo \
     snapatac2 \
     velocyto "
@@ -35,7 +36,7 @@ for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool""
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 #exit
@@ -50,35 +51,35 @@ for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 for tool in genes2genes mowgli 
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 for tool in dynamo moscot
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo-moscot python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo-moscot python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 for tool in cell2cell scReadSim
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 for tool in ikarus novosparc
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh ikarus-novosparc python -c "import $tool"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh ikarus-novosparc python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 echo "EEISP"
@@ -101,7 +102,7 @@ for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 echo "STELLAR"
@@ -111,7 +112,7 @@ for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 # scVI
@@ -119,7 +120,7 @@ for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo scVI  $command
-    docker run -it --rm --gpus all rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import $tool"
+    docker run -it --rm --gpus all rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 #rapids_singlecell

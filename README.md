@@ -21,7 +21,7 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Trajectory (pseudo-time) analysis**: [Monocle3](https://cole-trapnell-lab.github.io/monocle3/), [slingshot](https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html), [Palantir](https://github.com/dpeerlab/Palantir), [FROWMAP](https://github.com/zunderlab/FLOWMAP/)
 - **RNA velocity**: [velocyto](http://velocyto.org/), [scVelo](https://scvelo.readthedocs.io/en/stable/), [CellRank](https://cellrank.readthedocs.io/en/stable/), [Dynamo](https://dynamo-release.readthedocs.io/en/latest/), [MultiVelo](https://github.com/welch-lab/MultiVelo), [UniTVelo](https://github.com/StatBiomed/UniTVelo)
 - **Trajectory alignment**: [cellAlign](https://github.com/shenorrLabTRDF/cellAlign), [Genes2Genes](https://teichlab.github.io/Genes2Genes/)
-- **Spatial transcriptome**: [STELLAR](http://snap.stanford.edu/stellar/), [BANKSY](https://github.com/prabhakarlab/Banksy)
+- **Spatial transcriptome**: [STELLAR](http://snap.stanford.edu/stellar/), [BANKSY](https://github.com/prabhakarlab/Banksy), [Squidpy](https://squidpy.readthedocs.io/)
 - **Cell-cycle prediction**: [tricycle](https://github.com/hansenlab/tricycle)
 - **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [SCENIC+](https://github.com/aertslab/scenicplus), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/), [EEISP](https://github.com/nakatolab/EEISP)
 - **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://earmingol.github.io/cell2cell/), [CellChat](http://www.cellchat.org/), [Scriabin](https://github.com/BlishLab/scriabin)
@@ -138,7 +138,7 @@ Note that the `base` environment does not include any tools other than Jupyter n
 - multivelo
 - screcode
 - scrublet
-- sctriangulate
+- ~~sctriangulate~~
 - snapatac2
 - velocyto
 

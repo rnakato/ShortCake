@@ -10,7 +10,7 @@
 #docker save -o $reponame.tar rnakato/$reponame
 #singularity build -F $reponame.sif docker-archive://$reponame.tar
 
-for name in shortcake shortcake_light shortcake_full shortcake_scvi shortcake_rapidsc
+for name in shortcake_light shortcake shortcake_full shortcake_scvi shortcake_rapidsc
 do
     tag=3.2.0
     docker tag rnakato/$name:$tag rnakato/$name:latest

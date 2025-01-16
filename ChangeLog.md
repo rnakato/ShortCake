@@ -1,7 +1,8 @@
 # Changelog
 
-## 2025.1.31: version 3.2.0
+## 2025.1.15: version 3.2.0
 - Added [SCENIC+](https://github.com/aertslab/scenicplus) in the ``scenicplus`` environment
+- Added [Squidpy](https://squidpy.readthedocs.io/) in the ``scenicplus`` environment
 - Added [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) in the ``shortcake_default`` environment
 - In the ``shortcake_default`` environment,
    - Updated Python from 3.9 to 3.10
