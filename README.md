@@ -46,9 +46,9 @@ Since ShortCake version 3, we have created several flavors to reduce the image s
 - **shortcake_r**: Contains additional R packages installed on top of `shortcake_seurat`. Jupyter notebook is available, but Python tools are not installed.
 - **shortcake_light**: Installs the shortcake_default environment on top of `shortcake_r`. This flavor includes Seurat, Scanpy, Monocle3, and scVelo, and is sufficient for most users.
 - **shortcake**: Installs almost all Python virtual environments on top of `shortcake_light`. The only exceptions are the scVI and rapids_singlecell environments.
-- **shortcake_full**: The full image with all tools installed.
 - **shortcake_scvi**: Installs the scVI environment on top of `shortcake_light`.
 - **shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
+- **shortcake_full**: The full image with all tools installed.
 
 For example, you can use `shortcake_light` version 3.1.0 with this command:
 
