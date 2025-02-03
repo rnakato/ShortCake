@@ -1,19 +1,21 @@
-tag=3.2.0
+tag=3.3.0
 
-#    sctriangulate \
 toollist="
     autogenes \
     bbknn \
     cellmap \
     celltypist \
+    cellrank \
     constclust \
     cython \
+    dask \
     doubletdetection \
     harmonypy \
     llvmlite \
     louvain \
     leidenalg \
     magic \
+    memento \
     multivelo \
     numba \
     optuna \
@@ -22,21 +24,31 @@ toollist="
     pyscenic \
     scvelo \
     scanpy \
-    squidpy \
-    cellrank \
-    liana \
-    pyscenic \
-    scanpy \
     screcode \
     scrublet \
     scvelo \
     snapatac2 \
     velocyto "
+
 for tool in $toollist
 do
     command="python -c \"import "$tool"\""
     echo $command
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print ("$tool".__version__)"
+done
+
+for tool in squidpy
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh squidpy python -c "import "$tool"; print ("$tool".__version__)"
+done
+
+for tool in decoupler liana sctriangulate
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh decoupler-liana-sctriangulate python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 #exit

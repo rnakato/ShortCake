@@ -21,10 +21,30 @@ RUN pip install --no-cache-dir eeisp==0.5.0
 COPY micromamba/env.shortcake_default.yaml /opt/env.shortcake_default.yaml
 RUN eval "$(micromamba shell hook --shell bash)" \
     && micromamba create -y -n shortcake_default -f /opt/env.shortcake_default.yaml \
+    && micromamba run -n shortcake_default pip install --no-cache-dir git+https://github.com/sfortma2/scranPY.git \
     && micromamba run -n shortcake_default python -m ipykernel install --name=shortcake_default \
     && micromamba run -n shortcake_default jupyter kernelspec list \
     && micromamba clean --all --yes \
     && rm /opt/env.shortcake_default.yaml
+
+### decoupler, liana, sctriangulate
+# liana: https://github.com/saezlab/liana-py
+ENV ENVNAME=decoupler-liana-sctriangulate
+RUN set -e \
+    && micromamba create -y -n $ENVNAME python=3.10 conda-forge::decoupler-py==1.8.0 nbconvert==6.5.4 ipykernel==6.25.0 numba==0.60.0 -c defaults \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir liana==1.1.0 sctriangulate==0.13.0 plotnine==0.10.1 mizani==0.8.1 pandas==2.2.2  session-info \
+    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
+    && micromamba run -n $ENVNAME jupyter kernelspec list \
+    && micromamba clean --all --yes
+
+### squidpy
+ENV ENVNAME=squidpy
+RUN set -e \
+    && micromamba create -y -n $ENVNAME python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir squidpy==1.6.2 napari==0.5.5 dask[array]==2024.11.2 session-info \
+    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
+    && micromamba run -n $ENVNAME jupyter kernelspec list \
+    && micromamba clean --all --yes
 
 ### Final setting
 COPY run_env.sh /opt/scripts/run_env.sh

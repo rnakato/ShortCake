@@ -1,8 +1,16 @@
 # Changelog
 
+## 2025.2.3: version 3.3.0
+- Added [moscot](https://github.com/aertslab/scenicplus) in the ``shortcake_default`` environment
+- Added [memento](https://memento.readthedocs.io/en/master/index.html) in the ``shortcake_default`` environment
+- Added [scranPY](https://github.com/sfortma2/scranPY) in the ``shortcake_default`` environment
+- Moved decoupler, liana, sctriangulate from ``shortcake_default`` to a new environment ``decoupler-liana-sctriangulate`` to avoid version conflict
+- Moved Squidpy from ``shortcake_default`` to a new environment ``squidpy`` to avoid version conflict
+- Fixed an installation issue of kallisto|bustools (kb-python)
+
 ## 2025.1.15: version 3.2.0
 - Added [SCENIC+](https://github.com/aertslab/scenicplus) in the ``scenicplus`` environment
-- Added [Squidpy](https://squidpy.readthedocs.io/) in the ``scenicplus`` environment
+- Added [Squidpy](https://squidpy.readthedocs.io/) in the ``shortcake_default`` environment
 - Added [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) in the ``shortcake_default`` environment
 - In the ``shortcake_default`` environment,
    - Updated Python from 3.9 to 3.10
@@ -11,7 +19,6 @@
    - Updated pandas from 1.2.1 to 1.5.0
    - Updated scvelo from 0.2.5 to 0.3.1
    - Updated screcode from 0.2.5 to 1.0.0
-
 
 ### 2024.11.24: version 3.1.0
 - Updated jaxlib to 0.3.7 in the ``scvi-scgen-scmomat-unitvelo`` environment to fix an installation issue (https://github.com/rnakato/ShortCake/issues/13)
@@ -30,7 +37,6 @@
 - Added `glmGamPoi` for faster computation.
 - Created different flavors of **ShortCake** to improve usability.
 - Added [cell2fate](https://github.com/BayraktarLab/cell2fate)
-- ~~Added [RENGE](https://github.com/masastat/RENGE)~~
 - Added [BANKSY](https://github.com/prabhakarlab/Banksy)
 - Removed monet
 

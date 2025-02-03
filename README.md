@@ -10,9 +10,9 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
 ## 1. Included tools (latest)
 
-(The tools that cannot be installed due to unresolved errors are crossed out.)
+<!-- (The tools that cannot be installed due to unresolved errors are crossed out.) -->
 
-- **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), ~~[scranPY](https://github.com/sfortma2/scranPY/),~~ [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/), [rapids_singlecell](https://github.com/scverse/rapids_singlecell)
+- **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/), [rapids_singlecell](https://github.com/scverse/rapids_singlecell)
 - **Quality check**: [DropletQC](https://github.com/powellgenomicslab/DropletQC)
 - **Doublet finding**: [Scrublet](https://github.com/swolock/scrublet), [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder)
 - **Batch correction and data integration**: [Harmony](https://portals.broadinstitute.org/harmony/articles/quickstart.html), [scmap](https://www.sanger.ac.uk/tool/scmap/), [scBio](https://bioinformaticshome.com/db/tool/scBio), [SingleCellNet](https://github.com/pcahan1/singleCellNet)
@@ -27,7 +27,7 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://earmingol.github.io/cell2cell/), [CellChat](http://www.cellchat.org/), [Scriabin](https://github.com/BlishLab/scriabin)
 - **Data imputation**: [MAGIC](https://github.com/KrishnaswamyLab/MAGIC), [SAVER](https://github.com/mohuangx/SAVER), [scImpute](https://github.com/Vivianstats/scImpute), [SCRABBLE](https://github.com/tanlabcode/SCRABBLE), [RECODE](https://yusuke-imoto-lab.github.io/RECODE/)
 - **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [scAI](https://github.com/sqjin/scAI), [MOFA2](https://biofam.github.io/MOFA2/), [scMoMaT](https://github.com/PeterZZQ/scMoMaT), [Mowgli](https://github.com/cantinilab/mowgli), [MARIO](https://github.com/shuxiaoc/mario-py), [SATURN](https://github.com/snap-stanford/SATURN), [Moscot](https://moscot.readthedocs.io/en/latest/), [SCOT](https://rsinghlab.github.io/SCOT/), [DIRECT-NET](https://github.com/zhanglhbioinfor/DIRECT-NET)
-- **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html), [BayesPrism](https://github.com/Danko-Lab/BayesPrism), [InstaPrism](https://github.com/humengying0907/InstaPrism), [AutoGeneS](https://github.com/theislab/AutoGeneS)
+- **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html), [BayesPrism](https://github.com/Danko-Lab/BayesPrism), [InstaPrism](https://github.com/humengying0907/InstaPrism), [AutoGeneS](https://github.com/theislab/AutoGeneS), [scranPY](https://github.com/sfortma2/scranPY)
 - **Gene perturbation prediction**: [GEARS](https://github.com/snap-stanford/GEARS)
 - **Simulation**: [Splatter](https://github.com/Oshlack/splatter), [dyngen](https://github.com/dynverse/dyngen), [scGen](https://github.com/theislab/scgen), [scReadSim](https://github.com/JSB-UCLA/scReadSim), [scDesign3](https://github.com/SONGDONGYUAN1994/scDesign3)
 - **Others**: [Sleepwalk](https://anders-biostat.github.io/sleepwalk/), [singleCellHaystack](https://github.com/alexisvdb/singleCellHaystack), [SignatuR](https://github.com/carmonalab/SignatuR), [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html), [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/), [scplotter](https://pwwang.github.io/scplotter/index.html)
@@ -50,9 +50,9 @@ Since ShortCake version 3, we have created several flavors to reduce the image s
 - **rnakato/shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
 - **shortcake_full**: The full image with all tools installed.
 
-For example, you can use `shortcake_light` version 3.1.0 with this command:
+For example, you can use `shortcake_light` version 3.3.0 with this command:
 
-    docker run --rm -it rnakato/shortcake_light:3.1.0 jupyternotebook.sh
+    docker run --rm -it rnakato/shortcake_light:3.3.0 jupyternotebook.sh
 
 ## 3. Run
 
@@ -101,20 +101,23 @@ The `--nv` option is needed if you use a GPU (e.g., scvi-tools).
 To avoid version conflicts between tools, we created several Python environments with [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
 You can see the list of environments installed in the image with `micromamba env list` command as follows:
 
-    $ docker run -it --rm rnakato/shortcake:3.0.0 micromamba env list                                                                                                                                  (base)
+    $ docker run -it --rm rnakato/shortcake:3.3.0 micromamba env list
           Name                 Active  Path
         ─────────────────────────────────────────────────────────────────────────
-          base                 *       /opt/micromamba
-          cell2cell-screadsim          /opt/micromamba/envs/cell2cell-screadsim
-          celloracle                   /opt/micromamba/envs/celloracle
-          cellphonedb                  /opt/micromamba/envs/cellphonedb
-          dynamo-moscot                /opt/micromamba/envs/dynamo-moscot
-          episcanpy                    /opt/micromamba/envs/episcanpy
-          genes2genes-mowgli           /opt/micromamba/envs/genes2genes-mowgli
-          ikarus-novosparc             /opt/micromamba/envs/ikarus-novosparc
-          mario                        /opt/micromamba/envs/mario
-          seacells                     /opt/micromamba/envs/seacells
-          shortcake_default            /opt/micromamba/envs/shortcake_default
+         base                           *       /opt/micromamba
+         cell2cell-screadsim                    /opt/micromamba/envs/cell2cell-screadsim
+         celloracle                             /opt/micromamba/envs/celloracle
+         cellphonedb                            /opt/micromamba/envs/cellphonedb
+         decoupler-liana-sctriangulate          /opt/micromamba/envs/decoupler-liana-sctriangulate
+         dynamo-moscot                          /opt/micromamba/envs/dynamo-moscot
+         episcanpy                              /opt/micromamba/envs/episcanpy
+         genes2genes-mowgli                     /opt/micromamba/envs/genes2genes-mowgli
+         ikarus-novosparc                       /opt/micromamba/envs/ikarus-novosparc
+         mario                                  /opt/micromamba/envs/mario
+         scenicplus                             /opt/micromamba/envs/scenicplus
+         seacells                               /opt/micromamba/envs/seacells
+         shortcake_default                      /opt/micromamba/envs/shortcake_default
+         squidpy                                /opt/micromamba/envs/squidpy
 
 Note that the `base` environment does not include any tools other than Jupyter notebook and EEISP.
 `shortcake_default` is the default environment with Python3.9 and contains vairous tools as below:
@@ -123,24 +126,23 @@ Note that the `base` environment does not include any tools other than Jupyter n
 - scvelo
 - cellrank
 - harmonypy
-- kallisto
 - anndata2ri
 - autogenes
 - bbknn
 - cellmap
+- moscot
 - celltypist
 - doubletdetection
 - magic-impute
-- liana
 - pyscenic
 - palantir
 - constclust
 - multivelo
 - screcode
 - scrublet
-- ~~sctriangulate~~
 - snapatac2
 - velocyto
+- scranPY
 
 The other environments are named after the tools they contain.
 
