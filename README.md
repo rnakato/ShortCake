@@ -8,7 +8,7 @@ This is an update of the [singlecell_jupyter](https://hub.docker.com/repository/
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
-## 1. Included tools (latest)
+## 1. Included tools (v3.4.0)
 
 (The tools that cannot be installed due to unresolved errors are crossed out.)
 
