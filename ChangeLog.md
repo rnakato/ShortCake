@@ -1,10 +1,26 @@
 # Changelog
 
+## 2025.9.14: version 3.4.0
+- Moved pySCENIC from ``shortcake_default`` to a new environment ``scenic`` to avoid version conflict.
+    - Moved SCENIC+ to the ``scenic`` environment as well.
+- In the ``shortcake_default`` environment,
+  - Added [PHATE](https://github.com/KrishnaswamyLab/PHATE)
+  - Added [scib](https://github.com/theislab/scib)
+  - Added [scanorama](https://github.com/brianhie/scanorama)
+- In the ``R`` environment,
+  - Added [kBET](https://github.com/theislab/kBET)
+  - Added [GEDI](https://github.com/csglab/GEDI)
+  - Added [scplotter](https://pwwang.github.io/scplotter/index.html)
+  - Added [scRepertoire](https://www.bioconductor.org/packages/release/bioc/html/scRepertoire.html)
+  - Removed FROWMAP due to an unsolved installation error
+- Added [SCAFE](https://github.com/chung-lab/SCAFE)
+- Added the ``--server-daemonize=0`` option to ``rserver.sh``
+
 ## 2025.2.3: version 3.3.0
 - Added [moscot](https://github.com/aertslab/scenicplus) in the ``shortcake_default`` environment
 - Added [memento](https://memento.readthedocs.io/en/master/index.html) in the ``shortcake_default`` environment
 - Added [scranPY](https://github.com/sfortma2/scranPY) in the ``shortcake_default`` environment
-- Moved decoupler, liana, sctriangulate from ``shortcake_default`` to a new environment ``decoupler-liana-sctriangulate`` to avoid version conflict
+- Moved decoupler, liana, sctriangulate from ``shortcake_default`` to a new environment ``decoupler-liana-sctriangulate`` to avoid version conflict.
 - Moved Squidpy from ``shortcake_default`` to a new environment ``squidpy`` to avoid version conflict
 - Fixed an installation issue of kallisto|bustools (kb-python)
 

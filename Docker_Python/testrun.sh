@@ -1,4 +1,4 @@
-tag=3.3.0
+tag=3.4.0
 
 toollist="
     autogenes \
@@ -21,7 +21,6 @@ toollist="
     optuna \
     palantir \
     phenograph \
-    pyscenic \
     scvelo \
     scanpy \
     screcode \
@@ -37,18 +36,20 @@ do
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print ("$tool".__version__)"
 done
 
+for tool in scanpy loompy pyscenic
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic python -c "import "$tool"; print ("$tool".__version__)"
+done
+docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic pyscenic
+docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic scenicplus
+
 for tool in squidpy
 do
     command="python -c \"import "$tool"\""
     echo $command
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh squidpy python -c "import "$tool"; print ("$tool".__version__)"
-done
-
-for tool in decoupler liana sctriangulate
-do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh decoupler-liana-sctriangulate python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 #exit
@@ -85,6 +86,13 @@ do
     command="python -c \"import "$tool"\""
     echo $command
     docker run -it --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import "$tool"; print ("$tool".__version__)"
+done
+
+for tool in decoupler liana sctriangulate
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh decoupler-liana-sctriangulate python -c "import "$tool"; print ("$tool".__version__)"
 done
 
 for tool in ikarus novosparc

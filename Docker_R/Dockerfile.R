@@ -1,4 +1,4 @@
-FROM rnakato/shortcake_seurat:3.1.0
+FROM rnakato/shortcake_seurat:3.4.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -80,6 +80,7 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
                                     'JASPAR2018', \
                                     'JASPAR2020', \
                                     'JASPAR2022', \
+                                    'JASPAR2024', \
                                     'org.Hs.eg.db', \
                                     'org.Mm.eg.db', \
                                     'org.Dm.eg.db', \
@@ -94,6 +95,7 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
                                 'gganimate', \
                                 'gprofiler2', \
                                 'irlba', \
+                                'PRROC', \
                                 'rbokeh', \
                                 'SAVER', \
                                 'singleCellHaystack', \
@@ -106,7 +108,9 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
                                        'jokergoo/ComplexHeatmap', \
                                        'chris-mcginnis-ucsf/DoubletFinder', \
                                        'aet21/EpiSCORE', \
+                                       'csglab/GEDI', \
                                        'humengying0907/InstaPrism', \
+                                       'theislab/kBET', \
                                        'saezlab/liana', \
                                        'immunogenomics/presto', \
                                        'sqjin/scAI', \
@@ -116,13 +120,17 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
                                        'sunduanchen/Scissor', \
                                        'software-github/SCRABBLE/R', \
                                        'immunogenomics/SCENT', \
-                                       'pwwang/scplotter', \
                                        'BlishLab/scriabin', \
                                        'carmonalab/SignatuR', \
                                        'dviraran/SingleR'))" \
     && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
     && R -e "remotes::install_github('UPSUTER/GEMLI', subdir='GEMLI_package_v0')" \
     && R -e "remotes::install_github('shenorrLab/cellAlign')" \
+    && R -e "remotes::install_github('igrabski/sc-SHC')" \
+    && R -e "remotes::install_github('zhanghao-njmu/SCP')" \
+# scplotter
+    && R -e "BiocManager::install('scRepertoire')" \
+    && R -e "remotes::install_github('pwwang/scplotter')" \
 # velocyto.R
 # We cloned and modified velocyto.R to fix an installation error: https://github.com/velocyto-team/velocyto.R/issues/211
     && R -e "remotes::install_github(c('aertslab/SCopeLoomR', 'rnakato/velocyto.R'))" \
@@ -134,7 +142,9 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
     && R -e "devtools::install_github('GreenleafLab/ArchR', ref='master', repos = BiocManager::repositories())" \
 # chromVAR
     && R -e "BiocManager::install(c('chromVAR'))" \
-    && R -e "remotes::install_github(c('GreenleafLab/chromVARmotifs','GreenleafLab/motifmatchr'))"
+    && R -e "remotes::install_github(c('GreenleafLab/chromVARmotifs','GreenleafLab/motifmatchr'))" \
+# miloR
+    && R -e "BiocManager::install('miloR')"
 
 # Monocle3
 COPY speedglm-master.tar.gz speedglm-master.tar.gz
@@ -171,13 +181,14 @@ RUN set -e \
     && rm -rf /opt/bustools
 
 # FROWMAP
-COPY SDMTools_1.1-221.2.tar.gz SDMTools_1.1-221.2.tar.gz
-RUN set -e \
-    && R CMD INSTALL SDMTools_1.1-221.2.tar.gz \
-    && rm SDMTools_1.1-221.2.tar.gz \
-    && R -e "install.packages(c('igraph','robustbase','shiny','tcltk','rhandsontable'))" \
-    && R -e "BiocManager::install('flowCore')" \
-    && R -e "remotes::install_github(c('nolanlab/scaffold','ParkerICI/vite','nolanlab/Rclusterpp','nolanlab/spade','zunderlab/FLOWMAP'))"
+#COPY SDMTools_1.1-221.2.tar.gz SDMTools_1.1-221.2.tar.gz
+#    && R CMD INSTALL SDMTools_1.1-221.2.tar.gz \
+#    && rm SDMTools_1.1-221.2.tar.gz \
+#RUN set -e \
+#    && R -e "install.packages(c('igraph','robustbase','shiny','tcltk','rhandsontable'))" \
+#    && R -e "BiocManager::install('cytolib')" \
+#    && R -e "BiocManager::install('flowCore')" \
+#    && R -e "remotes::install_github(c('nolanlab/scaffold','ParkerICI/vite','nolanlab/Rclusterpp','nolanlab/spade','zunderlab/FLOWMAP'))"
 
 # FUSCA: CellComm
 RUN set -e \
@@ -187,6 +198,11 @@ RUN set -e \
     && R -e "remotes::install_github('edroaldo/fusca')"
 
 # LIGER (FFTW, FIt-SNE)
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+    | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+  && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' \
+    | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+  && apt update && apt install -y cmake
 RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
     && tar zxvf fftw-3.3.10.tar.gz \
     && rm fftw-3.3.10.tar.gz \
@@ -202,13 +218,13 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
     && rm -rf /opt/fftw-3.3.10 \
     && R -e "install.packages('rliger')"
 
-RUN set -e \
-    && R -e "remotes::install_github('igrabski/sc-SHC')" \
-    && R -e "remotes::install_github('zhanghao-njmu/SCP')"
-RUN R -e "BiocManager::install('miloR')"
-
 # CIBERSORTx EcoTyper resigstration needed
 # https://github.com/digitalcytometry/ecotyper
+
+# SCAFE
+RUN git clone https://github.com/chung-lab/SCAFE \
+    && cd SCAFE \
+    && chmod +x /opt/SCAFE/scripts/*  /opt/SCAFE/resources/bin/*/*
 
 ENV GITHUB_PAT=
 
@@ -218,7 +234,7 @@ RUN chmod +x /entrypoint.sh \
     && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
-ENV PATH=$PATH:/opt:/opt/scripts:
+ENV PATH=$PATH:/opt:/opt/scripts:/opt/SCAFE/scripts:
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/bin/bash"]
