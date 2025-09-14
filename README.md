@@ -43,7 +43,9 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
 ## 2. (new!) Flavors of ShortCake
 
-Since ShortCake version 3, we have created several flavors to reduce the image size and make it easier to use, as shown below.
+The ShortCake Docker image is large, at about 100 GB. 
+
+Since ShortCake version 3, we have created several flavors to reduce the size of the image and make it easier to use, as shown below.
 
 - **shortcake_seurat**: Contains only Seurat and its related packages.
 - **shortcake_r**: Contains additional R packages installed on top of `shortcake_seurat`. Jupyter notebook is available, but Python tools are not installed.
@@ -66,8 +68,6 @@ For Docker:
 You can pull (download) the ShortCake docker image with this command:
 
     docker pull rnakato/shortcake:<version>
-
-**Note**: The size of the ShortCake docker image is large (about 100GB). It requires a large amount of space on the docker cache directory.
 
 Then you can run ShortCake with the command:
 
