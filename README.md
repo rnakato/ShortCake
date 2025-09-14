@@ -57,7 +57,7 @@ Since ShortCake version 3, we have created several flavors to reduce the size of
 
 For example, you can use `shortcake_light` version 3.4.0 with this command:
 
-    docker run --rm -it rnakato/shortcake_light:3.4.0 jupyternotebook.sh
+    docker run --rm -p 8888:8888 -it rnakato/shortcake_light:3.4.0 jupyternotebook.sh
 
 ## 3. Run
 
