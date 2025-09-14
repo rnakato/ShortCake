@@ -98,7 +98,7 @@ Instead, you can download the singularity image of ShortCake from our [Dropbox](
 
 Then you can run ShortCake with the command:
 
-    # Execute jupyter notebook (Python and R)
+    # Execute Jupyter Notebook (Python and R)
     singularity exec [--nv] shortcake.sif jupyternotebook.sh
     
     # Execute RStudio Server
@@ -136,7 +136,7 @@ You can see the list of environments installed in the image with `micromamba env
 
 
 Note that the `base` environment does not include any tools other than Jupyter notebook and EEISP.
-`shortcake_default` is the default environment with Python3.9 and contains vairous tools as below:
+`shortcake_default` is the default environment with Python3.10 and contains vairous tools as below:
 
 - scanpy
 - scvelo
