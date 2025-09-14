@@ -81,9 +81,11 @@ Then you can run ShortCake with the command:
 - The `-p 8888:8888` option maps the container's port 8888 to the host's port 8888. This allows you to access the Jupyter notebook from your web browser.
 - The `-v (your directory):/work/mnt` option mounts your local directory to the `/work/mnt` directory in the container. You can change `(your directory)` to the path of your local directory where you want to save or load data. In the Jupyter notebook, you can see the `/work/mnt` directory.
 
-For more information about Docker, eee [the original website](https://docs.docker.com/get-started/overview/).
+For more information about Docker, see [the original website](https://docs.docker.com/get-started/overview/).
 
 ### 3.2. Singularity (Apptainer)
+
+(Note: Singularity has recently been renamed Apptainer. To use Apptainer, simply replace the `singularity` command with `apptainer`.)
 
 You can build the singularity file (.sif) of ShortCake with this command:
 
