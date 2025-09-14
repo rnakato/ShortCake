@@ -12,6 +12,7 @@
   - Added [GEDI](https://github.com/csglab/GEDI)
   - Added [scplotter](https://pwwang.github.io/scplotter/index.html)
   - Added [scRepertoire](https://www.bioconductor.org/packages/release/bioc/html/scRepertoire.html)
+  - Added [JASPAR2024](https://bioconductor.org/packages/release/data/annotation/html/JASPAR2024.html)
   - Removed FROWMAP due to an unsolved installation error
 - Added [SCAFE](https://github.com/chung-lab/SCAFE)
 - Added the ``--server-daemonize=0`` option to ``rserver.sh``
