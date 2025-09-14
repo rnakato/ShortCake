@@ -198,12 +198,12 @@ Note that Rstudio requires a GUI (Graphical User Interface) environment, so you 
 ### 4.4 Command line
 
 Several single-cell tools provide command-line tools. 
-For example, [Velocyto](https://velocyto.org/) provides the command ``velocyto run10x`` to generate a .loom file. 
+For example, [velocyto](https://velocyto.org/) provides the command ``velocyto run10x`` to generate a .loom file. 
 It can be executed as follows:
 
     singularity exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
 
-If you want to use a virtual environment from the command line, use the ``run_env.sh`` script to activate it:
+To use a virtual environment from the command line, activate it with the ``run_env.sh`` script:
 
     singularity exec shortcake.sif run_env.sh <environment> <command>
     
