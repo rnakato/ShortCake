@@ -190,6 +190,7 @@ We recommend using Rstudio server as follows:
 Then, access `http://localhost:8787` from your web browser. The default username and password are both `rstudio`.
 
 You can also run Rstudio directly without a server:
+
     singularity exec shortcake.sif rstudio
 
 Note that Rstudio requires a GUI (Graphical User Interface) environment, so you will need to set up X11 forwarding to use it.
