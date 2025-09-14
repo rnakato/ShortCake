@@ -85,7 +85,7 @@ For more information about Docker, see [the original website](https://docs.docke
 
 ### 3.2. Singularity (Apptainer)
 
-(Note: Singularity has recently been renamed Apptainer. To use Apptainer, simply replace the `singularity` command with `apptainer`.)
+(Note: Singularity has recently been renamed [Apptainer](https://apptainer.org/). To use Apptainer, simply replace the `singularity` command with `apptainer`.)
 
 You can build the singularity file (.sif) of ShortCake with this command:
 
@@ -101,10 +101,13 @@ Then you can run ShortCake with the command:
     # Execute jupyter notebook (Python and R)
     singularity exec [--nv] shortcake.sif jupyternotebook.sh
     
+    # Execute RStudio Server
+    singularity exec [--nv] shortcake.sif rserver.sh <port>
+
     # Execute R directory
     singularity exec [--nv] shortcake.sif R
 
-The `--nv` option is needed if you use a GPU (e.g., scvi-tools).
+The `--nv` option is needed if you use a GPU.
 
 ## 4. Usage
 
