@@ -164,6 +164,7 @@ Note that the `base` environment does not include any tools other than Jupyter n
 
 The other environments are named after the tools they contain.
 
+
 ### 4.2 Jupyter
 
 We recommend using Jupyter Notebook (JupyterLab) to use ShortCake:
@@ -178,11 +179,15 @@ In addition, the R command and all R tools are usable in the ``R`` kernel.
 
 ### 4.3 Rstudio
 
-ShortCake also provides the Rstudio environment. You can also execute Rstudio server using ShortCake:
+ShortCake also provides the Rstudio environment. 
+We recommend using Rstudio server as follows:
 
-    singularity exec shortcake.sif rserver.sh <port>
+    # Docker
+    docker run -it -p 8787:8787 --rm rnakato/shortcake_light:3.4.0 rserver.sh 8787
+    # Singularity
+    singularity exec shortcake.sif rserver.sh 8787
 
-Then, access `http://localhost:<port>` from your web browser. The default username and password are both `rstudio`.
+Then, access `http://localhost:8787` from your web browser. The default username and password are both `rstudio`.
 
 You can also run Rstudio directly without a server:
     singularity exec shortcake.sif rstudio
