@@ -77,7 +77,9 @@ Then you can run ShortCake with the command:
     # Execute jupyter notebook (see 'mnt/' directory in the notebook )
     docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
 
-The `--gpus all` option is needed if you use a GPU (e.g., scvi-tools).
+The `--gpus all` option is necessary when using a GPU (e.g., scvi-tools).
+The `-p 8888:8888` option maps the container's port 8888 to the host's port 8888. This allows you to access the Jupyter notebook from your web browser.
+For more information about Docker, eee [the original website](https://docs.docker.com/get-started/overview/).
 
 ### 3.2. Singularity (Apptainer)
 
