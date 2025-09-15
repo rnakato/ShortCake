@@ -268,3 +268,14 @@ Then build Python packages:
     docker-compose -f docker-compose.yml build scvi
     # build shortcake_rapidsc
     docker-compose -f docker-compose.yml build rapidsc
+
+
+## 6. Citation
+
+Please cite this reference when using Shortcake in your study.
+
+*Nakato R, Nagai LAE.
+,
+arXiv (preprint), Aug
+
+- Nakato R, Nagai LAE. ShortCake: An integrated platform for efficient and reproducible single-cell analysis, *arXiv*, 2025. DOI: [10.48550/arXiv.2508.08014](https://arxiv.org/abs/2508.08014)
