@@ -3,8 +3,6 @@
 
 ShortCake is an integrated platform for efficient and reproducible single-cell analysis using [the Docker system](https://docs.docker.com/).
 
-This is an update of the [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter) repository.
-
 ## 0. Changelog
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
