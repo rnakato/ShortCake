@@ -1,7 +1,8 @@
 
 # <img src = "img/ShortCakeLogo.jpg" width = 120ptx> ShortCake🍰 
 
-A docker image for single-cell analysis. It's on DockerHub and GitHub.
+ShortCake is an integrated platform for efficient and reproducible single-cell analysis using the Docker system.
+
 This is an update of the [singlecell_jupyter](https://hub.docker.com/repository/docker/rnakato/singlecell_jupyter) repository.
 
 ## 0. Changelog
