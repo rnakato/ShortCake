@@ -186,6 +186,7 @@ We recommend using Rstudio server as follows:
     # Singularity
     singularity exec shortcake.sif rserver.sh 8787
 
+`8787` is the port number, which you can change if necessary.
 Then, access `http://localhost:8787` from your web browser. The default username and password are both `rstudio`.
 
 You can also run Rstudio directly without a server:
