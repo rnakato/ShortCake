@@ -275,4 +275,4 @@ Then build Python packages:
 
 Please cite this reference when using Shortcake in your study.
 
-- Nakato R, Nagai LAE. ShortCake: An integrated platform for efficient and reproducible single-cell analysis, *arXiv*, 2025. DOI: [10.48550/arXiv.2508.08014](https://arxiv.org/abs/2508.08014)
+- Nakato R, Nagai LAE. ShortCake: An integrated platform for efficient and reproducible single-cell analysis, *Bioinformatics*, 2025. DOI: [10.1093/bioinformatics/btaf559](https://doi.org/10.1093/bioinformatics/btaf559)
