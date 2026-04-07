@@ -7,7 +7,7 @@ ShortCake is an integrated platform for efficient and reproducible single-cell a
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
-## 1. Included tools (v3.4.0)
+## 1. Included tools (v3.5.0)
 
 (The tools that cannot be installed due to unresolved errors are crossed out.)
 

@@ -1,16 +1,15 @@
-FROM rnakato/shortcake_light:3.4.0
+# syntax=docker/dockerfile:1
+FROM rnakato/shortcake_light:3.5.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
-
 # scVI, scGen, UnitVelo, doubletdetection (scGen and UnitVelo use scVI internally)
-RUN set -e \
-    && micromamba create -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    micromamba create -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
     && micromamba install -n scvi-scgen-scmomat-unitvelo pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=11.8 -c pytorch -c nvidia -c defaults \
     && micromamba install -n scvi-scgen-scmomat-unitvelo jax[cuda11]==0.3.14 jaxlib==0.3.7 -c conda-forge \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir "scvi-tools[tutorials]==1.1.2" \
@@ -22,8 +21,6 @@ RUN set -e \
 
 ### Final setting
 RUN micromamba clean --all --yes && pip cache purge
-
-ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

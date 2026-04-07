@@ -1,11 +1,12 @@
-FROM rnakato/r_python_gpu:2025.08
+# syntax=docker/dockerfile:1
+FROM rnakato/r_python_gpu:2026.03.2
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libgmp-dev \
@@ -15,8 +16,10 @@ RUN apt-get update \
 
 ENV Ncpus 16
 COPY SeuratData SeuratData
-RUN set -e \
-    && R -e "install.packages(c('Seurat','BPCells', 'presto', 'glmGamPoi'))" \
+COPY N2R_1.0.4.tar.gz N2R_1.0.4.tar.gz
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    R -e "install.packages(c('Seurat','BPCells', 'presto', 'glmGamPoi'))" \
     && R -e "remotes::install_github('satijalab/seurat-data', quiet = TRUE)" \
     && R -e "remotes::install_github('satijalab/azimuth', quiet = TRUE)" \
     && R -e "remotes::install_github('satijalab/seurat-wrappers', quiet = TRUE)" \
@@ -24,13 +27,11 @@ RUN set -e \
 # Signac
     && R -e "install.packages('Signac')" \
 # Others
-    && R -e "install.packages(c('bit64', \
-                                'sleepwalk', \
-                                'scBio', \
-                                'qqconf', \
-                                'metap'))" \
+    && R -e "install.packages(c('bit64','sleepwalk','scBio','qqconf','metap','RcppSpdlog'))" \
     && R -e "BiocManager::install(c('ggbio', 'scry','glmGamPoi'))" \
 # Wrapper (LIGER, Harmony, conos, CoGAPS, GLM-PCA, fastMNN (batchelor), ALRA (rsvd), Nebulosa, CIPR, miQC, tricycle)
+    && R CMD INSTALL N2R_1.0.4.tar.gz \
+    && rm N2R_1.0.4.tar.gz \
     && R -e "install.packages(c('glmpca','harmony','rliger','rsvd'))" \
     && R -e "BiocManager::install(c('batchelor', 'CoGAPS', 'Nebulosa', 'tricycle'))" \
     && R -e "remotes::install_github('kharchenkolab/conos')" \
@@ -52,7 +53,6 @@ RUN set -e \
     && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
     && rm -rf SeuratData
 
-ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

@@ -1,22 +1,21 @@
-FROM rnakato/shortcake_light:3.4.0
+# syntax=docker/dockerfile:1
+FROM rnakato/shortcake_light:3.5.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
-SHELL ["/bin/bash", "-c"]
-
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # CellOracle
 COPY micromamba/env.CellOracle.yaml /opt/env.CellOracle.yaml
-RUN micromamba create -y -n celloracle -f /opt/env.CellOracle.yaml \
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    micromamba create -y -n celloracle -f /opt/env.CellOracle.yaml \
     && micromamba run -n celloracle python -m ipykernel install --name=celloracle \
     && micromamba run -n celloracle jupyter kernelspec list \
     && micromamba clean --all --yes \
-    && rm /opt/env.CellOracle.yaml
+    && rm /opt/env.CellOracle.yaml \
 # MARIO
-RUN set -e \
     && micromamba create -y -n mario python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
     && micromamba run -n mario pip install --no-cache-dir pyMARIO==0.0.2 session-info \
     && micromamba run -n mario python -m ipykernel install --name=mario \
@@ -27,15 +26,23 @@ RUN set -e \
     && micromamba run -n episcanpy python -m ipykernel install --name=episcanpy \
     && micromamba run -n episcanpy jupyter kernelspec list \
 # SEACells
-    && micromamba create -y -n seacells -c defaults -c conda-forge python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 cmake \
+    && micromamba create -y -n seacells -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 cmake \
     && micromamba run -n seacells pip install --no-cache-dir SEACells==0.3.3 session-info \
     && micromamba run -n seacells python -m ipykernel install --name=seacells \
     && micromamba run -n seacells jupyter kernelspec list \
-# dynamo Moscot
-    && micromamba create -y -n dynamo-moscot python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults -c conda-forge \
-    && micromamba run -n dynamo-moscot pip install --no-cache-dir dynamo-release==1.4.0  moscot==0.3.4 rich pycairo importlib-metadata session-info \
-    && micromamba run -n dynamo-moscot python -m ipykernel install --name=dynamo-moscot \
-    && micromamba run -n dynamo-moscot jupyter kernelspec list \
+# dynamo 
+    && micromamba create -y -n dynamo -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 \
+       setuptools==80.10.2 "matplotlib<3.6" numpy=1.26.*  \
+    && micromamba run -n dynamo pip install --no-cache-dir "dynamo-release==1.4.0" "jax<0.5" "jaxlib<0.5" \
+        rich pycairo importlib-metadata session-info \
+    && micromamba run -n dynamo python -m ipykernel install --name=dynamo \
+    && micromamba run -n dynamo jupyter kernelspec list \
+# Moscot
+    && micromamba create -y -n moscot -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 \
+    && micromamba run -n moscot pip install --no-cache-dir  "moscot==0.5.0" \
+        rich pycairo importlib-metadata session-info setuptools==80.10.2 \
+    && micromamba run -n moscot python -m ipykernel install --name=moscot \
+    && micromamba run -n moscot jupyter kernelspec list \
 # Genes2Genes mowgli
     && micromamba create -y -n genes2genes-mowgli python=3.9 'pandas<2.0' nbconvert==6.5.4 ipykernel==6.25.0 importlib-metadata==7.0.1 -c defaults \
     && micromamba run -n genes2genes-mowgli pip install --no-cache-dir mowgli==0.3.0 session-info \
@@ -48,7 +55,7 @@ RUN set -e \
     && micromamba run -n cell2cell-screadsim python -m ipykernel install --name=cell2cell-screadsim \
     && micromamba run -n cell2cell-screadsim jupyter kernelspec list \
 # novosparc ikarus
-    && micromamba create -y -n ikarus-novosparc python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 TBB==2021.11.0 numba==0.58.1 -c defaults -c conda-forge \
+    && micromamba create -y -n ikarus-novosparc python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 TBB==2021.11.0 numba==0.58.1 pot -c defaults -c conda-forge \
     && micromamba run -n ikarus-novosparc pip install --no-cache-dir novosparc==0.4.4 ikarus==0.0.3 session-info \
     # For ikarus: To avoid the error "ModuleNotFoundError: No module named 'pyscenic.genesig'"
     # issue: https://github.com/BIMSBbioinfo/ikarus/issues/12
@@ -65,9 +72,10 @@ RUN set -e \
 ### decoupler, liana, sctriangulate
 # liana: https://github.com/saezlab/liana-py
 ENV ENVNAME=decoupler-liana-sctriangulate
-RUN set -e \
-    && micromamba create -y -n $ENVNAME python=3.10 conda-forge::decoupler-py==1.8.0 nbconvert==6.5.4 ipykernel==6.25.0 numba==0.60.0 -c defaults \
-    && micromamba run -n $ENVNAME pip install --no-cache-dir liana==1.1.0 sctriangulate==0.13.0 plotnine==0.10.1 mizani==0.8.1 pandas==2.2.2  session-info \
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    micromamba create -y -n $ENVNAME python=3.10 conda-forge::decoupler-py==1.8.0 nbconvert==6.5.4 ipykernel==6.25.0 numba==0.60.0 -c defaults \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir liana==1.1.0 sctriangulate==0.13.0 plotnine==0.10.1 mizani==0.8.1 pandas==2.2.2 setuptools==80.10.2 session-info \
     && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
     && micromamba run -n $ENVNAME jupyter kernelspec list \
     && micromamba clean --all --yes
@@ -89,7 +97,6 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/compat/
 
 RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/bustools /opt/samtools-1.17
 
-ENV GITHUB_PAT=
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \

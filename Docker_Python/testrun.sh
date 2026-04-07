@@ -1,4 +1,4 @@
-tag=3.4.0
+tag=3.5.0
 
 toollist="
     autogenes \
@@ -67,20 +67,26 @@ do
     docker run -it --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import "$tool"; print ("$tool".__version__)"
 done
 
-for tool in genes2genes mowgli 
+for tool in genes2genes mowgli
 do
     command="python -c \"import "$tool"\""
     echo $command
     docker run -it --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import "$tool"; print ("$tool".__version__)"
 done
 
-for tool in dynamo moscot
+for tool in dynamo 
 do
     command="python -c \"import "$tool"\""
     echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo-moscot python -c "import "$tool"; print ("$tool".__version__)"
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo python -c "import "$tool"; print ("$tool".__version__)"
 done
 
+for tool in moscot 
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake:$tag run_env.sh moscot python -c "import "$tool"; print ("$tool".__version__)"
+done
 for tool in cell2cell scReadSim
 do
     command="python -c \"import "$tool"\""
@@ -136,7 +142,7 @@ do
 done
 
 # scVI
-for tool in scvi scgen scmomat unitvelo 
+for tool in scvi scgen scmomat unitvelo
 do
     command="python -c \"import "$tool"\""
     echo scVI  $command

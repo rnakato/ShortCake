@@ -1,16 +1,15 @@
-FROM rnakato/shortcake_r:3.4.0
+# syntax=docker/dockerfile:1
+FROM rnakato/shortcake_r:3.5.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
-SHELL ["/bin/bash", "-c"]
-
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libgraphviz-dev \
+    python-setuptools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,41 +28,44 @@ RUN eval "$(micromamba shell hook --shell bash)" \
 
 ### squidpy
 ENV ENVNAME=squidpy
-RUN set -e \
-    && micromamba create -y -n $ENVNAME python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
-    && micromamba run -n $ENVNAME pip install --no-cache-dir squidpy==1.6.2 napari==0.5.5 dask[array]==2024.11.2 session-info \
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    micromamba create -y -n $ENVNAME python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir squidpy==1.6.2 napari==0.5.5 dask[array]==2024.11.2 session-info setuptools==80.10.2 \
     && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
     && micromamba run -n $ENVNAME jupyter kernelspec list \
-    && micromamba clean --all --yes
+    && micromamba clean --all --yes \
+# Salmon (Alevin)
+    && cd /opt/ \
+    && wget --progress=dot:giga https://github.com/COMBINE-lab/salmon/releases/download/v1.11.4/salmon-linux-x86_64.tar.gz \
+    && tar zxvf salmon-linux-x86_64.tar.gz \
+    && cp /opt/salmon-linux-x86_64/bin/salmon /usr/local/bin/ \
+    && rm -rf salmon-linux-x86_64.tar.gz /opt/salmon-linux-x86_64
 
-# pySCENIC
-#ENV ENVNAME=pyscenic
-#RUN set -e \
-#    && micromamba create -y -n $ENVNAME python=3.7 nbconvert==6.5.4 ipykernel seaborn -c defaults \
-#    && micromamba run -n $ENVNAME pip install --no-cache-dir pyscenic==0.12.1 numpy==1.19 loompy==2.0.17 scanpy==1.10.4 session-info \
+# SCENIC (pySCENIC)
+#ENV ENVNAME=scenic
+#RUN micromamba create -y -n $ENVNAME python=3.10 nbconvert ipykernel "numpy==1.23.5" -c conda-forge -c bioconda -c defaults \
 #    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
-#    && micromamba run -n $ENVNAME jupyter kernelspec list \
+#    && jupyter kernelspec list \
 #    && micromamba clean --all --yes
 
-# SCENIC+ (pySCENIC)
+# SCENIC+
 ENV ENVNAME=scenic
-RUN micromamba create -y -n $ENVNAME python=3.11.8 nbconvert ipykernel -c defaults \
+RUN micromamba create -y -n $ENVNAME \
+        python=3.11.8 pip wheel "poetry<2" macs2=2.2.9.1 \
+        nbconvert ipykernel bedtools pybedtools cython "numpy==1.23.5" "pandas==1.5.3" "pyranges==0.0.111" "cython<3" \
+        python-igraph louvain multicore-tsne ipywidgets pycistarget \
+        -c conda-forge -c bioconda -c defaults \
+    && micromamba run -n $ENVNAME pip install --no-build-isolation git+https://github.com/aertslab/LoomXpy@main \
+    && micromamba run -n $ENVNAME pip install --no-build-isolation git+https://github.com/aertslab/pycisTopic.git \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir --no-deps "pyscenic==0.12.1" \
     && git clone https://github.com/aertslab/scenicplus \
     && cd scenicplus \
-    && micromamba run -n $ENVNAME pip install . \
-    && git clone https://github.com/aertslab/pycisTopic.git \
-    && cd pycisTopic \
-    && micromamba run -n $ENVNAME pip install -e . \
-    && micromamba install -y -n $ENVNAME python-igraph louvain multicore-tsne ipywidgets -c defaults -c conda-forge \
+    && micromamba run -n $ENVNAME pip install --no-build-isolation --no-deps . \
+    && micromamba run -n $ENVNAME pip install --no-cache-dir --no-deps "loomxpy==0.4.2" "numpy==1.23.5" setuptools==80.10.2 \
     && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
     && jupyter kernelspec list \
     && micromamba clean --all --yes
-
-# Salmon (Alevin)
-RUN wget --progress=dot:giga https://github.com/COMBINE-lab/salmon/releases/download/v1.10.0/salmon-1.10.0_linux_x86_64.tar.gz \
-    && tar zxvf salmon-1.10.0_linux_x86_64.tar.gz \
-    && rm salmon-1.10.0_linux_x86_64.tar.gz
-ENV PATH=${PATH}:/opt/salmon-latest_linux_x86_64/bin/
 
 ### Final setting
 COPY run_env.sh /opt/scripts/run_env.sh

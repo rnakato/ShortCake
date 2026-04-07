@@ -1,11 +1,12 @@
-FROM rnakato/shortcake_seurat:3.4.0
+# syntax=docker/dockerfile:1
+FROM rnakato/shortcake_seurat:3.5.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -20,9 +21,17 @@ COPY howmany_0.3-1.tar.gz howmany_0.3-1.tar.gz
 RUN R CMD INSTALL howmany_0.3-1.tar.gz \
     && rm howmany_0.3-1.tar.gz
 
-RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
+COPY pryr_0.1.6.tar.gz pryr_0.1.6.tar.gz
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    R -e "install.packages(c('lobstr'))" \
+    && R CMD INSTALL pryr_0.1.6.tar.gz \
+    && rm pryr_0.1.6.tar.gz \
+    && R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
     && R -e "remotes::install_github(c('bokeh/rbokeh'))" \
     && R -e "BiocManager::install(c('BioQC', \
+                                    'BiocNeighbors', \
+                                    'biomaRt', \
                                     'beachmat', \
                                     'celldex', \
                                     'clusterExperiment', \
@@ -123,7 +132,8 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
                                        'BlishLab/scriabin', \
                                        'carmonalab/SignatuR', \
                                        'dviraran/SingleR'))" \
-    && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = TRUE)" \
+    # DropletQCのbuild_vignettes=FALSEは、vignetteビルドに必要なパッケージがBioconductor 3.15でインストールできないため
+    && R -e "remotes::install_github('powellgenomicslab/DropletQC', build_vignettes = FALSE)" \
     && R -e "remotes::install_github('UPSUTER/GEMLI', subdir='GEMLI_package_v0')" \
     && R -e "remotes::install_github('shenorrLab/cellAlign')" \
     && R -e "remotes::install_github('igrabski/sc-SHC')" \
@@ -148,11 +158,16 @@ RUN R -e 'devtools::install_version("dbplyr", version = "2.3.4")' \
 
 # Monocle3
 COPY speedglm-master.tar.gz speedglm-master.tar.gz
-RUN set -e \
-    && R CMD INSTALL speedglm-master.tar.gz \
-    && rm speedglm-master.tar.gz \
-    && R -e "BiocManager::install(c('BiocGenerics', 'limma', 'S4Vectors', 'SingleCellExperiment', 'SummarizedExperiment', 'batchelor', 'Matrix.utils'))" \
-    && R -e "remotes::install_github('cole-trapnell-lab/leidenbase')" \
+COPY grr_0.9.5.tar.gz grr_0.9.5.tar.gz
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    R CMD INSTALL speedglm-master.tar.gz \
+    && R CMD INSTALL grr_0.9.5.tar.gz \
+    && rm speedglm-master.tar.gz grr_0.9.5.tar.gz\
+    && R -e "BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats', \
+                       'limma', 'lme4', 'S4Vectors', 'SingleCellExperiment', \
+                       'SummarizedExperiment', 'batchelor', 'HDF5Array', 'ggrastr'))" \
+    && R -e "remotes::install_github(c('cole-trapnell-lab/leidenbase', 'bnprks/BPCells/r'))" \
     && R -e "remotes::install_github('cole-trapnell-lab/monocle3', ref='develop')" \
     && R -e "remotes::install_github('cole-trapnell-lab/garnett', ref='monocle3')" \
 # cicero
@@ -170,35 +185,9 @@ RUN set -e \
 # DIRECT-NET
     && R -e "remotes::install_github('zhanglhbioinfor/DIRECT-NET')"
 
-# kallisto, bustools
-RUN set -e \
-    && git clone https://github.com/BUStools/bustools.git \
-    && cd bustools \
-    && mkdir build \
-    && cd build \
-    && cmake .. && make && make install \
-    && R -e "remotes::install_github(c('tidymodels/tidymodels','BUStools/BUSpaRse'))" \
-    && rm -rf /opt/bustools
-
-# FROWMAP
-#COPY SDMTools_1.1-221.2.tar.gz SDMTools_1.1-221.2.tar.gz
-#    && R CMD INSTALL SDMTools_1.1-221.2.tar.gz \
-#    && rm SDMTools_1.1-221.2.tar.gz \
-#RUN set -e \
-#    && R -e "install.packages(c('igraph','robustbase','shiny','tcltk','rhandsontable'))" \
-#    && R -e "BiocManager::install('cytolib')" \
-#    && R -e "BiocManager::install('flowCore')" \
-#    && R -e "remotes::install_github(c('nolanlab/scaffold','ParkerICI/vite','nolanlab/Rclusterpp','nolanlab/spade','zunderlab/FLOWMAP'))"
-
-# FUSCA: CellComm
-RUN set -e \
-    && wget https://cran.r-project.org/src/contrib/Archive/geomnet/geomnet_0.3.1.tar.gz \
-    && R CMD INSTALL geomnet_0.3.1.tar.gz \
-    && rm geomnet_0.3.1.tar.gz \
-    && R -e "remotes::install_github('edroaldo/fusca')"
-
 # LIGER (FFTW, FIt-SNE)
-RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+RUN set -euo pipefail; \
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
     | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
   && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' \
     | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null \
@@ -218,15 +207,24 @@ RUN wget --progress=dot:giga http://www.fftw.org/fftw-3.3.10.tar.gz \
     && rm -rf /opt/fftw-3.3.10 \
     && R -e "install.packages('rliger')"
 
-# CIBERSORTx EcoTyper resigstration needed
-# https://github.com/digitalcytometry/ecotyper
-
+COPY bustools_linux-v0.39.3.tar.gz bustools_linux-v0.39.3.tar.gz 
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+# kallisto, bustools
+    tar zxvf bustools_linux-v0.39.3.tar.gz \
+    && cp bustools/bustools /usr/local/bin/ \
+    && rm -rf /opt/bustools bustools_linux-v0.39.3.tar.gz \
+    && R -e "remotes::install_github(c('tidymodels/tidymodels','BUStools/BUSpaRse'))" \
+# FUSCA: CellComm
+    && wget https://cran.r-project.org/src/contrib/Archive/geomnet/geomnet_0.3.1.tar.gz \
+    && R CMD INSTALL geomnet_0.3.1.tar.gz \
+    && rm geomnet_0.3.1.tar.gz \
+    && R -e "remotes::install_github('edroaldo/fusca')" \
 # SCAFE
-RUN git clone https://github.com/chung-lab/SCAFE \
+    && cd /opt \
+    && git clone https://github.com/chung-lab/SCAFE \
     && cd SCAFE \
     && chmod +x /opt/SCAFE/scripts/*  /opt/SCAFE/resources/bin/*/*
-
-ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

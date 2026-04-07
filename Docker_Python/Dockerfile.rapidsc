@@ -1,26 +1,22 @@
-FROM rnakato/shortcake_light:3.4.0
+# syntax=docker/dockerfile:1
+FROM rnakato/shortcake_light:3.5.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-c"]
 
-ARG GITHUB_PAT
-ENV GITHUB_PAT=${GITHUB_PAT}
-
 # rapids-singlecell
-COPY rapids_singlecell_v0.10.10.tar.gz rapids_singlecell_v0.10.10.tar.gz
-RUN tar zxvf rapids_singlecell_v0.10.10.tar.gz \
-    && cd rapids_singlecell-0.10.10 \
-    && micromamba create -f conda/rsc_rapids_24.06.yml \
+COPY micromamba/rsc_rapids_26.02_cuda12.yml /opt/rsc_rapids_26.02_cuda12.yml
+RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    set -euo pipefail; \
+    micromamba create -f /opt/rsc_rapids_26.02_cuda12.yml \
     && micromamba run -n rapids_singlecell python -m ipykernel install --name=rapids_singlecell \
     && micromamba run -n rapids_singlecell jupyter kernelspec list \
-    && rm -rf /opt/rapids_singlecell-0.10.10 /opt/rapids_singlecell_v0.10.10.tar.gz
+    && rm /opt/rsc_rapids_26.02_cuda12.yml
 
 ### Final setting
 RUN micromamba clean --all --yes && pip cache purge
-
-ENV GITHUB_PAT=
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \

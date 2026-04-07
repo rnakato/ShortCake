@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.3.29: version 3.5.0
+- Changed ``docker-compose.yml`` to ``compose.yaml``.
+- Changed the setup so that **GITHUB_PAT** is provided through secrets to prevent token leakage on DockerHub.
+
 ## 2025.9.14: version 3.4.0
 - Moved pySCENIC from ``shortcake_default`` to a new environment ``scenic`` to avoid version conflict.
     - Moved SCENIC+ to the ``scenic`` environment as well.

@@ -1,17 +1,20 @@
-version: "3.8"
 services:
   seurat:
     image: rnakato/shortcake_seurat:${TAG}
     build:
       context: .
       dockerfile: Dockerfile.Seurat
-      args:
-        - GITHUB_PAT=${GITHUB_PAT}
+      secrets:
+        - github_pat
 
   r:
     image: rnakato/shortcake_r:${TAG}
     build:
       context: .
       dockerfile: Dockerfile.R
-      args:
-        - GITHUB_PAT=${GITHUB_PAT}
+      secrets:
+        - github_pat
+
+secrets:
+  github_pat:
+    environment: GITHUB_PAT
