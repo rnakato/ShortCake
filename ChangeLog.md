@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026.3.29: version 3.5.0
+## 2026.4.7: version 3.5.0
 - Changed ``docker-compose.yml`` to ``compose.yaml``.
 - Changed the setup so that **GITHUB_PAT** is provided through secrets to prevent token leakage on DockerHub.
 
