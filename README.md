@@ -54,9 +54,9 @@ Since ShortCake version 3, we have created several flavors to reduce the size of
 - **shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
 - **shortcake_full**: The full image with all tools installed.
 
-For example, you can use `shortcake_light` version 3.4.0 with this command:
+For example, you can use `shortcake_light` version 3.5.0 with this command:
 
-    docker run --rm -p 8888:8888 -it rnakato/shortcake_light:3.4.0 jupyternotebook.sh
+    docker run --rm -p 8888:8888 -it rnakato/shortcake_light:3.5.0 jupyternotebook.sh
 
 ## 3. Run
 
@@ -82,29 +82,29 @@ Then you can run ShortCake with the command:
 
 For more information about Docker, see [the original website](https://docs.docker.com/get-started/overview/).
 
-### 3.2. Singularity (Apptainer)
+### 3.2. Apptainer
 
-(Note: Singularity has recently been renamed [Apptainer](https://apptainer.org/). To use Apptainer, simply replace the `singularity` command with `apptainer`.)
+(Note: Singularity has recently been renamed [Apptainer](https://apptainer.org/).)
 
-You can build the singularity file (.sif) of ShortCake with this command:
+You can build the apptainer file (.sif) of ShortCake with this command:
 
-    # If you use singularity
-    singularity build -F shortcake.sif docker://rnakato/shortcake    
+    # If you use apptainer
+    apptainer build -F shortcake.sif docker://rnakato/shortcake    
     # If you use apptainer
     apptainer build -F shortcake.sif docker://rnakato/shortcake
 
-Instead, you can download the singularity image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0) (We use singularity version 3.8.5).
+Instead, you can download the apptainer image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0) (We use apptainer version 1.4.2).
 
 Then you can run ShortCake with the command:
 
     # Execute Jupyter Notebook (Python and R)
-    singularity exec [--nv] shortcake.sif jupyternotebook.sh
+    apptainer exec [--nv] shortcake.sif jupyternotebook.sh
     
     # Execute RStudio Server
-    singularity exec [--nv] shortcake.sif rserver.sh <port>
+    apptainer exec [--nv] shortcake.sif rserver.sh <port>
 
     # Execute R directory
-    singularity exec [--nv] shortcake.sif R
+    apptainer exec [--nv] shortcake.sif R
 
 The `--nv` option is needed if you use a GPU.
 
@@ -115,41 +115,40 @@ The `--nv` option is needed if you use a GPU.
 To avoid version conflicts between tools, we created several Python environments with [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
 You can see the list of environments installed in the image with `micromamba env list` command as follows:
 
-    $ docker run -it --rm rnakato/shortcake:3.4.0 micromamba env list
+    $ docker run -it --rm rnakato/shortcake:3.5.0 micromamba env list
         Name                           Active  Path
         ─────────────────────────────────────────────────────────────────────────────────────────────
-        base                           *       /opt/micromamba
-        cell2cell-screadsim                    /opt/micromamba/envs/cell2cell-screadsim
-        celloracle                             /opt/micromamba/envs/celloracle
-        cellphonedb                            /opt/micromamba/envs/cellphonedb
-        decoupler-liana-sctriangulate          /opt/micromamba/envs/decoupler-liana-sctriangulate
-        dynamo-moscot                          /opt/micromamba/envs/dynamo-moscot
-        episcanpy                              /opt/micromamba/envs/episcanpy
-        genes2genes-mowgli                     /opt/micromamba/envs/genes2genes-mowgli
-        ikarus-novosparc                       /opt/micromamba/envs/ikarus-novosparc
-        mario                                  /opt/micromamba/envs/mario
-        scenic                                 /opt/micromamba/envs/scenic
-        seacells                               /opt/micromamba/envs/seacells
-        shortcake_default                      /opt/micromamba/envs/shortcake_default
-        squidpy                                /opt/micromamba/envs/squidpy
+          base                           *       /opt/micromamba
+          cell2cell-screadsim                    /opt/micromamba/envs/cell2cell-screadsim
+          celloracle                             /opt/micromamba/envs/celloracle
+          cellphonedb                            /opt/micromamba/envs/cellphonedb
+          cellrank                               /opt/micromamba/envs/cellrank
+          decoupler-liana-sctriangulate          /opt/micromamba/envs/decoupler-liana-sctriangulate
+          dynamo                                 /opt/micromamba/envs/dynamo
+          episcanpy                              /opt/micromamba/envs/episcanpy
+          genes2genes-mowgli                     /opt/micromamba/envs/genes2genes-mowgli
+          ikarus-novosparc                       /opt/micromamba/envs/ikarus-novosparc
+          mario                                  /opt/micromamba/envs/mario
+          moscot                                 /opt/micromamba/envs/moscot
+          scanpy                                 /opt/micromamba/envs/scanpy
+          scenic                                 /opt/micromamba/envs/scenic
+          scenicplus                             /opt/micromamba/envs/scenicplus
+          seacells                               /opt/micromamba/envs/seacells
+          shortcake_default                      /opt/micromamba/envs/shortcake_default
+          squidpy                                /opt/micromamba/envs/squidpy
 
 
 Note that the `base` environment does not include any tools other than Jupyter notebook and EEISP.
 `shortcake_default` is the default environment with Python3.10 and contains vairous tools as below:
 
-- scanpy
-- scvelo
-- cellrank
 - harmonypy
 - anndata2ri
 - autogenes
 - bbknn
 - cellmap
-- moscot
 - celltypist
 - doubletdetection
 - magic-impute
-- palantir
 - constclust
 - multivelo
 - screcode
@@ -168,7 +167,7 @@ The other environments are named after the tools they contain.
 
 We recommend using Jupyter Notebook (JupyterLab) to use ShortCake:
 
-    singularity exec shortcake.sif jupyternotebook.sh
+    apptainer exec shortcake.sif jupyternotebook.sh
 
 Specify the appropriate kernel (environment) to use them.
 In addition, the R command and all R tools are usable in the ``R`` kernel.
@@ -182,16 +181,16 @@ ShortCake also provides the Rstudio environment.
 We recommend using Rstudio server as follows:
 
     # Docker
-    docker run -it -p 8787:8787 --rm rnakato/shortcake_light:3.4.0 rserver.sh 8787
+    docker run -it -p 8787:8787 --rm rnakato/shortcake_light:3.5.0 rserver.sh 8787
     # Singularity
-    singularity exec shortcake.sif rserver.sh 8787
+    apptainer exec shortcake.sif rserver.sh 8787
 
 `8787` is the port number, which you can change if necessary.
 Then, access `http://localhost:8787` from your web browser. The default username and password are both `rstudio`.
 
 You can also run Rstudio directly without a server:
 
-    singularity exec shortcake.sif rstudio
+    apptainer exec shortcake.sif rstudio
 
 Note that Rstudio requires a GUI (Graphical User Interface) environment, so you will need to set up X11 forwarding to use it.
 
@@ -201,14 +200,14 @@ Several single-cell tools provide command-line tools.
 For example, [velocyto](https://velocyto.org/) provides the command ``velocyto run10x`` to generate a .loom file. 
 It can be executed as follows:
 
-    singularity exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
+    apptainer exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
 
 To use a virtual environment from the command line, activate it with the ``run_env.sh`` script:
 
-    singularity exec shortcake.sif run_env.sh <environment> <command>
+    apptainer exec shortcake.sif run_env.sh <environment> <command>
     
     # Example to activate "celloracle" environment
-    singularity exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
+    apptainer exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
 It is also possible to log directly into the ShortCake container and work inside it using the command-line interface. 
 
@@ -242,13 +241,11 @@ Download the [SeuratData](https://github.com/satijalab/seurat-data) dataset usin
 Then build packages:
 
     cd Docker_R
-    # build both shortcake_seurat and shortcake_r
-    docker-compose -f docker-compose.yml build
     # build shortcake_seurat only
-    docker-compose -f docker-compose.yml build seurat 
+    docker compose -f compose.yaml build seurat
     # build shortcake_r only
-    docker-compose -f docker-compose.yml build r
-
+    ocker compose -f compose.yaml build r
+    
 ## 5.3 Build other flavors
 
 Move to 'Python' directory:
@@ -257,19 +254,16 @@ Move to 'Python' directory:
 
 Then build Python packages:
 
-    # build all the flavors below
-    docker-compose -f docker-compose.yml build
     # build shortcake_light
-    docker-compose -f docker-compose.yml build light
+    docker compose -f compose.yaml build light
     # build shortcake
-    docker-compose -f docker-compose.yml build default
+    docker compose -f compose.yaml build default
     # build shortcake_full
-    docker-compose -f docker-compose.yml build full
+    docker compose -f compose.yaml build full
     # build shortcake_scvi
-    docker-compose -f docker-compose.yml build scvi
+    docker compose -f compose.yaml build scvi
     # build shortcake_rapidsc
-    docker-compose -f docker-compose.yml build rapidsc
-
+    docker compose -f compose.yaml build rapidsc
 
 ## 6. Citation
 
