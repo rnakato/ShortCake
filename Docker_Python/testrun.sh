@@ -19,13 +19,11 @@ toollist="
     multivelo \
     numba \
     optuna \
-    palantir \
     phenograph \
     scvelo \
     scanpy \
     screcode \
     scrublet \
-    scvelo \
     snapatac2 \
     velocyto "
 

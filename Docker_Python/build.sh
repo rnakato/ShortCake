@@ -1,9 +1,12 @@
 tag=3.5.0
-docker compose -f compose.yaml build light
-docker compose -f compose.yaml build default
-docker compose -f compose.yaml build full
-docker compose -f compose.yaml build scvi
-docker compose -f compose.yaml build rapidsc
+#docker compose -f compose.yaml build light
+#docker compose -f compose.yaml build default
+#docker compose -f compose.yaml build full
+#docker compose -f compose.yaml build scvi
+#docker compose -f compose.yaml build rapidsc
+
+#reponame=shortcake_light
+#apptainer build -F /work3/SingularityImages/$reponame.$tag.sif docker-daemon://rnakato/$reponame:$tag
 
 #exit
 for name in shortcake_light shortcake shortcake_full shortcake_scvi shortcake_rapidsc

@@ -3,6 +3,8 @@
 ## 2026.4.7: version 3.5.0
 - Changed ``docker-compose.yml`` to ``compose.yaml``.
 - Changed the setup so that **GITHUB_PAT** is provided through secrets to prevent token leakage on DockerHub.
+- Create the ``scanpy`` for Scanpy and scVelo and ``cellrank`` for Cellrank and Palantir environments.
+- Separate the ``scenic`` environment into two environments: ``scenic`` for pySCENIC and ``scenicplus`` for SCENIC+ to avoid version conflict.
 
 ## 2025.9.14: version 3.4.0
 - Moved pySCENIC from ``shortcake_default`` to a new environment ``scenic`` to avoid version conflict.

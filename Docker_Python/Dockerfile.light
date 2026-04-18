@@ -6,6 +6,10 @@ USER root
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+COPY run_env.sh /opt/scripts/run_env.sh
+COPY verify_python_env.sh /opt/scripts/verify_python_env.sh
+RUN chmod +x /opt/scripts/run_env.sh /opt/scripts/verify_python_env.sh
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libgraphviz-dev \
@@ -24,16 +28,29 @@ RUN eval "$(micromamba shell hook --shell bash)" \
     && micromamba run -n shortcake_default python -m ipykernel install --name=shortcake_default \
     && micromamba run -n shortcake_default jupyter kernelspec list \
     && micromamba clean --all --yes \
-    && rm /opt/env.shortcake_default.yaml
+    && rm /opt/env.shortcake_default.yaml 
 
-### squidpy
-ENV ENVNAME=squidpy
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     set -euo pipefail; \
-    micromamba create -y -n $ENVNAME python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
-    && micromamba run -n $ENVNAME pip install --no-cache-dir squidpy==1.6.2 napari==0.5.5 dask[array]==2024.11.2 session-info setuptools==80.10.2 \
-    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
-    && micromamba run -n $ENVNAME jupyter kernelspec list \
+    micromamba create -y -n scanpy python=3.10 pip wheel nbconvert ipykernel \
+        scanpy=1.11.3 scvelo=0.3.4 "jinja2>=3.1.3" python-igraph "numpy>=2" tqdm ipywidgets \
+        -c conda-forge -c bioconda -c defaults \
+    && micromamba run -n scanpy python -m ipykernel install --name=scanpy \
+    && micromamba run -n scanpy jupyter kernelspec list \
+    && /opt/scripts/verify_python_env.sh scanpy scanpy scvelo \
+    # cellrank
+    && micromamba create -y -n cellrank python=3.12 pip wheel nbconvert ipykernel \
+        cellrank==2.2.0 scvelo=0.3.4 "jinja2==3.0.3"  "palantir>=1.4.2" scipy=1.15.* "numpy>=2" tqdm ipywidgets \
+        -c conda-forge -c bioconda -c defaults \
+    && micromamba run -n cellrank python -m ipykernel install --name=cellrank \
+    && micromamba run -n cellrank jupyter kernelspec list \
+    && /opt/scripts/verify_python_env.sh cellrank cellrank palantir scvelo \
+    # squidpy
+    && micromamba create -y -n squidpy python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 tqdm ipywidgets -c defaults \
+    && micromamba run -n squidpy pip install --no-cache-dir squidpy==1.6.2 napari==0.5.5 dask[array]==2024.11.2 session-info setuptools==80.10.2 \
+    && micromamba run -n squidpy python -m ipykernel install --name=squidpy \
+    && micromamba run -n squidpy jupyter kernelspec list \
+    && /opt/scripts/verify_python_env.sh squidpy squidpy \
     && micromamba clean --all --yes \
 # Salmon (Alevin)
     && cd /opt/ \
@@ -42,35 +59,40 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && cp /opt/salmon-linux-x86_64/bin/salmon /usr/local/bin/ \
     && rm -rf salmon-linux-x86_64.tar.gz /opt/salmon-linux-x86_64
 
-# SCENIC (pySCENIC)
-#ENV ENVNAME=scenic
-#RUN micromamba create -y -n $ENVNAME python=3.10 nbconvert ipykernel "numpy==1.23.5" -c conda-forge -c bioconda -c defaults \
-#    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
+# SCENIC (pySCENIC) 
+RUN micromamba create -y -n scenic python=3.10 nbconvert ipykernel numpy=1.23.5 \
+        loomxpy=0.4.2 setuptools=80.10.2 macs2=2.2.9.1 pycistarget cython=0.29 pyranges=0.0.111 \
+        -c conda-forge -c bioconda -c defaults \
+    && micromamba run -n scenic pip install pyscenic==0.12.1 \
+    && micromamba run -n scenic python -m ipykernel install --name=scenic \
+    && jupyter kernelspec list \
+    && /opt/scripts/verify_python_env.sh scenic pyscenic 
+    # SCENIC+
+#RUN micromamba create -y -n scenicplus python=3.11.8 pip wheel "poetry<2" setuptools=80.10.2 \
+#        nbconvert ipykernel bedtools pybedtools cython python-igraph multicore-tsne ipywidgets  \
+COPY scenicplus-1.0a2.tar.gz scenicplus-1.0a2.tar.gz
+RUN tar zxvf scenicplus-1.0a2.tar.gz \
+    && cd scenicplus-1.0a2 \
+    && micromamba create -y -n scenicplus python=3.11.8 pip pybedtools ipykernel=6.29.3 jupyter_client=8.4.0 setuptools=80.10.2 \
+        -c conda-forge -c bioconda -c defaults \
+    && micromamba run -n scenicplus pip install . \
+    && micromamba run -n scenicplus python -m ipykernel install --name=scenicplus \
+    && jupyter kernelspec list \
+    && /opt/scripts/verify_python_env.sh scenicplus scenicplus \
+    && micromamba clean --all --yes \
+    && rm -rf /opt/scenicplus-1.0a2 /opt/scenicplus-1.0a2.tar.gz
+#    && micromamba create -y -n scenicplus python=3.11.8 pip nbconvert ipykernel pybedtools  \
+#        -c conda-forge -c bioconda -c defaults \
+#    && git clone https://github.com/aertslab/scenicplus \
+#    && cd scenicplus \
+#    && micromamba run -n scenicplus pip install --no-deps . \
+#    && pip install -r requirements.txt --no-deps \
+#    && micromamba run -n scenicplus python -m ipykernel install --name=scenicplus \
 #    && jupyter kernelspec list \
+#    && /opt/scripts/verify_python_env.sh scenicplus scenicplus \
 #    && micromamba clean --all --yes
 
-# SCENIC+
-ENV ENVNAME=scenic
-RUN micromamba create -y -n $ENVNAME \
-        python=3.11.8 pip wheel "poetry<2" macs2=2.2.9.1 \
-        nbconvert ipykernel bedtools pybedtools cython "numpy==1.23.5" "pandas==1.5.3" "pyranges==0.0.111" "cython<3" \
-        python-igraph louvain multicore-tsne ipywidgets pycistarget \
-        -c conda-forge -c bioconda -c defaults \
-    && micromamba run -n $ENVNAME pip install --no-build-isolation git+https://github.com/aertslab/LoomXpy@main \
-    && micromamba run -n $ENVNAME pip install --no-build-isolation git+https://github.com/aertslab/pycisTopic.git \
-    && micromamba run -n $ENVNAME pip install --no-cache-dir --no-deps "pyscenic==0.12.1" \
-    && git clone https://github.com/aertslab/scenicplus \
-    && cd scenicplus \
-    && micromamba run -n $ENVNAME pip install --no-build-isolation --no-deps . \
-    && micromamba run -n $ENVNAME pip install --no-cache-dir --no-deps "loomxpy==0.4.2" "numpy==1.23.5" setuptools==80.10.2 \
-    && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
-    && jupyter kernelspec list \
-    && micromamba clean --all --yes
-
 ### Final setting
-COPY run_env.sh /opt/scripts/run_env.sh
-RUN chmod +x /opt/scripts/run_env.sh
-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \

@@ -38,7 +38,7 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && micromamba run -n dynamo python -m ipykernel install --name=dynamo \
     && micromamba run -n dynamo jupyter kernelspec list \
 # Moscot
-    && micromamba create -y -n moscot -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 \
+    && micromamba create -y -n moscot -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 zarr \
     && micromamba run -n moscot pip install --no-cache-dir  "moscot==0.5.0" \
         rich pycairo importlib-metadata session-info setuptools==80.10.2 \
     && micromamba run -n moscot python -m ipykernel install --name=moscot \
