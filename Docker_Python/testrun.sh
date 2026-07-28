@@ -5,23 +5,22 @@ toollist="
     bbknn \
     cellmap \
     celltypist \
-    cellrank \
     constclust \
     cython \
     dask \
     doubletdetection \
     harmonypy \
     llvmlite \
-    louvain \
     leidenalg \
     magic \
     memento \
     multivelo \
     numba \
     optuna \
+    phate \
     phenograph \
-    scvelo \
-    scanpy \
+    scanorama \
+    scib \
     screcode \
     scrublet \
     snapatac2 \
@@ -34,6 +33,22 @@ do
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print ("$tool".__version__)"
 done
 
+# scanpy environment
+for tool in scanpy scvelo
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scanpy python -c "import "$tool"; print ("$tool".__version__)"
+done
+
+# cellrank environment
+for tool in cellrank scvelo palantir
+do
+    command="python -c \"import "$tool"\""
+    echo $command
+    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh cellrank python -c "import "$tool"; print ("$tool".__version__)"
+done
+
 for tool in scanpy loompy pyscenic
 do
     command="python -c \"import "$tool"\""
@@ -41,7 +56,7 @@ do
     docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic python -c "import "$tool"; print ("$tool".__version__)"
 done
 docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic pyscenic
-docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic scenicplus
+docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenicplus scenicplus
 
 for tool in squidpy
 do
@@ -131,6 +146,11 @@ done
 
 echo "STELLAR"
 docker run -it --rm rnakato/shortcake_full:$tag run_env.sh stellar python /opt/stellar/STELLAR_run.py
+
+# SATURN (not pip-installed as an importable package; this only confirms the
+# GPU torch stack built for it imports correctly)
+echo "SATURN"
+docker run -it --rm --gpus all rnakato/shortcake_full:$tag run_env.sh saturn python -c "import torch; print(torch.__version__)"
 
 for tool in scvi scgen scmomat unitvelo
 do

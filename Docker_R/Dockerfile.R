@@ -229,7 +229,7 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \
-    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && printf '#!/bin/sh\n. /entrypoint.sh\nexec "$@"\n' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
 ENV PATH=$PATH:/opt:/opt/scripts:/opt/SCAFE/scripts:

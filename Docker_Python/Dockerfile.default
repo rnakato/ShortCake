@@ -63,7 +63,7 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && micromamba run -n ikarus-novosparc python -m ipykernel install --name=ikarus-novosparc \
     && micromamba run -n ikarus-novosparc jupyter kernelspec list \
 # cellphoneDB
-    && micromamba create -n cellphonedb python=3.8 ipykernel==6.25.0 nbconvert==5.6.1 -c defaults \
+    && micromamba create -y -n cellphonedb python=3.8 ipykernel==6.25.0 nbconvert==5.6.1 -c defaults \
     && micromamba run -n cellphonedb pip install --no-cache-dir cellphonedb==5.0.0 session-info \
 #    && micromamba run -n cellphonedb cellphonedb database download \
     && micromamba run -n cellphonedb python -m ipykernel install --name=cellphonedb \
@@ -100,7 +100,7 @@ RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/b
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \
-    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && printf '#!/bin/sh\n. /entrypoint.sh\nexec "$@"\n' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
 ENTRYPOINT ["/entrypoint.sh"]

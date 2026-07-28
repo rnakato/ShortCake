@@ -88,9 +88,6 @@ For more information about Docker, see [the original website](https://docs.docke
 
 You can build the apptainer file (.sif) of ShortCake with this command:
 
-    # If you use apptainer
-    apptainer build -F shortcake.sif docker://rnakato/shortcake    
-    # If you use apptainer
     apptainer build -F shortcake.sif docker://rnakato/shortcake
 
 Instead, you can download the apptainer image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0) (We use apptainer version 1.4.2).
@@ -142,7 +139,6 @@ Note that the `base` environment does not include any tools other than Jupyter n
 `shortcake_default` is the default environment with Python3.10 and contains vairous tools as below:
 
 - harmonypy
-- anndata2ri
 - autogenes
 - bbknn
 - cellmap
@@ -182,7 +178,7 @@ We recommend using Rstudio server as follows:
 
     # Docker
     docker run -it -p 8787:8787 --rm rnakato/shortcake_light:3.5.0 rserver.sh 8787
-    # Singularity
+    # Apptainer
     apptainer exec shortcake.sif rserver.sh 8787
 
 `8787` is the port number, which you can change if necessary.
@@ -244,7 +240,7 @@ Then build packages:
     # build shortcake_seurat only
     docker compose -f compose.yaml build seurat
     # build shortcake_r only
-    ocker compose -f compose.yaml build r
+    docker compose -f compose.yaml build r
     
 ## 5.3 Build other flavors
 

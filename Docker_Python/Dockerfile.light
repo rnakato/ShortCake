@@ -68,8 +68,6 @@ RUN micromamba create -y -n scenic python=3.10 nbconvert ipykernel numpy=1.23.5 
     && jupyter kernelspec list \
     && /opt/scripts/verify_python_env.sh scenic pyscenic 
     # SCENIC+
-#RUN micromamba create -y -n scenicplus python=3.11.8 pip wheel "poetry<2" setuptools=80.10.2 \
-#        nbconvert ipykernel bedtools pybedtools cython python-igraph multicore-tsne ipywidgets  \
 COPY scenicplus-1.0a2.tar.gz scenicplus-1.0a2.tar.gz
 RUN tar zxvf scenicplus-1.0a2.tar.gz \
     && cd scenicplus-1.0a2 \
@@ -81,22 +79,12 @@ RUN tar zxvf scenicplus-1.0a2.tar.gz \
     && /opt/scripts/verify_python_env.sh scenicplus scenicplus \
     && micromamba clean --all --yes \
     && rm -rf /opt/scenicplus-1.0a2 /opt/scenicplus-1.0a2.tar.gz
-#    && micromamba create -y -n scenicplus python=3.11.8 pip nbconvert ipykernel pybedtools  \
-#        -c conda-forge -c bioconda -c defaults \
-#    && git clone https://github.com/aertslab/scenicplus \
-#    && cd scenicplus \
-#    && micromamba run -n scenicplus pip install --no-deps . \
-#    && pip install -r requirements.txt --no-deps \
-#    && micromamba run -n scenicplus python -m ipykernel install --name=scenicplus \
-#    && jupyter kernelspec list \
-#    && /opt/scripts/verify_python_env.sh scenicplus scenicplus \
-#    && micromamba clean --all --yes
 
 ### Final setting
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \
-    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && printf '#!/bin/sh\n. /entrypoint.sh\nexec "$@"\n' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
 ENV LD_LIBRARY_PATH=/opt/micromamba/envs/shortcake_default/lib:$LD_LIBRARY_PATH
