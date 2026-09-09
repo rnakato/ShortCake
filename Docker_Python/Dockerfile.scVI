@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM rnakato/shortcake_light:3.5.0
+FROM rnakato/shortcake_light:4.0.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -8,6 +8,7 @@ SHELL ["/bin/bash", "-c"]
 
 # scVI, scGen, UnitVelo, doubletdetection (scGen and UnitVelo use scVI internally)
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    --mount=type=bind,source=verify_python_env.sh,target=/tmp/verify_python_env.sh \
     set -euo pipefail; \
     micromamba create -y -n scvi-scgen-scmomat-unitvelo python=3.9 nbconvert==6.5.4 ipykernel==6.25.0 tbb==2021.8.0 -c defaults \
     && micromamba install -n scvi-scgen-scmomat-unitvelo pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=11.8 -c pytorch -c nvidia -c defaults \
@@ -15,9 +16,14 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir "scvi-tools[tutorials]==1.1.2" \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir doubletdetection \
     && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir anndata==0.10.8 \
-    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir git+https://github.com/theislab/scgen.git unitvelo==0.2.5.2 scmomat==0.2.2 session-info \
+# scgen はタグではなくコミットで固定する。upstream の最終タグ v2.1.0 は 2022-04 のもので、
+# その版は from scvi._compat import Literal を使っており scvi-tools 1.1.2 では import できない。
+# 下の d79e1f04 は default ブランチの HEAD (2023-10) で、バージョンは 2.1.1、typing.Literal に修正済み。
+# 3.5.0 のイメージもリビジョン無指定でこのコミットを拾っていた。
+    && micromamba run -n scvi-scgen-scmomat-unitvelo pip install --no-cache-dir git+https://github.com/theislab/scgen.git@d79e1f04233c30f9a4eb5b8d57718127909807d7 unitvelo==0.2.5.2 scmomat==0.2.2 session-info \
     && micromamba run -n scvi-scgen-scmomat-unitvelo python -m ipykernel install --name=scvi-scgen-scmomat-unitvelo \
-    && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list
+    && micromamba run -n scvi-scgen-scmomat-unitvelo jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh scvi-scgen-scmomat-unitvelo scvi scgen scmomat unitvelo
 
 ### Final setting
 RUN micromamba clean --all --yes && pip cache purge

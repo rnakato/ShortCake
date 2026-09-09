@@ -1,2 +1,6 @@
 build.sh
 log
+.env
+*.log
+tutorial_test_logs/
+micromamba/*.old

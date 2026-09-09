@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM rnakato/r_python_gpu:2026.03.2
+#FROM rnakato/r_python_gpu:2026.03.2
+FROM rnakato/r_python_gpu_24.04:2026.09
 LABEL maintainer "Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -9,6 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+    libfftw3-dev \
     libgmp-dev \
     libglpk-dev \
     && apt-get clean \
@@ -18,25 +20,31 @@ ENV Ncpus 16
 COPY SeuratData SeuratData
 COPY N2R_1.0.4.tar.gz N2R_1.0.4.tar.gz
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    --mount=type=bind,source=verify_r_packages.R,target=/tmp/verify_r_packages.R \
     set -euo pipefail; \
-    R -e "install.packages(c('Seurat','BPCells', 'presto', 'glmGamPoi'))" \
-    && R -e "remotes::install_github('satijalab/seurat-data', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/azimuth', quiet = TRUE)" \
-    && R -e "remotes::install_github('satijalab/seurat-wrappers', quiet = TRUE)" \
-    && R -e "remotes::install_github('mojaveazure/seurat-disk')" \
+    R -e "install.packages('Seurat')" \
+    && R -e "remotes::install_github(c('bnprks/BPCells/r@v0.3.1', 'immunogenomics/presto@v1.1.0'))" \
+    && R -e "BiocManager::install('glmGamPoi')" \
+    && R -e "remotes::install_github('satijalab/seurat-data@v0.2.1')" \
+    && R -e "remotes::install_github('satijalab/azimuth@ad5929686e005ae91d8452187a3a1d8c0563fdd5')" \
+    && R -e "install.packages('R.utils')" \
+    && R -e "remotes::install_github('satijalab/seurat-wrappers@8df83435cf10ca76f28ddfc658ad3f6bec61824c')" \
+    && R -e "remotes::install_github('mojaveazure/seurat-disk@877d4e18ab38c686f5db54f8cd290274ccdbe295')" \
 # Signac
     && R -e "install.packages('Signac')" \
 # Others
-    && R -e "install.packages(c('bit64','sleepwalk','scBio','qqconf','metap','RcppSpdlog'))" \
-    && R -e "BiocManager::install(c('ggbio', 'scry','glmGamPoi'))" \
+    && R -e "install.packages(c('bit64','sleepwalk','qqconf','metap','RcppSpdlog'))" \
+    && R -e "BiocManager::install('limma')" \
+    && R -e "install.packages('scBio'); loadNamespace('scBio')" \
+    && R -e "BiocManager::install(c('ggbio', 'scry'))" \
 # Wrapper (LIGER, Harmony, conos, CoGAPS, GLM-PCA, fastMNN (batchelor), ALRA (rsvd), Nebulosa, CIPR, miQC, tricycle)
     && R CMD INSTALL N2R_1.0.4.tar.gz \
     && rm N2R_1.0.4.tar.gz \
-    && R -e "install.packages(c('glmpca','harmony','rliger','rsvd'))" \
+    && R -e "install.packages(c('glmpca','harmony','rsvd'))" \
     && R -e "BiocManager::install(c('batchelor', 'CoGAPS', 'Nebulosa', 'tricycle'))" \
-    && R -e "remotes::install_github('kharchenkolab/conos')" \
-    && R -e "remotes::install_github('atakanekiz/CIPR-Package')" \
-    && R -e "remotes::install_github('greenelab/miQC')" \
+    && R -e "remotes::install_github('kharchenkolab/conos@v1.5.4')" \
+    && R -e "remotes::install_github('atakanekiz/CIPR-Package@v0.1.0')" \
+    && R -e "remotes::install_github('greenelab/miQC@a31358e533dc0eccab31f08acaae70eba531b0fd')" \
 # SeuratData
     && R -e "install.packages('SeuratData/bmcite.SeuratData_0.3.0.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/pbmcMultiome.SeuratData_0.1.2.tar.gz', repos = NULL, type = 'source')" \
@@ -51,7 +59,8 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && R -e "install.packages('SeuratData/panc8.SeuratData_3.0.2.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/thp1.eccite.SeuratData_3.1.5.tar.gz', repos = NULL, type = 'source')" \
     && R -e "install.packages('SeuratData/pbmc3k.SeuratData_3.1.4.tar.gz', repos = NULL, type = 'source')" \
-    && rm -rf SeuratData
+    && rm -rf SeuratData \
+    && Rscript /tmp/verify_r_packages.R Seurat BPCells presto glmGamPoi SeuratData Azimuth SeuratWrappers SeuratDisk Signac bit64 sleepwalk qqconf metap RcppSpdlog scBio ggbio scry N2R glmpca harmony rsvd batchelor CoGAPS Nebulosa tricycle conos CIPR miQC
 
 
 COPY entrypoint.sh /entrypoint.sh

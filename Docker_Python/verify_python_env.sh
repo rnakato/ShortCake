@@ -38,12 +38,42 @@ filter_known_exceptions() {
         "$outfile" > "${outfile}.tmp" || true
       mv "${outfile}.tmp" "$outfile"
       ;;
+    dictys)
+      # Known issues (both come from conda-provided packages whose pip metadata cannot be satisfied):
+      #   - macs2 / pydnase declare a runtime requirement on cython, which is only a build dependency.
+      #   - pydnase pins matplotlib<2.0.0 (a 2015 constraint) that nothing in this stack can satisfy.
+      # Remove only these exact warnings. Everything else still fails.
+      grep -Ev '^(macs2|pydnase)[[:space:]]+[^ ]+[[:space:]]+requires cython, which is not installed\.$' \
+        "$outfile" > "${outfile}.tmp" || true
+      mv "${outfile}.tmp" "$outfile"
+      grep -Ev '^pydnase[[:space:]]+[^ ]+[[:space:]]+has requirement matplotlib<2\.0\.0, but you have matplotlib[[:space:]].*\.$' \
+        "$outfile" > "${outfile}.tmp" || true
+      mv "${outfile}.tmp" "$outfile"
+      ;;
+    celloracle)
+      # Known issue:
+      # xgboost comes from conda, and its wheel metadata carries a platform tag that pip
+      # considers incompatible, so `pip check` flags it even though the package is fully
+      # functional (DMatrix / train / predict all work). The 3.5.0 image reports the same line.
+      # Remove only this exact warning. Everything else still fails.
+      grep -Ev '^xgboost[[:space:]]+[^ ]+[[:space:]]+is not supported on this platform$' \
+        "$outfile" > "${outfile}.tmp" || true
+      mv "${outfile}.tmp" "$outfile"
+      ;;
   esac
 }
 
 should_skip_pip_check() {
   case "$1" in
     scenicplus)
+      return 0
+      ;;
+    rapids_singlecell)
+      # The RAPIDS stack is installed from conda, but its packages declare pip-style requirements
+      # (cupy-cuda13x, libcugraph, libcudf, cuda-toolkit, ...) that conda satisfies under different
+      # names, so `pip check` reports ~30 unsatisfiable lines. The exact set changes with every RAPIDS
+      # release, which makes line-by-line filtering too brittle to maintain; skip the check for this
+      # environment only. The import smoke test below still runs and does not need a GPU.
       return 0
       ;;
     *)
