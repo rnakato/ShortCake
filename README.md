@@ -1,5 +1,4 @@
-
-# <img src = "img/ShortCakeLogo.jpg" width = 120ptx> ShortCake🍰 
+# <img src = "img/ShortCakeLogo.jpg" width = 120ptx> ShortCake🍰
 
 ShortCake is an integrated platform for efficient and reproducible single-cell analysis using [the Docker system](https://docs.docker.com/).
 
@@ -7,32 +6,34 @@ ShortCake is an integrated platform for efficient and reproducible single-cell a
 
 See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 
-## 1. Included tools (v3.5.0)
+## 1. Included tools (v4.0.0)
 
 (The tools that cannot be installed due to unresolved errors are crossed out.)
 
-- **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/), [SCAFE](https://github.com/chung-lab/SCAFE), [rapids_singlecell](https://github.com/scverse/rapids_singlecell)
-- **Quality check**: [DropletQC](https://github.com/powellgenomicslab/DropletQC)
+- **Pipeline**: [Seurat](https://satijalab.org/seurat/) (and [Seurat wrappers](https://github.com/satijalab/seurat-wrappers)), [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), [Scanpy](https://scanpy.readthedocs.io/en/stable/), [scvi-tools](https://scvi-tools.org/) (previous scVI), [Pagoda2](https://github.com/kharchenkolab/pagoda2), [kallisto-bustools](https://www.kallistobus.tools/), [SCAFE](https://github.com/chung-lab/SCAFE), [rapids_singlecell](https://github.com/scverse/rapids_singlecell), [SCP](https://github.com/zhanghao-njmu/SCP), [BPCells](https://github.com/bnprks/BPCells), [BUSpaRse](https://github.com/BUStools/BUSpaRse)
+- **Quality check**: [DropletQC](https://github.com/powellgenomicslab/DropletQC), [miQC](https://bioconductor.org/packages/release/bioc/html/miQC.html)
 - **Doublet finding**: [Scrublet](https://github.com/swolock/scrublet), [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder)
-- **Batch correction and data integration**: [Harmony](https://portals.broadinstitute.org/harmony/articles/quickstart.html), [scmap](https://www.sanger.ac.uk/tool/scmap/), [scBio](https://bioinformaticshome.com/db/tool/scBio), [SingleCellNet](https://github.com/pcahan1/singleCellNet), [scib](https://github.com/theislab/scib), [scanorama](https://github.com/brianhie/scanorama), [kBET](https://github.com/theislab/kBET)
-- **Clustering**: [SC3](https://bioconductor.org/packages/release/bioc/html/SC3.html), [metacell](https://tanaylab.github.io/metacell/), [SCCAF](https://github.com/SCCAF/sccaf), [Constclust](https://constclust.readthedocs.io/en/latest/), [bigSCale2](https://github.com/iaconogi/bigSCale2), [scTriangulate](https://github.com/frankligy/scTriangulate), [miloR](https://github.com/MarioniLab/miloR), [GEDI](https://github.com/csglab/GEDI)
-- **Cell-type annotation**: [RCA](https://github.com/prabhakarlab/RCAv2), [garnett](https://cole-trapnell-lab.github.io/garnett/), [scCatch](https://github.com/ZJUFanLab/scCATCH), [SingleR](https://github.com/dviraran/SingleR), [CellTypist](https://github.com/Teichlab/celltypist), [ikarus](https://github.com/BIMSBbioinfo/ikarus)
-- **Trajectory (pseudo-time) analysis**: [Monocle3](https://cole-trapnell-lab.github.io/monocle3/), [slingshot](https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html), [Palantir](https://github.com/dpeerlab/Palantir), [PHATE](https://github.com/KrishnaswamyLab/PHATE), ~~[FROWMAP](https://github.com/zunderlab/FLOWMAP/)~~
+- **Batch correction and data integration**: [Harmony](https://portals.broadinstitute.org/harmony/articles/quickstart.html), [scmap](https://www.sanger.ac.uk/tool/scmap/), [scBio](https://bioinformaticshome.com/db/tool/scBio), [SingleCellNet](https://github.com/pcahan1/singleCellNet), [scib](https://github.com/theislab/scib), [scanorama](https://github.com/brianhie/scanorama), [kBET](https://github.com/theislab/kBET), [batchelor](https://bioconductor.org/packages/release/bioc/html/batchelor.html), [conos](https://github.com/kharchenkolab/conos)
+- **Clustering**: [SC3](https://bioconductor.org/packages/release/bioc/html/SC3.html), [Constclust](https://constclust.readthedocs.io/en/latest/), [bigSCale2](https://github.com/iaconogi/bigSCale2), [scTriangulate](https://github.com/frankligy/scTriangulate), [miloR](https://github.com/MarioniLab/miloR), [GEDI](https://github.com/csglab/GEDI), [metacells](https://github.com/tanaylab/metacells), [MUDAN](https://github.com/JEFworks/MUDAN)
+- **Cell-type annotation**: [RCA](https://github.com/prabhakarlab/RCAv2), [garnett](https://cole-trapnell-lab.github.io/garnett/), [scCatch](https://github.com/ZJUFanLab/scCATCH), [SingleR](https://github.com/dviraran/SingleR), [CellTypist](https://github.com/Teichlab/celltypist), [ikarus](https://github.com/BIMSBbioinfo/ikarus), [Azimuth](https://github.com/satijalab/azimuth), [CIPR](https://github.com/atakanekiz/CIPR-Package)
+- **Trajectory (pseudo-time) analysis**: [Monocle3](https://cole-trapnell-lab.github.io/monocle3/), [slingshot](https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html), [Palantir](https://github.com/dpeerlab/Palantir), [PHATE](https://github.com/KrishnaswamyLab/PHATE), [GEMLI](https://github.com/UPSUTER/GEMLI), ~~[FLOWMAP](https://github.com/zunderlab/FLOWMAP/)~~
 - **RNA velocity**: [velocyto](http://velocyto.org/), [scVelo](https://scvelo.readthedocs.io/en/stable/), [CellRank](https://cellrank.readthedocs.io/en/stable/), [Dynamo](https://dynamo-release.readthedocs.io/en/latest/), [MultiVelo](https://github.com/welch-lab/MultiVelo), [UniTVelo](https://github.com/StatBiomed/UniTVelo)
 - **Trajectory alignment**: [cellAlign](https://github.com/shenorrLabTRDF/cellAlign), [Genes2Genes](https://teichlab.github.io/Genes2Genes/)
 - **Spatial transcriptome**: [STELLAR](http://snap.stanford.edu/stellar/), [BANKSY](https://github.com/prabhakarlab/Banksy), [Squidpy](https://squidpy.readthedocs.io/), [singleCellHaystack](https://github.com/alexisvdb/singleCellHaystack)
 - **Cell-cycle prediction**: [tricycle](https://github.com/hansenlab/tricycle)
-- **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [SCENIC+](https://github.com/aertslab/scenicplus), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/), [EEISP](https://github.com/nakatolab/EEISP)
-- **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://earmingol.github.io/cell2cell/), [CellChat](http://www.cellchat.org/), [Scriabin](https://github.com/BlishLab/scriabin)
+- **Gene network**: WGCNA, [SCENIC](https://scenic.aertslab.org/) (pySCENIC), [SCENIC+](https://github.com/aertslab/scenicplus), [CellOracle](https://morris-lab.github.io/CellOracle.documentation/), [EEISP](https://github.com/nakatolab/EEISP), [Dictys](https://github.com/pinellolab/dictys)
+- **Cell-cell interaction**: [CellPhoneDB](https://www.cellphonedb.org/), [SingleCellSignalR](https://www.bioconductor.org/packages/release/bioc/html/SingleCellSignalR.html), [scTensor](https://www.bioconductor.org/packages/release/bioc/html/scTensor.html), [cell2cell](https://earmingol.github.io/cell2cell/), [CellChat](http://www.cellchat.org/), [Scriabin](https://github.com/BlishLab/scriabin), [LIANA](https://github.com/saezlab/liana)
 - **Data imputation**: [MAGIC](https://github.com/KrishnaswamyLab/MAGIC), [SAVER](https://github.com/mohuangx/SAVER), [scImpute](https://github.com/Vivianstats/scImpute), [SCRABBLE](https://github.com/tanlabcode/SCRABBLE), [RECODE](https://yusuke-imoto-lab.github.io/RECODE/)
-- **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [scAI](https://github.com/sqjin/scAI), [MOFA2](https://biofam.github.io/MOFA2/), [scMoMaT](https://github.com/PeterZZQ/scMoMaT), [Mowgli](https://github.com/cantinilab/mowgli), [MARIO](https://github.com/shuxiaoc/mario-py), [SATURN](https://github.com/snap-stanford/SATURN), [Moscot](https://moscot.readthedocs.io/en/latest/), [SCOT](https://rsinghlab.github.io/SCOT/), [DIRECT-NET](https://github.com/zhanglhbioinfor/DIRECT-NET)
-- **Visualization**: [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/), [scplotter](https://pwwang.github.io/scplotter/index.html), [Sleepwalk](https://anders-biostat.github.io/sleepwalk/)
-- **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html), [BayesPrism](https://github.com/Danko-Lab/BayesPrism), [InstaPrism](https://github.com/humengying0907/InstaPrism), [AutoGeneS](https://github.com/theislab/AutoGeneS), [scranPY](https://github.com/sfortma2/scranPY)
+- **Multi-modal analysis**: [LIGER](https://github.com/welch-lab/liger), [MOFA2](https://biofam.github.io/MOFA2/), [scMoMaT](https://github.com/PeterZZQ/scMoMaT), [Mowgli](https://github.com/cantinilab/mowgli), [MARIO](https://github.com/shuxiaoc/mario-py), [SATURN](https://github.com/snap-stanford/SATURN) (dependencies only, see below), [Moscot](https://moscot.readthedocs.io/en/latest/), [DIRECT-NET](https://github.com/zhanglhbioinfor/DIRECT-NET)
+- **Visualization**: [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/), [scplotter](https://pwwang.github.io/scplotter/index.html), [Sleepwalk](https://anders-biostat.github.io/sleepwalk/), [Nebulosa](https://bioconductor.org/packages/release/bioc/html/Nebulosa.html), [ggbio](https://bioconductor.org/packages/release/bioc/html/ggbio.html)
+- **Bulk deconvolution**: [SCDC](https://meichendong.github.io/SCDC/articles/SCDC.html), [MuSiC](https://xuranw.github.io/MuSiC/articles/MuSiC.html), [BayesPrism](https://github.com/Danko-Lab/BayesPrism), [InstaPrism](https://github.com/humengying0907/InstaPrism), [AutoGeneS](https://github.com/theislab/AutoGeneS), [scranPY](https://github.com/sfortma2/scranPY), [EpiSCORE](https://github.com/aet21/EpiSCORE)
 - **Gene perturbation prediction**: [GEARS](https://github.com/snap-stanford/GEARS)
 - **Simulation**: [Splatter](https://github.com/Oshlack/splatter), [dyngen](https://github.com/dynverse/dyngen), [scGen](https://github.com/theislab/scgen), [scReadSim](https://github.com/JSB-UCLA/scReadSim), [scDesign3](https://github.com/SONGDONGYUAN1994/scDesign3)
-- **scATAC-seq**: [Cicero](https://cole-trapnell-lab.github.io/cicero-release/docs_m3/), [chromVAR](https://bioconductor.org/packages/release/bioc/html/chromVAR.html), [ArchR](https://www.archrproject.com/), [Signac](https://stuartlab.org/signac/index.html), [cisTopic](https://github.com/aertslab/cisTopic), [EpiScanpy](https://episcanpy.readthedocs.io/en/latest/), [SCENT](https://github.com/immunogenomics/SCENT)
+- **scATAC-seq**: [Cicero](https://cole-trapnell-lab.github.io/cicero-release/docs_m3/), [chromVAR](https://bioconductor.org/packages/release/bioc/html/chromVAR.html), [ArchR](https://www.archrproject.com/), [Signac](https://stuartlab.org/signac/index.html), [EpiScanpy](https://episcanpy.readthedocs.io/en/latest/), [SCENT](https://github.com/immunogenomics/SCENT)
 - **Immune receptor analysis**: [scRepertoire](https://www.bioconductor.org/packages/release/bioc/html/scRepertoire.html)
-- **Others**: [SignatuR](https://github.com/carmonalab/SignatuR), [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html)
+- **Others**: [SignatuR](https://github.com/carmonalab/SignatuR), [decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html), [presto](https://github.com/immunogenomics/presto), [memento](https://github.com/yelabucsf/scrna-parameter-estimation), [CoGAPS](https://bioconductor.org/packages/release/bioc/html/CoGAPS.html), [glmGamPoi](https://bioconductor.org/packages/release/bioc/html/glmGamPoi.html), [glmpca](https://cran.r-project.org/package=glmpca), [scry](https://bioconductor.org/packages/release/bioc/html/scry.html)
+
+For [SATURN](https://github.com/snap-stanford/SATURN), the `saturn` environment provides its dependencies (torch 1.10.2+cu113, torchvision, pytorch-lightning, scanpy) but not SATURN itself: the repository is cloned during the build only to resolve `requirements.txt` and is then removed. Clone it yourself and run it inside that environment.
 
 
 - **Database (genome)**: BSgenome.Hsapiens.UCSC.hg19, BSgenome.Hsapiens.UCSC.hg38, BSgenome.Mmusculus.UCSC.mm10, BSgenome.Scerevisiae.UCSC.sacCer3, BSgenome.Dmelanogaster.UCSC.dm6
@@ -40,9 +41,9 @@ See [Changelog](https://github.com/rnakato/ShortCake/blob/master/ChangeLog.md)
 - **Database (motif)**: JASPAR2016, JASPAR2018, JASPAR2020, JASPAR2022, JASPAR2024
 - **SeuratData**: ifnb_3.1.0, panc8_3.0.2, pbmcsca_3.0.0, pbmc3k_3.1.4, celegans.embryo_0.1.0, cbmc_3.1.4, hcabm40k_3.0.0, thp1.eccite_3.1.5, stxBrain_0.1.1, stxKidney_0.1.0, bmcite_0.3.0, pbmcMultiome_0.1.2, ssHippo_3.1.4
 
-## 2. (new!) Flavors of ShortCake
+## 2. Flavors of ShortCake
 
-The ShortCake Docker image is large, at about 100 GB. 
+The ShortCake Docker image is large, at about 100 GB.
 
 Since ShortCake version 3, we have created several flavors to reduce the size of the image and make it easier to use, as shown below.
 
@@ -54,9 +55,9 @@ Since ShortCake version 3, we have created several flavors to reduce the size of
 - **shortcake_rapidsc**: Installs the shortcake_rapidsc environment on top of `shortcake_light`.
 - **shortcake_full**: The full image with all tools installed.
 
-For example, you can use `shortcake_light` version 3.5.0 with this command:
+For example, you can use `shortcake_light` version 4.0.0 with this command:
 
-    docker run --rm -p 8888:8888 -it rnakato/shortcake_light:3.5.0 jupyternotebook.sh
+    docker run --rm -p 8888:8888 -it rnakato/shortcake_light:4.0.0 jupyternotebook.sh
 
 ## 3. Run
 
@@ -72,7 +73,7 @@ Then you can run ShortCake with the command:
 
     # Container login
     docker run [--gpus all] --rm -it rnakato/shortcake /bin/bash
-    
+
     # Execute jupyter notebook (see 'mnt/' directory in the notebook )
     docker run [--gpus all] --rm -p 8888:8888 -v (your directory):/work/mnt rnakato/shortcake jupyternotebook.sh
 
@@ -88,9 +89,6 @@ For more information about Docker, see [the original website](https://docs.docke
 
 You can build the apptainer file (.sif) of ShortCake with this command:
 
-    # If you use apptainer
-    apptainer build -F shortcake.sif docker://rnakato/shortcake    
-    # If you use apptainer
     apptainer build -F shortcake.sif docker://rnakato/shortcake
 
 Instead, you can download the apptainer image of ShortCake from our [Dropbox](https://www.dropbox.com/scl/fo/lptb68dirr9wcncy77wsv/h?rlkey=whhcaxuvxd1cz4fqoeyzy63bf&dl=0) (We use apptainer version 1.4.2).
@@ -99,7 +97,7 @@ Then you can run ShortCake with the command:
 
     # Execute Jupyter Notebook (Python and R)
     apptainer exec [--nv] shortcake.sif jupyternotebook.sh
-    
+
     # Execute RStudio Server
     apptainer exec [--nv] shortcake.sif rserver.sh <port>
 
@@ -115,7 +113,7 @@ The `--nv` option is needed if you use a GPU.
 To avoid version conflicts between tools, we created several Python environments with [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
 You can see the list of environments installed in the image with `micromamba env list` command as follows:
 
-    $ docker run -it --rm rnakato/shortcake:3.5.0 micromamba env list
+    $ docker run -it --rm rnakato/shortcake:4.0.0 micromamba env list
         Name                           Active  Path
         ─────────────────────────────────────────────────────────────────────────────────────────────
           base                           *       /opt/micromamba
@@ -129,6 +127,7 @@ You can see the list of environments installed in the image with `micromamba env
           genes2genes-mowgli                     /opt/micromamba/envs/genes2genes-mowgli
           ikarus-novosparc                       /opt/micromamba/envs/ikarus-novosparc
           mario                                  /opt/micromamba/envs/mario
+          metacells                              /opt/micromamba/envs/metacells
           moscot                                 /opt/micromamba/envs/moscot
           scanpy                                 /opt/micromamba/envs/scanpy
           scenic                                 /opt/micromamba/envs/scenic
@@ -142,7 +141,6 @@ Note that the `base` environment does not include any tools other than Jupyter n
 `shortcake_default` is the default environment with Python3.10 and contains vairous tools as below:
 
 - harmonypy
-- anndata2ri
 - autogenes
 - bbknn
 - cellmap
@@ -177,12 +175,12 @@ In addition, the R command and all R tools are usable in the ``R`` kernel.
 
 ### 4.3 Rstudio
 
-ShortCake also provides the Rstudio environment. 
+ShortCake also provides the Rstudio environment.
 We recommend using Rstudio server as follows:
 
     # Docker
-    docker run -it -p 8787:8787 --rm rnakato/shortcake_light:3.5.0 rserver.sh 8787
-    # Singularity
+    docker run -it -p 8787:8787 --rm rnakato/shortcake_light:4.0.0 rserver.sh 8787
+    # Apptainer
     apptainer exec shortcake.sif rserver.sh 8787
 
 `8787` is the port number, which you can change if necessary.
@@ -196,8 +194,8 @@ Note that Rstudio requires a GUI (Graphical User Interface) environment, so you 
 
 ### 4.4 Command line
 
-Several single-cell tools provide command-line tools. 
-For example, [velocyto](https://velocyto.org/) provides the command ``velocyto run10x`` to generate a .loom file. 
+Several single-cell tools provide command-line tools.
+For example, [velocyto](https://velocyto.org/) provides the command ``velocyto run10x`` to generate a .loom file.
 It can be executed as follows:
 
     apptainer exec shortcake.sif velocyto run10x -m repeat_msk.gtf <10Xdir> <gtf>
@@ -205,11 +203,11 @@ It can be executed as follows:
 To use a virtual environment from the command line, activate it with the ``run_env.sh`` script:
 
     apptainer exec shortcake.sif run_env.sh <environment> <command>
-    
+
     # Example to activate "celloracle" environment
     apptainer exec shortcake.sif run_env.sh celloracle python -c "import celloracle"
 
-It is also possible to log directly into the ShortCake container and work inside it using the command-line interface. 
+It is also possible to log directly into the ShortCake container and work inside it using the command-line interface.
 
     docker run --rm -p 8888:8888 rnakato/shortcake /bin/bash
 
@@ -244,8 +242,8 @@ Then build packages:
     # build shortcake_seurat only
     docker compose -f compose.yaml build seurat
     # build shortcake_r only
-    ocker compose -f compose.yaml build r
-    
+    docker compose -f compose.yaml build r
+
 ## 5.3 Build other flavors
 
 Move to 'Python' directory:

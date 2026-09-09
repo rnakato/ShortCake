@@ -1,27 +1,55 @@
-tag=3.5.0
+#!/usr/bin/env bash
+set -u
+
+tag=4.0.0
+
+TOTAL=0
+FAILURES=0
+FAILED_LABELS=()
+
+check() {
+    local label="$1"
+    shift
+    TOTAL=$((TOTAL + 1))
+    echo
+    echo "================================================================"
+    echo "[$TOTAL] $label"
+    echo "================================================================"
+    echo "+ $*"
+    if "$@"; then
+        echo "OK: $label"
+    else
+        local status=$?
+        echo "FAILED($status): $label" >&2
+        FAILURES=$((FAILURES + 1))
+        FAILED_LABELS+=("$label")
+    fi
+}
 
 toollist="
+    anndata \
     autogenes \
     bbknn \
     cellmap \
     celltypist \
-    cellrank \
     constclust \
     cython \
     dask \
     doubletdetection \
     harmonypy \
     llvmlite \
-    louvain \
     leidenalg \
     magic \
     memento \
     multivelo \
     numba \
     optuna \
+    phate \
     phenograph \
-    scvelo \
+    scanorama \
     scanpy \
+    scib \
+    scranPY \
     screcode \
     scrublet \
     snapatac2 \
@@ -29,124 +57,125 @@ toollist="
 
 for tool in $toollist
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print ("$tool".__version__)"
+    check "shortcake_default: import $tool" docker run --rm rnakato/shortcake_light:$tag run_env.sh shortcake_default python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-for tool in scanpy loompy pyscenic
+# scanpy environment
+for tool in scanpy scvelo
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic python -c "import "$tool"; print ("$tool".__version__)"
+    check "scanpy env: import $tool" docker run --rm rnakato/shortcake_light:$tag run_env.sh scanpy python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
-docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic pyscenic
-docker run -it --rm rnakato/shortcake_light:$tag run_env.sh scenic scenicplus
+
+# cellrank environment
+for tool in cellrank scvelo palantir
+do
+    check "cellrank env: import $tool" docker run --rm rnakato/shortcake_light:$tag run_env.sh cellrank python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
+done
+
+for tool in loompy pyscenic
+do
+    check "scenic env: import $tool" docker run --rm rnakato/shortcake_light:$tag run_env.sh scenic python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
+done
+check "scenic cli: pyscenic" docker run --rm rnakato/shortcake_light:$tag run_env.sh scenic pyscenic
+check "scenicplus cli: scenicplus" docker run --rm rnakato/shortcake_light:$tag run_env.sh scenicplus scenicplus
+check "scenicplus env: import scenicplus" docker run --rm rnakato/shortcake_light:$tag run_env.sh scenicplus python -c "import scenicplus; print (getattr(scenicplus, '__version__', 'no __version__'))"
 
 for tool in squidpy
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake_light:$tag run_env.sh squidpy python -c "import "$tool"; print ("$tool".__version__)"
+    check "squidpy env: import $tool" docker run --rm rnakato/shortcake_light:$tag run_env.sh squidpy python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
-
-#exit
 
 # default
 toollist="
     celloracle \
     cellphonedb \
     episcanpy \
-    mario"
+    mario \
+    metacells"
 for tool in $toollist
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import "$tool"; print ("$tool".__version__)"
+    check "$tool env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh $tool python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
 for tool in genes2genes mowgli
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import "$tool"; print ("$tool".__version__)"
+    check "genes2genes-mowgli env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh genes2genes-mowgli python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-for tool in dynamo 
+for tool in dynamo
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh dynamo python -c "import "$tool"; print ("$tool".__version__)"
+    check "dynamo env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh dynamo python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-for tool in moscot 
+for tool in moscot
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh moscot python -c "import "$tool"; print ("$tool".__version__)"
+    check "moscot env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh moscot python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
+
 for tool in cell2cell scReadSim
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import "$tool"; print ("$tool".__version__)"
+    check "cell2cell-screadsim env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh cell2cell-screadsim python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
 for tool in decoupler liana sctriangulate
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh decoupler-liana-sctriangulate python -c "import "$tool"; print ("$tool".__version__)"
+    check "decoupler-liana-sctriangulate env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh decoupler-liana-sctriangulate python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
 for tool in ikarus novosparc
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm rnakato/shortcake:$tag run_env.sh ikarus-novosparc python -c "import "$tool"; print ("$tool".__version__)"
+    check "ikarus-novosparc env: import $tool" docker run --rm rnakato/shortcake:$tag run_env.sh ikarus-novosparc python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-echo "EEISP"
-docker run -it --rm rnakato/shortcake:$tag eeisp --version
+check "eeisp cli" docker run --rm rnakato/shortcake:$tag eeisp --version
 
-echo "SEACells"
-docker run -it --rm rnakato/shortcake:$tag run_env.sh seacells python -c "import SEACells"
-
-#exit
+check "seacells env: import SEACells" docker run --rm rnakato/shortcake:$tag run_env.sh seacells python -c "import SEACells"
 
 # Full
-# default
-#    cellrank \
-#   liana \
 toollist="
     dictys \
     gears \
     rapids_singlecell"
 for tool in $toollist
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh $tool python -c "import "$tool"; print ("$tool".__version__)"
+    check "$tool env: import $tool" docker run --rm --gpus all rnakato/shortcake_full:$tag run_env.sh $tool python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-echo "STELLAR"
-docker run -it --rm rnakato/shortcake_full:$tag run_env.sh stellar python /opt/stellar/STELLAR_run.py
+# STELLAR is a cloned repository, not an installed package, and STELLAR_run.py needs the HuBMAP
+# demo data from Dryad, which is not shipped in the image. Check that its modules and the
+# torch/torch_geometric stack they need can be imported instead.
+check "stellar modules" docker run --rm rnakato/shortcake_full:$tag run_env.sh stellar python -c "import sys; sys.path.insert(0, '/opt/stellar'); import torch, torch_geometric; from STELLAR import STELLAR; import datasets, utils; print (torch.__version__, torch_geometric.__version__)"
+
+# SATURN (not pip-installed as an importable package; this only confirms the
+# GPU torch stack built for it imports correctly)
+check "saturn env: import torch" docker run --rm --gpus all rnakato/shortcake_full:$tag run_env.sh saturn python -c "import torch; print(getattr(torch, '__version__', 'no __version__'))"
 
 for tool in scvi scgen scmomat unitvelo
 do
-    command="python -c \"import "$tool"\""
-    echo $command
-    docker run -it --rm --gpus all rnakato/shortcake_full:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print ("$tool".__version__)"
+    check "full scvi-scgen-scmomat-unitvelo env: import $tool" docker run --rm --gpus all rnakato/shortcake_full:$tag run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-# scVI
+# scVI flavor
 for tool in scvi scgen scmomat unitvelo
 do
-    command="python -c \"import "$tool"\""
-    echo scVI  $command
-    docker run -it --rm --gpus all rnakato/shortcake_scvi:$tag  run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print ("$tool".__version__)"
+    check "scvi flavor: import $tool" docker run --rm --gpus all rnakato/shortcake_scvi:$tag run_env.sh scvi-scgen-scmomat-unitvelo python -c "import "$tool"; print (getattr("$tool", '__version__', 'no __version__'))"
 done
 
-#rapids_singlecell
-echo "rapids_singlecell rapids_singlecell"
-docker run -it --rm --gpus all rnakato/shortcake_rapidsc:$tag run_env.sh rapids_singlecell python -c "import rapids_singlecell"
+# rapidsc flavor
+check "rapidsc flavor: import rapids_singlecell" docker run --rm --gpus all rnakato/shortcake_rapidsc:$tag run_env.sh rapids_singlecell python -c "import rapids_singlecell"
+
+echo
+echo "================================================================"
+echo "Summary"
+echo "================================================================"
+echo "Total checks : $TOTAL"
+echo "Failures     : $FAILURES"
+
+if [[ "$FAILURES" -gt 0 ]]; then
+    echo
+    echo "Failed:"
+    printf '  - %s\n' "${FAILED_LABELS[@]}"
+    exit 1
+fi
+
+echo "All checks passed."

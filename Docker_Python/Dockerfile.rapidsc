@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM rnakato/shortcake_light:3.5.0
+FROM rnakato/shortcake_light:4.0.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -9,10 +9,12 @@ SHELL ["/bin/bash", "-c"]
 # rapids-singlecell
 COPY micromamba/rsc_rapids_26.02_cuda12.yml /opt/rsc_rapids_26.02_cuda12.yml
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    --mount=type=bind,source=verify_python_env.sh,target=/tmp/verify_python_env.sh \
     set -euo pipefail; \
-    micromamba create -f /opt/rsc_rapids_26.02_cuda12.yml \
+    micromamba create -y -f /opt/rsc_rapids_26.02_cuda12.yml \
     && micromamba run -n rapids_singlecell python -m ipykernel install --name=rapids_singlecell \
     && micromamba run -n rapids_singlecell jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh rapids_singlecell rapids_singlecell \
     && rm /opt/rsc_rapids_26.02_cuda12.yml
 
 ### Final setting
@@ -21,7 +23,7 @@ RUN micromamba clean --all --yes && pip cache purge
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \
-    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && printf '#!/bin/sh\n. /entrypoint.sh\nexec "$@"\n' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
 ENTRYPOINT ["/entrypoint.sh"]

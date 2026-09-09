@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM rnakato/shortcake_light:3.5.0
+FROM rnakato/shortcake_light:4.0.0
 LABEL maintainer="Ryuichiro Nakato <rnakato@iqb.u-tokyo.ac.jp>"
 
 USER root
@@ -9,10 +9,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # CellOracle
 COPY micromamba/env.CellOracle.yaml /opt/env.CellOracle.yaml
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    --mount=type=bind,source=verify_python_env.sh,target=/tmp/verify_python_env.sh \
     set -euo pipefail; \
     micromamba create -y -n celloracle -f /opt/env.CellOracle.yaml \
     && micromamba run -n celloracle python -m ipykernel install --name=celloracle \
     && micromamba run -n celloracle jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh celloracle celloracle \
     && micromamba clean --all --yes \
     && rm /opt/env.CellOracle.yaml \
 # MARIO
@@ -20,40 +22,57 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && micromamba run -n mario pip install --no-cache-dir pyMARIO==0.0.2 session-info \
     && micromamba run -n mario python -m ipykernel install --name=mario \
     && micromamba run -n mario jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh mario mario \
 # episcanpy
     && micromamba create -y -n episcanpy python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
     && micromamba run -n episcanpy pip install --no-cache-dir episcanpy==0.4.0 session-info \
     && micromamba run -n episcanpy python -m ipykernel install --name=episcanpy \
     && micromamba run -n episcanpy jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh episcanpy episcanpy \
 # SEACells
     && micromamba create -y -n seacells -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 cmake \
     && micromamba run -n seacells pip install --no-cache-dir SEACells==0.3.3 session-info \
     && micromamba run -n seacells python -m ipykernel install --name=seacells \
     && micromamba run -n seacells jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh seacells SEACells \
 # dynamo 
     && micromamba create -y -n dynamo -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 \
        setuptools==80.10.2 "matplotlib<3.6" numpy=1.26.*  \
+    # numpy と statsmodels は pip 側でも抑える必要がある。
+    #  - numpy: 上の micromamba create で 1.26 に固定していても、この pip install が numba を引く際に
+    #    numpy 2 へ上げてしまう。matplotlib 3.5.3 は numpy 1.x の C ABI 向けなので
+    #    "numpy.core.multiarray failed to import" で import dynamo が落ちる。
+    #  - statsmodels: dynamo の tools/markers.py が非推奨の置き場所
+    #    statsmodels.sandbox.stats.multicomp から multipletests を import しており、
+    #    2026-08-27 リリースの statsmodels 0.15.0 でこれが削除された。
+    #    最新の dynamo-release 1.5.3 も同じ import のままなので、上げても解決しない。
     && micromamba run -n dynamo pip install --no-cache-dir "dynamo-release==1.4.0" "jax<0.5" "jaxlib<0.5" \
-        rich pycairo importlib-metadata session-info \
+        rich pycairo importlib-metadata session-info "numpy<2" "statsmodels<0.15" \
     && micromamba run -n dynamo python -m ipykernel install --name=dynamo \
     && micromamba run -n dynamo jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh dynamo dynamo \
 # Moscot
     && micromamba create -y -n moscot -c defaults -c conda-forge python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 zarr \
     && micromamba run -n moscot pip install --no-cache-dir  "moscot==0.5.0" \
         rich pycairo importlib-metadata session-info setuptools==80.10.2 \
     && micromamba run -n moscot python -m ipykernel install --name=moscot \
     && micromamba run -n moscot jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh moscot moscot \
 # Genes2Genes mowgli
     && micromamba create -y -n genes2genes-mowgli python=3.9 'pandas<2.0' nbconvert==6.5.4 ipykernel==6.25.0 importlib-metadata==7.0.1 -c defaults \
     && micromamba run -n genes2genes-mowgli pip install --no-cache-dir mowgli==0.3.0 session-info \
-    && micromamba run -n genes2genes-mowgli pip install --no-cache-dir git+https://github.com/Teichlab/Genes2Genes.git \
+# Genes2Genes もタグではなくコミットで固定する。唯一のタグ v0.1.0 は 0.1.0 相当で、
+# 3.5.0 が入れていた 0.2.0 (下の 99c27d66) より古い。
+    && micromamba run -n genes2genes-mowgli pip install --no-cache-dir git+https://github.com/Teichlab/Genes2Genes.git@99c27d6619f89c1bc3a01d713ee8efa3f4f78004 \
     && micromamba run -n genes2genes-mowgli python -m ipykernel install --name=genes2genes-mowgli \
     && micromamba run -n genes2genes-mowgli jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh genes2genes-mowgli genes2genes mowgli \
 # cell2cell screadsim
     && micromamba create -y -n cell2cell-screadsim python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 -c defaults \
     && micromamba run -n cell2cell-screadsim pip install --no-cache-dir cell2cell==0.7.4 scReadSim==1.4.1 session-info obonet umap-learn \
     && micromamba run -n cell2cell-screadsim python -m ipykernel install --name=cell2cell-screadsim \
     && micromamba run -n cell2cell-screadsim jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh cell2cell-screadsim cell2cell scReadSim \
 # novosparc ikarus
     && micromamba create -y -n ikarus-novosparc python=3.8 nbconvert==6.5.4 ipykernel==6.25.0 TBB==2021.11.0 numba==0.58.1 pot -c defaults -c conda-forge \
     && micromamba run -n ikarus-novosparc pip install --no-cache-dir novosparc==0.4.4 ikarus==0.0.3 session-info \
@@ -62,22 +81,40 @@ RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
     && micromamba run -n ikarus-novosparc sed -i 's/pyscenic\.genesig/ctxcore.genesig/g' /opt/micromamba/envs/ikarus-novosparc/lib/python3.8/site-packages/ikarus/classifier.py \
     && micromamba run -n ikarus-novosparc python -m ipykernel install --name=ikarus-novosparc \
     && micromamba run -n ikarus-novosparc jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh ikarus-novosparc ikarus novosparc \
 # cellphoneDB
-    && micromamba create -n cellphonedb python=3.8 ipykernel==6.25.0 nbconvert==5.6.1 -c defaults \
+    && micromamba create -y -n cellphonedb python=3.8 ipykernel==6.25.0 nbconvert==5.6.1 -c defaults \
     && micromamba run -n cellphonedb pip install --no-cache-dir cellphonedb==5.0.0 session-info \
 #    && micromamba run -n cellphonedb cellphonedb database download \
     && micromamba run -n cellphonedb python -m ipykernel install --name=cellphonedb \
-    && micromamba run -n cellphonedb jupyter kernelspec list
+    && micromamba run -n cellphonedb jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh cellphonedb cellphonedb
 
 ### decoupler, liana, sctriangulate
 # liana: https://github.com/saezlab/liana-py
 ENV ENVNAME=decoupler-liana-sctriangulate
 RUN --mount=type=secret,id=github_pat,env=GITHUB_PAT \
+    --mount=type=bind,source=verify_python_env.sh,target=/tmp/verify_python_env.sh \
     set -euo pipefail; \
     micromamba create -y -n $ENVNAME python=3.10 conda-forge::decoupler-py==1.8.0 nbconvert==6.5.4 ipykernel==6.25.0 numba==0.60.0 -c defaults \
     && micromamba run -n $ENVNAME pip install --no-cache-dir liana==1.1.0 sctriangulate==0.13.0 plotnine==0.10.1 mizani==0.8.1 pandas==2.2.2 setuptools==80.10.2 session-info \
     && micromamba run -n $ENVNAME python -m ipykernel install --name=$ENVNAME \
     && micromamba run -n $ENVNAME jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh $ENVNAME decoupler liana sctriangulate \
+    && micromamba clean --all --yes
+
+### metacells (Python)
+# tanaylab の README は R 版 metacell を旧版と位置づけ、この Python 版を後継としている。
+# 依存を一切固定していないパッケージだが、配布 wheel (manylinux cp310) は numpy 2 でも動作することを
+# 実機で確認済み (downsample_matrix と corrcoef を実行して検証)。そのため numpy の制約は付けない。
+# python=3.10 は cp310 wheel に合わせている。
+RUN --mount=type=bind,source=verify_python_env.sh,target=/tmp/verify_python_env.sh \
+    set -euo pipefail; \
+    micromamba create -y -n metacells python=3.10 nbconvert==6.5.4 ipykernel==6.25.0 -c conda-forge -c defaults \
+    && micromamba run -n metacells pip install --no-cache-dir metacells==0.9.5 session-info \
+    && micromamba run -n metacells python -m ipykernel install --name=metacells \
+    && micromamba run -n metacells jupyter kernelspec list \
+    && bash /tmp/verify_python_env.sh metacells metacells \
     && micromamba clean --all --yes
 
 # RENGE
@@ -100,7 +137,7 @@ RUN rm -rf /opt/OpenBLAS-0.3.24 /opt/OpenBLAS-0.3.24.tar.gz /opt/OpenBLAS /opt/b
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
     && mkdir -p /.singularity.d \
-    && echo '#!/bin/sh\n. /entrypoint.sh\nexec "$@"' > /.singularity.d/runscript \
+    && printf '#!/bin/sh\n. /entrypoint.sh\nexec "$@"\n' > /.singularity.d/runscript \
     && chmod +x /.singularity.d/runscript
 
 ENTRYPOINT ["/entrypoint.sh"]
