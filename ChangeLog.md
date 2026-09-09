@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026.9.4: version 4.0.0
+## 2026.9.9: version 4.0.0
 - Important: Changed the base image from Ubuntu 22.04 to Ubuntu 24.04, which updates R from 4.5.3 to 4.6.1 and Bioconductor from 3.22 to 3.23.
 - Important: Switched to an agent-assisted maintenance workflow: this release was prepared with the help of an AI coding agent ([Claude Code](https://claude.com/claude-code)). Moving the base OS, R and Bioconductor forward at the same time broke a number of pinned tools in ways that only surface during a multi-hour build, and the agent was used for the parts of that work that are mechanical -- reading the multi-megabyte build logs, tracing each failure back to the upstream release that caused it, comparing the resulting images against the 3.5.0 ones, and writing the build-time verification scripts described below. Which tools to include, and which to drop, remain manual decisions.
 - Pinned the packages installed from GitHub (``remotes::install_github`` and ``pip install git+https://...``) to a specific commit to make the build reproducible. Commits are used rather than tags because several of these repositories tag their releases only sporadically, so the newest tag can be years behind the code that was actually shipped.
